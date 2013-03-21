@@ -268,10 +268,10 @@ var FileManager = function(config) {
       fm.openSaver();
     } else {
       var docText = _exportDocument();
-  
+  alert(("saving"))
       $.ajax({
 
-        url : cwrc_params.BASE_PATH + '/cwrc/save/',
+        url : cwrc_params.BASE_PATH + '/islandora/cwrcwriter/save_data/' + PID,
         type: 'POST',
         dataType: 'text',
         data: {

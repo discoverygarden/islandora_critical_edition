@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Implements hook_menu().
+ */
+
 function islandora_critical_edition_menu() {
   $items['islandora/object/%islandora_object/manage/crited'] = array(
     'title' => 'Critical Editions',
@@ -60,8 +64,26 @@ function islandora_critical_edition_access($object = null) {
   $models = $object->models;
   $is_book = in_array('islandora:bookCModel', $object->models);
   $is_critical_edition = in_array('islandora:criticalEditionCModel', $object->models);
-  $is_system = in_array('fedora-system:FedoraObject-3.0', $object->models);  //need to go
+  $is_system = in_array('fedora-system:FedoraObject-3.0', $object->models);  //need to go, not sure where its coming from
   return ($is_book || $is_critical_edition || $is_system) && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
+}
+
+/**
+ * Implements hook_permission().
+ * Additional permissions to come
+ */
+
+function islandora_critical_edition_permission() {
+  return array(
+    'use CWRC' => array(
+      'title' => t('Use CWRCWriter'),
+      'description' => t('Access CWRCWriter.'),
+    ),
+    'edit CWRC' => array(
+      'title' => t('Edit with CWRCWriter'),
+      'description' => t('Edit and save content within CWRCWriter to objects in the repository. Note: Fedora XACML security policies may override this position.'),
+    ),
+  );
 }
 
 /**

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Provides all the parameters necessary for CWRCWriter to operate with fedora
+ * @global url $base_url
+ * @global User $user
+ * @param IslandoraFedoraObject $fedora_object
+ */
+
 function islandora_critical_edition_setup($fedora_object) {
   module_load_include('inc', 'islandora_basic_collection', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
@@ -7,7 +14,7 @@ function islandora_critical_edition_setup($fedora_object) {
   global $base_url;
   global $user;
 
-// add permission check
+// TODO add permission check
   $cant_edit = user_access('edit CWRC') ? false : true;
   $fedora_url = variable_get('fedora_base_url', 'http://localhost:8080/fedora');
   if (!$fedora_object['CWRC']) {
@@ -31,6 +38,7 @@ function islandora_critical_edition_setup($fedora_object) {
   $results['authority_url'] = $base_url . '/cwrc/authorities/';
   $results['no_edit'] = $cant_edit;
   $results['page_count'] = count($pages);
+  // authority mappings stil to come
   //$results['authority_mappings'] = emic_cwrc_get_authority_mappings();
   $json = json_encode($results);
   echo $json;
@@ -47,7 +55,7 @@ function islandora_critical_edition_getdata($fedora_object) {
 /**
  * Persists CWRC datastream to critical edition page object
  */
-function islandora_critical_edition_savedata() {
+function islandora_critical_edition_savedata($fedora_object) {
   $data = html_entity_decode(stripslashes($_POST['text']), ENT_QUOTES, 'UTF-8');
   $cwrc = str_replace('<br>', '<br />', $data);
   $cwrc = str_replace('&', '&amp;', $cwrc);
