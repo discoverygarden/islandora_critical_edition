@@ -85,3 +85,46 @@ function islandora_critical_edition_islandora_criticalEditionCModel_islandora_vi
   $output = theme('islandora_critical_edition', array('islandora_object' => $object));
   return array('' => $output);
 }
+
+
+
+/**
+ * Implements hook_islandora_required_objects().
+ */
+function islandora_critical_edition_islandora_required_objects(IslandoraTuque $connection) {
+  $module_path = drupal_get_path('module', 'islandora_critical_edition');
+  $datastreams_path = "$module_path/data/datastreams";
+
+  // Page Content Model.
+  $critical_edition_page_content_model = $connection->repository->constructObject('islandora:criticalEditionCModelPage');
+  $critical_edition_page_content_model->owner = 'fedoraAdmin';
+  $critical_edition_page_content_model->label = 'Islandora Critical Edition Page Content Model';
+  $critical_edition_page_content_model->models = 'fedora-system:ContentModel-3.0';
+  // DS-COMPOSITE-MODEL Datastream.
+  $datastream = $critical_edition_page_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'M');
+  $datastream->label = 'DS-COMPOSITE-MODEL';
+  $datastream->mimetype = 'text/xml';
+  $datastream->setContentFromFile("$datastreams_path/islandora_crtitical_edition_pageCModel_ds_composite_model.xml", FALSE);
+  $critical_edition_page_content_model->ingestDatastream($datastream);
+  // Ctitical Edition Content Model.
+  $critical_edition_content_model = $connection->repository->constructObject('islandora:criticalEditionCModel');
+  $critical_edition_content_model->owner = 'fedoraAdmin';
+  $critical_edition_content_model->label = 'Islandora Critical Edition Content Model';
+  $critical_edition_content_model->models = 'fedora-system:ContentModel-3.0';
+  // DS-COMPOSITE-MODEL Datastream.
+  $datastream = $critical_edition_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'M');
+  $datastream->label = 'DS-COMPOSITE-MODEL';
+  $datastream->mimetype = 'text/xml';
+  $datastream->setContentFromFile("$datastreams_path/islandora_criticalEditionCModel_ds_composite_model.xml", FALSE);
+  $critical_edition_content_model->ingestDatastream($datastream);
+
+  return array(
+  'islandora_critical_edition' => array(
+      'title' => 'Islandora critical editions',
+      'objects' => array(
+        $critical_edition_content_model,
+        $critical_edition_page_content_model,
+      )
+    )
+  );
+}

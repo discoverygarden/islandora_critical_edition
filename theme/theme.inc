@@ -30,5 +30,8 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   $variables['islandora_object_label'] = $islandora_object->label;
   global $base_url;
   $variables['viewer_url'] = "$base_url/" . drupal_get_path('module', 'islandora_critical_edition') . "/cwrcwriter/resources/index.php?PID=". $pids[0];
+  $path = drupal_get_path('module', 'islandora_critical_edition');
+  drupal_add_js($path . '/cwrcwriter/js/critical_edition.js');
+  drupal_add_css($path . '/cwrcwriter/css/crited.css');
  
 }
