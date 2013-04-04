@@ -14,7 +14,7 @@ $.urlParam = function(name){
 $('document').ready(function(){
   PID = $.urlParam('PID');
   $.ajax({
-    url: '/islandora/cwrcwriter/setup/' + PID,
+    url: window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
     async:false,
     success: function(data, status, xhr) {
       cwrc_params = data;
@@ -211,7 +211,7 @@ function init_canvas_div() {
 
   pagePid = cwrc_params.pages[cwrc_params.position];
   $.ajax({
-    url: '/islandora/cwrcwriter/setup_canvas/' + pagePid,
+    url: window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/setup_canvas/' + pagePid,
     async:false,
     success: function(data, status, xhr) {
       islandora_canvas_params = data;
