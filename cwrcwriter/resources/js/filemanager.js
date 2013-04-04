@@ -271,12 +271,11 @@ var FileManager = function(config) {
   alert(("saving"))
       $.ajax({
 
-        url : cwrc_params.BASE_PATH + '/islandora/cwrcwriter/save_data/' + PID,
+        url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
         type: 'POST',
         dataType: 'text',
         data: {
-          "text" : docText,
-          'file_pid':PID
+          "text" : docText
         },
         success: function(data, status, xhr) {
           w.editor.isNotDirty = 1; // force clean state
@@ -436,7 +435,7 @@ var FileManager = function(config) {
   fm.loadEMICDocument = function() {
     w.entities = {};
     w.structs = {};
-    var url = cwrc_params.BASE_PATH + '/islandora/cwrcwriter/get_data/' + PID;
+    var url = window.parent.Drupal.settings.basePath + 'islandora/object/' + PID + '/datastream/CWRC/view';
     var file_content = '';
     $.ajax({
       url: url,

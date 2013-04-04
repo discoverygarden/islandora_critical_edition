@@ -1,11 +1,10 @@
 name = "Islandora CWRC"
-description = "Create Critical Editions of Islandora Book Objects."
+description = "Create critical editions of Islandora objects."
 package = Islandora
 dependencies[] = islandora
 dependencies[] = islandora_book
 dependencies[] = islandora_paged_content
 dependencies[] = islandora_basic_collection
 dependencies[] = islandora_image_annotation
-files[] = includes/critical_edition_forms.inc
 version = 7.x-dev
 core = 7.x

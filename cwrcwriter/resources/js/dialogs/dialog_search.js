@@ -319,7 +319,10 @@ var SearchDialog = function(config) {
       },{
         text: 'Add New '+config.title,
         click: function() {
-          window.open(cwrc_params.BASE_PATH + '/fedora/repository/' + cwrc_params.authority_mappings[config.title]);
+          // @XXX authority mappings right?
+          window.open(window.parent.Drupal.settings.basePath +
+                        'islandora/object/' +
+                      cwrc_params.authority_mappings[config.title]);
         }
       },{
         text: 'Tag '+config.title,
