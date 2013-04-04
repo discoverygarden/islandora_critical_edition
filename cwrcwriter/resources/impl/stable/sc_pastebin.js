@@ -7,7 +7,7 @@ function islandora_postData(title, data, type, color) {
   $.ajax({
     type:'POST',
     async:false,
-    url:islandora_canvas_params.islandora_post_url,
+    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.islandora_post_url,
     data: {
       title:title,
       data:data,
@@ -35,7 +35,7 @@ function islandora_getList() {
   $.ajax({
     type:'GET',
     async:false,
-    url: islandora_canvas_params.get_annotation_list_url,
+    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.get_annotation_list_url,
     success: function(data,status,xhr) {
    
       if(data != 'null'){
@@ -102,7 +102,7 @@ function islandora_getAnnotation(pid) {
 
   $.ajax({
     type:'GET',
-    url: islandora_canvas_params.islandora_get_annotation + pid,
+    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.islandora_get_annotation + pid,
     success: function(data,status,xhr) {
       load_commentAnno(data);
      
@@ -114,7 +114,6 @@ function islandora_getAnnotation(pid) {
 }
 
 // deletes annotation from fedora
-
 function islandora_deleteAnno(urn) {
 
   var selector = '#anno_'+urn;
@@ -128,7 +127,7 @@ function islandora_deleteAnno(urn) {
   var classSelector = '.svg_'+urn;
   $.ajax({
     type:'POST',
-    url:islandora_canvas_params.islandora_delete_annotation + urn,
+    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.islandora_delete_annotation + urn,
     data: urn,
     success: function(data,status,xhr) {
       $(selector).next().remove();
@@ -147,7 +146,7 @@ function islandora_deleteAnno(urn) {
 function islandora_updateAnno(urn, title,annoType, content, color){
   $.ajax({
     type:'POST',
-    url:islandora_canvas_params.islandora_update_annotation,
+    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.islandora_update_annotation,
     data: {
       urn:urn,
       title:title,

@@ -1,0 +1,170 @@
+<?php
+/**
+ * @file
+ *   Holds code for creating new critical editions.
+ */
+
+/**
+ * This function will create the critical edition creation form.
+ *
+ * @param array $form
+ *   The form.
+ * @param array $form_state
+ *   The form state.
+ * @param AbstractObject $object
+ *   The object to create the critical edition creation form for.
+ *
+ * @return array
+ *   The form.
+ */
+function islandora_create_edition_form(array $form, array &$form_state, AbstractObject $object) {
+  global $user;
+
+  $label = t('Critical Edition of') . " " . $object->label . ' - ' . $user->name;
+  $form = array();
+  $form['fedora_object'] = array(
+    '#type' => 'hidden',
+    '#value' => $object->id,
+  );
+  $form['title'] = array(
+    '#title' => t('Edition Title'),
+    '#description' => t('Enter title for this critical edition'),
+    '#type' => 'textfield',
+    '#default_value' => $label,
+    '#id' => "edition_title",
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create Critical Edition'),
+  );
+  return $form;
+}
+
+/**
+ * Creates Critical Edition and associated objects.
+ *
+ * @param array $form
+ *   The form.
+ * @param array $form_state
+ *   The form state.
+ */
+function islandora_create_edition_form_submit($form, &$form_state) {
+  module_load_include('inc', 'islandora', '/includes/ingest.form');
+  module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
+  module_load_include('inc', 'islandora', 'includes/utilities');
+
+  $book_pid = $form_state['values']['fedora_object'];
+  $book_object = islandora_object_load($book_pid);
+
+  // Create Critical edition Fedora Object.
+  $content_models = array(array('pid' => 'islandora:criticalEditionCModel'));
+
+  $config = islandora_critical_edition_get_object_configuration(islandora_get_namespace($book_pid),
+                                                                $form_state['values']['title'],
+                                                                $content_models);
+
+  $fedora_object = islandora_ingest_form_prepare_new_object($config);
+  $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION, $book_pid, RELS_TYPE_PLAIN_LITERAL);
+  $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:criticalEditionCModel');
+  $edition_object = islandora_add_object($fedora_object);
+
+  $pages = islandora_paged_content_get_pages($book_object);
+
+  $batch = array(
+    'title' => t('Creating New Critical Edition'),
+    'operations' => array(),
+    'file' => drupal_get_path('module', 'islandora_critical_edition') . '/includes/create.inc',
+    'progress_message' => t('@current of @total pages created.'),
+  );
+
+  foreach ($pages as $page) {
+    $batch['operations'][] = array('islandora_create_edition_page', array(
+        'page' => $page,
+        'parent_book' => $edition_object->id));
+  }
+
+  batch_set($batch);
+  batch_process();
+}
+
+/**
+ * Created individual page objects for new Critical Edition.
+ *
+ *
+ * @param array $page
+ *   A page from an array create by @see islandora_paged_content_get_pages
+ * @param string $parent
+ *   The Fedora PID of the paged parent.
+ */
+function islandora_create_edition_page($page, $parent) {
+  module_load_include('inc', 'islandora', '/includes/ingest.form');
+  module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
+
+  $namespace = substr($page['pid'], 0, strpos($page['pid'], ":"));
+  $config = islandora_critical_edition_get_object_configuration($namespace, $page['label']);
+
+  $fedora_object = islandora_ingest_form_prepare_new_object($config);
+  // Add all relationships.
+  $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:criticalEditionCModelPage');
+  $fedora_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOf', $parent);
+  $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isPageOf', $parent);
+  $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isEditionOf', $page['pid']);
+  $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isSequenceNumber', $page['page'], RELS_TYPE_PLAIN_LITERAL);
+  $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isPageNumber', $page['page'], RELS_TYPE_PLAIN_LITERAL);
+  $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isSection', '1', RELS_TYPE_PLAIN_LITERAL);
+  // Create object.
+  $new_page_object = islandora_add_object($fedora_object);
+  $original_page_object = islandora_object_load($page['pid']);
+
+  // Add a minimal set of datastreams from original page object.
+  $dsids = array('OCR', 'TN', 'CWRC');
+  foreach ($dsids as $dsid) {
+    if (isset($original_page_object[$dsid])) {
+      $new_page_object->ingestDatastream($original_page_object[$dsid]);
+    }
+  }
+  // Create new CWRC datastream if there is none.
+  if (!isset($new_page_object['CWRC']) && isset($new_page_object['OCR'])) {
+    islandora_critical_edition_add_cwrc_datastream($new_page_object);
+  }
+}
+
+/**
+ * This function holds code for constructing an object's attributes while
+ * respecting UUIDs.
+ *
+ * @global user user
+ *
+ * @param string $namespace
+ *   The namespace to create the object's PID in.
+ * @param string $label
+ *   The object's label.
+ * @param array $content_models
+ *   Content models that the object will have.
+ *
+ * @return array
+ *   An array acceptable by @see islandora_ingest_form_prepare_new_object
+ */
+function islandora_critical_edition_get_object_configuration($namespace, $label = '', $content_models = array()) {
+  global $user;
+
+  $configuration = array(
+    'label' => $label,
+    'owner' => $user->name,
+  );
+  if ($content_models) {
+    $configuration['models'] = $content_models;
+  }
+
+  // Choose between 'id' and 'namespace'.
+  $make_uuid = variable_get('islandora_basic_collection_generate_uuid', FALSE);
+  if (module_exists('islandora_basic_collection') && $make_uuid) {
+    $connection = islandora_get_tuque_connection();
+    $configuration['id'] = $connection->repository->getNextIdentifier($namespace, $make_uuid);
+  }
+  else {
+    $configuration['namespace'] = $namespace;
+  }
+
+  return $configuration;
+}

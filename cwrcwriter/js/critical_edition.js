@@ -16,6 +16,9 @@
           $(this).val(Drupal.t('Full Window'));
         }
       });
+      $("#bookview_button").click(function(){
+          location.href = window.parent.Drupal.settings.basePath + 'islandora/object/' + Drupal.settings.islandora_critical_edition.book_pid;
+      });
     }
   };
 })(jQuery);
