@@ -1,78 +1,121 @@
 <?php
+/**
+ * @file
+ *   This module is for managing critical editions of Islandora objects.
+ */
+
+define('ISLANDORA_CRITICAL_EDITION', 'isCriticalEditionOf');
 
 /**
  * Implements hook_menu().
  */
-
 function islandora_critical_edition_menu() {
-  $items['islandora/object/%islandora_object/manage/crited'] = array(
+  $items['islandora/object/%islandora_object/manage/critical_editions'] = array(
     'title' => 'Critical Editions',
     'page callback' => 'islandora_critical_edition_management',
     'page arguments' => array(2),
     'type' => MENU_LOCAL_TASK,
-    'access callback' => 'islandora_critical_edition_access',
+    'access callback' => 'islandora_critical_edition_mangement_access',
     'access arguments' => array(2),
-    'file' => 'includes/critical_edition.inc'
+    'file' => 'includes/manage.inc',
   );
-
   $items['islandora/cwrcwriter/setup/%islandora_object'] = array(
     'title' => 'Cwrcwriter Setup',
     'page callback' => 'islandora_critical_edition_setup',
     'page arguments' => array(3),
     'type' => MENU_CALLBACK,
-    'access callback' => 'islandora_critical_edition_access',
+    'access callback' => 'islandora_critical_edition_cwrc_access',
     'access arguments' => array(3),
-    'file' => 'includes/critical_edition_callbacks.inc'
+    'file' => 'includes/callbacks.inc',
   );
-  $items['islandora/cwrcwriter/get_data/%islandora_object'] = array(
-    'title' => 'Get Data',
-    'page callback' => 'islandora_critical_edition_getdata',
-    'page arguments' => array(3),
-    'type' => MENU_CALLBACK,
-    'access callback' => 'islandora_critical_edition_access',
-    'access arguments' => array(3),
-    'file' => 'includes/critical_edition_callbacks.inc'
-  );
-  
   $items['islandora/cwrcwriter/save_data/%islandora_object'] = array(
     'title' => 'Save Data',
     'page callback' => 'islandora_critical_edition_savedata',
     'page arguments' => array(3),
     'type' => MENU_CALLBACK,
-    'access callback' => 'islandora_critical_edition_access',
+    'access callback' => 'islandora_critical_edition_edit_cwrc_access',
     'access arguments' => array(3),
-    'file' => 'includes/critical_edition_callbacks.inc'
+    'file' => 'includes/callbacks.inc',
   );
-  $items['islandora/cwrcwriter/setup_shared/%islandora_object'] = array(
+  $items['islandora/cwrcwriter/setup_canvas/%islandora_object'] = array(
     'title' => 'Shared Canvas Setup',
     'page callback' => 'islandora_critical_edition_canvas_setup',
     'page arguments' => array(3),
     'type' => MENU_CALLBACK,
-    'access callback' => 'islandora_critical_edition_access',
+    'access callback' => 'islandora_critical_edition_cwrc_access',
     'access arguments' => array(3),
-    'file' => 'includes/critical_edition_callbacks.inc'
+    'file' => 'includes/callbacks.inc',
   );
 
   return $items;
 }
 
-//  todo - make permissions make sense
-function islandora_critical_edition_access($object = null) {
-  if (!isset($object)) {
+/**
+ * Checks to see if the user should have access to the CWRC editor for the
+ * given object.
+ *
+ * @param IslandoraFedora $object
+ *   The object to determine functionality for.
+ *
+ * @return boolean
+ *   TRUE if the user has access.
+ *   FALSE if the user doesn't have access.
+ */
+function islandora_critical_edition_cwrc_access(AbstractObject $object = NULL) {
+  if (is_null($object)) {
     return FALSE;
   }
-  $models = $object->models;
-  $is_book = in_array('islandora:bookCModel', $object->models);
-  $is_critical_edition = in_array('islandora:criticalEditionCModel', $object->models);
-  $is_system = in_array('fedora-system:FedoraObject-3.0', $object->models);  //need to go, not sure where its coming from
-  return ($is_book || $is_critical_edition || $is_system) && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
+
+  $is_page = in_array('islandora:criticalEditionCModelPage', $object->models);
+
+  return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access('use CWRC');
 }
 
+/**
+ * Checks to see if the user should have access to critical editions
+ * management functionality for the given object.
+ *
+ * @param IslandoraFedora $object
+ *   The object to determine functionality for.
+ *
+ * @return boolean
+ *   TRUE if the user has access.
+ *   FALSE if the user doesn't have access.
+ */
+function islandora_critical_edition_mangement_access(AbstractObject $object = NULL) {
+  if (is_null($object)) {
+    return FALSE;
+  }
+
+  $is_book = in_array('islandora:bookCModel', $object->models);
+  $is_critical_edition = in_array('islandora:criticalEditionCModel', $object->models);
+
+  return ($is_book || $is_critical_edition) && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
+}
+
+/**
+ * Checks to see if the user should have access save critical edition data.
+ *
+ * @param IslandoraFedora $object
+ *   The object to determine functionality for.
+ *
+ * @return boolean
+ *   TRUE if the user has access.
+ *   FALSE if the user doesn't have access.
+ */
+function islandora_critical_edition_edit_cwrc_access(AbstractObject $object = NULL) {
+  if (is_null($object)) {
+    return FALSE;
+  }
+
+  $is_page = in_array('islandora:criticalEditionCModelPage', $object->models);
+
+  return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access('edit CWRC');
+}
 /**
  * Implements hook_permission().
  * Additional permissions to come
  */
-
 function islandora_critical_edition_permission() {
   return array(
     'use CWRC' => array(
@@ -93,10 +136,10 @@ function islandora_critical_edition_theme($existing, $type, $theme, $path) {
   return array(
     'islandora_critical_edition' => array(
       'file' => 'theme/theme.inc',
-      'template' => 'theme/islandora-crited',
+      'template' => 'theme/islandora_critical_edition',
       'pattern' => 'islandora_critical_edition__',
       'variables' => array('islandora_object' => NULL),
-    )
+    ),
   );
 }
 
@@ -108,14 +151,11 @@ function islandora_critical_edition_islandora_criticalEditionCModel_islandora_vi
   return array('' => $output);
 }
 
-
-
 /**
  * Implements hook_islandora_required_objects().
  */
 function islandora_critical_edition_islandora_required_objects(IslandoraTuque $connection) {
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
-  $datastreams_path = "$module_path/data/datastreams";
 
   // Page Content Model.
   $critical_edition_page_content_model = $connection->repository->constructObject('islandora:criticalEditionCModelPage');
@@ -126,9 +166,9 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
   $datastream = $critical_edition_page_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'M');
   $datastream->label = 'DS-COMPOSITE-MODEL';
   $datastream->mimetype = 'text/xml';
-  $datastream->setContentFromFile("$datastreams_path/islandora_crtitical_edition_pageCModel_ds_composite_model.xml", FALSE);
+  $datastream->setContentFromFile("$module_path/xml/islandora_crtitical_edition_page_ds_composite_model.xml", FALSE);
   $critical_edition_page_content_model->ingestDatastream($datastream);
-  // Ctitical Edition Content Model.
+  // Critical Edition Content Model.
   $critical_edition_content_model = $connection->repository->constructObject('islandora:criticalEditionCModel');
   $critical_edition_content_model->owner = 'fedoraAdmin';
   $critical_edition_content_model->label = 'Islandora Critical Edition Content Model';
@@ -137,16 +177,16 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
   $datastream = $critical_edition_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'M');
   $datastream->label = 'DS-COMPOSITE-MODEL';
   $datastream->mimetype = 'text/xml';
-  $datastream->setContentFromFile("$datastreams_path/islandora_criticalEditionCModel_ds_composite_model.xml", FALSE);
+  $datastream->setContentFromFile("$module_path/xml/islandora_critical_edition_ds_composite_model.xml", FALSE);
   $critical_edition_content_model->ingestDatastream($datastream);
 
   return array(
-  'islandora_critical_edition' => array(
+    'islandora_critical_edition' => array(
       'title' => 'Islandora critical editions',
       'objects' => array(
         $critical_edition_content_model,
         $critical_edition_page_content_model,
-      )
-    )
+      ),
+    ),
   );
 }

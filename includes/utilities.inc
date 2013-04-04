@@ -1,42 +1,62 @@
 <?php
-
-
 /**
- * Returns PID and title of all critical editions associated with a book object
- * @param IslandoraFedoraObject $fedora_object
- * @return array
+ * @file
+ *   Holds utility functions for islandora_critical_editions.
  */
 
-function islandora_get_critical_editions($fedora_object) {
-  $pid = $fedora_object->id;
-  module_load_include('inc', 'fedora_repository', 'api/fedora_utils');
-  $query = <<<STRING
-select \$subject \$title from <#ri>
-where (\$subject <http://islandora.ca/ontology/relsext#isCriticalEditionOf> '$pid'
-and \$subject <info:fedora/fedora-system:def/model#state> <info:fedora/fedora-system:def/model#Active>
-and \$subject <dc:title> \$title)
-STRING;
+/**
+ * Returns PID and title of all critical editions associated with an object.
+ *
+ * @param AbstractObject $fedora_object
+ *   The base object to check for related critical editions.
+ *
+ * @return array
+ *   The list of critical editions.
+ */
+function islandora_critical_edition_get_critical_editions(AbstractObject $fedora_object) {
+  $edition_pids = array();
 
-  $objects = $fedora_object->repository->ri->itqlQuery($query, 'unlimited'); // for itql
+  $query = "
+select \$subject \$title from <#ri>
+where (\$subject <" . ISLANDORA_RELS_EXT_URI . ISLANDORA_CRITICAL_EDITION . ">'" . $fedora_object->id . "'
+and \$subject <" . FEDORA_MODEL_URI . "state> <" . FEDORA_MODEL_URI . "Active>
+and \$subject <dc:title> \$title)
+";
+
+  $objects = $fedora_object->repository->ri->itqlQuery($query, 'unlimited');
   if (!empty($objects)) {
-    foreach($objects as $object){
-      $edition_pids[$object['subject']['value']]=$object['title']['value'];
+    foreach ($objects as $object) {
+      $edition_pids[$object['subject']['value']] = $object['title']['value'];
     }
   }
 
   return $edition_pids;
 }
 
+/**
+ * Returns the Fedora object of the base object associated with a critical
+ * edition.
+ *
+ * @param AbstractObject $fedora_object
+ *   The critical edition object to check for a related base object.
+ *
+ * @return string
+ *   The PID of the base object.
+ */
+function islandora_critical_edition_get_object_of_critical_edition(AbstractObject $fedora_object) {
+  $critical_edition_relationships = $fedora_object->relationships->get(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION);
+  return $critical_edition_relationships[0]['object']['value'];
+}
 
 /**
- * Constructs cwrc datastream if none exists
- * @param IslandoraFedoraObject $fedora_object
+ * Constructs CWRC datastream on an object if none exists.
+ *
+ * @param AbstractObject $fedora_object
+ *   The object to create the CWRC datastream for. It should have an OCR
+ *   datastream.
  */
-
-function islandora_critical_edition_add_cwrc_datastream($fedora_object) {
-  global $base_url;
+function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_object) {
   $ocr_in = $fedora_object['OCR']->content;
-
   $lines = explode("\n", $ocr_in);
   $preface = '<?xml version="1.0"?>
 <html>
@@ -60,9 +80,6 @@ function islandora_critical_edition_add_cwrc_datastream($fedora_object) {
 
       $line = htmlspecialchars($line);
       $count++;
-      // the l tag is not supported in version 2 of cwrcwriter
-      // $ocr .=   "<l xml:id='struct_$count'>$line</l>";
-      // $ocr .= $line . '<span _editable="true" _struct="true" _tag="lb" id="struct_' . $count++ . '">﻿</span>';
       $count++;
       $ocr .= $line . trim("<span _editable='true' _struct='true' _tag='lb' id='struct_$count' />﻿");
     }

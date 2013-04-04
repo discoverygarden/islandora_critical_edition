@@ -1,5 +1,6 @@
-//function to retrieve url params
-
+/**
+ * Function to retrieve URL parameters.
+ */
 $.urlParam = function(name){
   var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
   if (!results)
@@ -9,53 +10,35 @@ $.urlParam = function(name){
   return results[1] || 0;
 }
 
-// gets setup information from Islandora
-//determine base of Drupal installation
-
-var here = window.location.toString();
-
-var splitter = here.indexOf('/sites/');
-if(splitter > 0){
-  splitter = '/sites/';
-}else{
-  splitter = '/modules/';
-}
-base = here.split(splitter);
-basedir = base[0];
-
-
+// Gets setup information from Islandora.
 $('document').ready(function(){
   PID = $.urlParam('PID');
   $.ajax({
-    url: basedir +'/islandora/cwrcwriter/setup/' + PID,
+    url: '/islandora/cwrcwriter/setup/' + PID,
     async:false,
     success: function(data, status, xhr) {
       cwrc_params = data;
     },
     error: function() {
-      alert("Please log in to host site");
+      alert("Please log in to host site.");
     },
     dataType: 'json'
-
   });
 
-  // get inital positions of col1 and separator
-  cwrc_params.col_width = $('.col1').css("width");
-  cwrc_params.separator_pos =$('#column-separator').css("left");
-
-
+  // Get initial positions of the text annotation div and separator.
+  setReturnParams()
 
   $(this).attr("title", cwrc_params.title);
   $('#header h1').text( cwrc_params.title + " - Seq# " + cwrc_params.position);
-  // instantiate and initialize writer object
 
+  // Instantiate and initialize writer object.
   writer = new Writer({
     'project':'EMiC'
   });
   writer.init();
 
   init_canvas_div();
-  testCModel();
+  openColumn();
   if(cwrc_params.position == 1){
     $('#page-prev').css('opacity', '.6').addClass('disabled');
   }
@@ -68,8 +51,7 @@ $('document').ready(function(){
     $('#page_choose').append('<option  value="' + key + '">Seq# ' + key + '</option>');
   });
 
-  // synchronize displayed page with dropdown
-
+  // Synchronize displayed page with dropdown.
   var selector = "#page_choose option[value='" + cwrc_params.position + "']";
   $(selector).attr('selected','selected');
 
@@ -89,7 +71,7 @@ $('document').ready(function(){
 
     setReturnParams();
     cwrc_params.position = $('#page_choose :selected').attr('value');
-    testCModel();
+    openColumn();
     PID = cwrc_params.pages[ cwrc_params.position];
     writer.fm.loadEMICDocument();
     init_canvas_div();
@@ -110,7 +92,7 @@ $('document').ready(function(){
   $('#page-prev').click(function(e){
     e.preventDefault();
     if(!writer.editor.isNotDirty){
-      answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave");
+      answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave.");
       if (!answer){
 
         return;
@@ -123,7 +105,7 @@ $('document').ready(function(){
       $(selector).removeAttr('selected');
       setReturnParams()
       cwrc_params.position--;
-      testCModel();
+      openColumn();
       selector = "#page_choose option[value='" + cwrc_params.position + "']";
       $(selector).attr('selected','selected');
       PID = cwrc_params.pages[ cwrc_params.position];
@@ -151,7 +133,7 @@ $('document').ready(function(){
       $(selector).removeAttr('selected');
       setReturnParams()
       cwrc_params.position++;
-      testCModel();
+      openColumn();
       selector = "#page_choose option[value='" + cwrc_params.position + "']";
       $(selector).attr('selected','selected');
       PID = cwrc_params.pages[ cwrc_params.position];
@@ -207,7 +189,6 @@ $('document').ready(function(){
           name: "Delete annotation",
           icon: "delete"
         }
-
       }
     });
   });
@@ -226,19 +207,17 @@ $('document').ready(function(){
   }
 });
 
+function init_canvas_div() {
 
-function init_canvas_div(){
-
-  pagePid =cwrc_params.pages[ cwrc_params.position];
- 
+  pagePid = cwrc_params.pages[cwrc_params.position];
   $.ajax({
-    url: basedir +'/islandora/cwrcwriter/setup_shared/' + pagePid,
+    url: '/islandora/cwrcwriter/setup_canvas/' + pagePid,
     async:false,
     success: function(data, status, xhr) {
       islandora_canvas_params = data;
     },
     error: function() {
-      alert("Please Login to EMiC site");
+      alert("Please log in to host site.");
     },
     dataType: 'json'
 
@@ -247,11 +226,9 @@ function init_canvas_div(){
   if(islandora_canvas_params.no_edit == true){
     $('#create_annotation').hide();
   }
-  opts.base = islandora_canvas_params.object_base;
+  opts.base = window.parent.Drupal.settings.basePath + islandora_canvas_params.object_base;
 
-
-
-  // build and populate page choice dropdown
+  // Build and populate page choice dropdown.
   $('#canvas_page_selector').html('<select id="canvas_page_choose"></select>');
   $.each(islandora_canvas_params.pages, function(key, value){
     $('#canvas_page_choose').append('<option  value="' + key + '">Page ' + (key + 1) + '</option>');
@@ -265,8 +242,6 @@ function init_canvas_div(){
   // RDF Initializationc
   var rdfbase = $.rdf(opts);
   topinfo['query'] = rdfbase;
-
-
 
 
   var l = $(location).attr('hash');
@@ -295,15 +270,11 @@ function init_canvas_div(){
   init_ui();
   // Setup a basic Canvas with explicit width to scale to from browser width
   initCanvas(nCanvas)
-
-  // Manifest Initialization
-  var manuri = islandora_canvas_params.manifest_url;
-  if (manuri != undefined) {
-    fetchTriples(manuri, rdfbase, cb_process_manifest);
-  } else {
-    repouri = $('#repository').attr('href');
-    fetchTriples(repouri, rdfbase, cb_process_repository);
-  }
+  // Manifest initialization.
+  fetchTriples('http://' + document.domain + '/' +
+                 islandora_canvas_params.manifest_url,
+               rdfbase,
+               cb_process_manifest);
 
   $('#color-picker-wrapper').click(function(){
     $('#anno_color_activated').attr('value', 'active');
@@ -312,35 +283,23 @@ function init_canvas_div(){
 
 }
 
-
-function testCModel(){
-
-  if(cwrc_params.cModels[cwrc_params.position -1] == 'islandora:bd_pageCModel'){
-    closeColumn()
-  }else{
-    openColumn();
-  }
-}
-function closeColumn(){
-
-  $('.col3').css("display","none");
-  $('.col1').css("width","100%");
-  $('#column-separator').css("left","99%");
-  $("#annotation_tab").hide()
+// @XXX openColumn and setReturnParams may not be necessary dependent on theme
+//   need more investigation. Noticed different results with Garland and
+//   Bartik.
+/**
+ * This will set the annoation panes' sizes and separator position.
+ */
+function openColumn() {
+  $('.col3').css("display", "block");
+  $('.col1').css("width", cwrc_params.text_annotation_width);
+  $('#column-separator').css("left", cwrc_params.separator_pos);
 }
 
-function openColumn(){
-
-  $('.col3').css("display","block");
-  $('.col1').css("width",cwrc_params.col_width);
-  $('#column-separator').css("left",cwrc_params.separator_pos);
-  $("#annotation_tab").show()
-}
-
-
+/**
+ * Used to preserve the width of the text annotation pane
+ * and the leftedness of the seperator.
+ */
 function setReturnParams(){
-  if(cwrc_params.cModels[cwrc_params.position -1] == 'islandora:pageCModel'){
-    cwrc_params.col_width = $('.col1').css("width");
-    cwrc_params.separator_pos =$('#column-separator').css("left");
-  }
+  cwrc_params.text_annotation_width = $('.col1').css("width");
+  cwrc_params.separator_pos = $('#column-separator').css("left");
 }
