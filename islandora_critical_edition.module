@@ -88,9 +88,8 @@ function islandora_critical_edition_mangement_access(AbstractObject $object = NU
   }
 
   $is_book = in_array('islandora:bookCModel', $object->models);
-  $is_critical_edition = in_array('islandora:criticalEditionCModel', $object->models);
 
-  return ($is_book || $is_critical_edition) && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
+  return $is_book && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
 }
 
 /**

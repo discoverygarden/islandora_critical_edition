@@ -65,8 +65,6 @@ function islandora_critical_edition_delete_edition_form(array $form, array &$for
  * This will destroy children objects of aggregate objects.
  * It will use a batch.
  *
- * @XXX should we implement a recursive deletion option?
- *
  * @param array $form
  *   The form.
  * @param array $form_state
