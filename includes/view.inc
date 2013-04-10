@@ -14,6 +14,11 @@ function islandora_critical_edition_view_edition_form($editions) {
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
 
   $links = array();
+
+  if (!user_access(VIEW_CRITICAL_EDITION)) {
+    return $links;
+  }
+
   foreach ($editions as $pid => $title) {
     $links[] = l($title, "islandora/object/$pid");
   }

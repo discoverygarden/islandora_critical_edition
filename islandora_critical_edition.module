@@ -4,6 +4,14 @@
  *   This module is for managing critical editions of Islandora objects.
  */
 
+// Permissions.
+define('USE_CWRC_WRITER', 'use CWRC');
+define('EDIT_WITH_CWRC_WRITER', 'edit CWRC');
+define('CREATE_CRITICAL_EDITION', 'create critical edition');
+define('DELETE_CRITICAL_EDITION', 'delete critical edition');
+define('VIEW_CRITICAL_EDITION', 'view critical edition');
+
+// Relationships.
 define('ISLANDORA_CRITICAL_EDITION', 'isCriticalEditionOf');
 
 /**
@@ -68,7 +76,7 @@ function islandora_critical_edition_cwrc_access(AbstractObject $object = NULL) {
 
   $is_page = in_array('islandora:criticalEditionCModelPage', $object->models);
 
-  return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access('use CWRC');
+  return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access(USE_CWRC_WRITER);
 }
 
 /**
@@ -89,7 +97,10 @@ function islandora_critical_edition_mangement_access(AbstractObject $object = NU
 
   $is_book = in_array('islandora:bookCModel', $object->models);
 
-  return $is_book && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
+  return $is_book && (user_access(CREATE_CRITICAL_EDITION) ||
+      user_access(DELETE_CRITICAL_EDITION) ||
+      user_access(VIEW_CRITICAL_EDITION)) &&
+    islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
 }
 
 /**
@@ -109,7 +120,7 @@ function islandora_critical_edition_edit_cwrc_access(AbstractObject $object = NU
 
   $is_page = in_array('islandora:criticalEditionCModelPage', $object->models);
 
-  return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access('edit CWRC');
+  return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access(EDIT_WITH_CWRC_WRITER);
 }
 /**
  * Implements hook_permission().
@@ -117,13 +128,27 @@ function islandora_critical_edition_edit_cwrc_access(AbstractObject $object = NU
  */
 function islandora_critical_edition_permission() {
   return array(
-    'use CWRC' => array(
+    USE_CWRC_WRITER => array(
       'title' => t('Use CWRCWriter'),
       'description' => t('Access CWRCWriter.'),
     ),
-    'edit CWRC' => array(
+    EDIT_WITH_CWRC_WRITER => array(
       'title' => t('Edit with CWRCWriter'),
-      'description' => t('Edit and save content within CWRCWriter to objects in the repository. Note: Fedora XACML security policies may override this position.'),
+      'description' => t('Edit and save content within CWRCWriter to objects in
+        the repository. Note: Fedora XACML security policies may override this
+        permission.'),
+    ),
+    CREATE_CRITICAL_EDITION => array(
+      'title' => t('Create Critical Editions'),
+      'description' => t('Create Critical Editions of Islandora Books.'),
+    ),
+    DELETE_CRITICAL_EDITION => array(
+      'title' => t('Delete Critical Editions'),
+      'description' => t('Delete Critical Editions of Islandora Books.'),
+    ),
+    VIEW_CRITICAL_EDITION => array(
+      'title' => t('View Critical Editions'),
+      'description' => t('View Critical Editions of Islandora Books.'),
     ),
   );
 }
