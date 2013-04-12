@@ -23,13 +23,14 @@ function islandora_critical_edition_management(AbstractObject $object) {
 
   drupal_set_title($object->label);
   $items = array();
+
   $items['manage_book'] = array(
     '#type' => 'vertical_tabs',
     '#weight' => 0,
     '#prefix' => '',
   );
   $items['manage_book']['create'] = array(
-    '#access' => user_access(FEDORA_ADD_DS),
+    '#access' => user_access(CREATE_CRITICAL_EDITION),
     '#title' => t('Create Critical Edition'),
     '#type' => 'fieldset',
     'form' => drupal_get_form('islandora_create_edition_form', $object),
@@ -38,16 +39,15 @@ function islandora_critical_edition_management(AbstractObject $object) {
   );
   if ($editions) {
     $items['manage_book']['view'] = array(
-      '#access' => user_access(FEDORA_ADD_DS),
+      '#access' => user_access(VIEW_CRITICAL_EDITION),
       '#title' => t('View Critical Editions'),
       '#type' => 'fieldset',
       'view_critical_editions' => islandora_critical_edition_view_edition_form($editions),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     );
-
     $items['manage_book']['delete'] = array(
-      '#access' => user_access(FEDORA_ADD_DS),
+      '#access' => user_access(DELETE_CRITICAL_EDITION),
       '#title' => t('Delete Critical Editions'),
       '#type' => 'fieldset',
       'form' => drupal_get_form('islandora_critical_edition_delete_edition_form', $object),

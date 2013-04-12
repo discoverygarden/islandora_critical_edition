@@ -19,9 +19,13 @@
  */
 function islandora_create_edition_form(array $form, array &$form_state, AbstractObject $object) {
   global $user;
+  $form = array();
+
+  if (!user_access(CREATE_CRITICAL_EDITION)) {
+    return $form;
+  }
 
   $label = t('Critical Edition of') . " " . $object->label . ' - ' . $user->name;
-  $form = array();
   $form['fedora_object'] = array(
     '#type' => 'hidden',
     '#value' => $object->id,

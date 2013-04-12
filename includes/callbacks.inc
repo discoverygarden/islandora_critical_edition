@@ -24,8 +24,6 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   global $user;
 
-  $fedora_url = variable_get('fedora_base_url', 'http://localhost:8080/fedora');
-
   $critical_edition_relationships = $fedora_object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isPageOf');
   $critical_edition = $critical_edition_relationships[0]['object']['value'];
   $critical_edition_object = islandora_object_load($critical_edition);
@@ -35,7 +33,6 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $position = array_search($fedora_object->id, $pages);
   $results = array();
   $results['uid'] = $user->uid;
-  $results['fedora_url'] = $fedora_url;
   $results['position'] = $position;
   $results['pages'] = $pages;
   $results['title'] = $title;

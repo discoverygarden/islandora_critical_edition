@@ -271,7 +271,7 @@ function init_canvas_div() {
   // Setup a basic Canvas with explicit width to scale to from browser width
   initCanvas(nCanvas)
   // Manifest initialization.
-  fetchTriples('http://' + document.domain + '/' +
+  fetchTriples('http://' + document.domain + window.parent.Drupal.settings.basePath +
                  islandora_canvas_params.manifest_url,
                rdfbase,
                cb_process_manifest);
