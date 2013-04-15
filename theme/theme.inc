@@ -6,6 +6,7 @@
 
 /**
  * Implements hook_preprocess_islandora_critical_edition().
+ *
  * Prepares variables for the CWRC viewer.
  *
  * @param array &$variables

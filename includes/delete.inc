@@ -21,6 +21,12 @@
 function islandora_critical_edition_delete_edition_form(array $form, array &$form_state, AbstractObject $object) {
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
   global $user;
+  $form = array();
+
+  if (!user_access(DELETE_CRITICAL_EDITION)) {
+    return $form;
+  }
+
   $editions = islandora_critical_edition_get_critical_editions($object);
   foreach ($editions as $pid => $label) {
     $options[$pid] = array(
@@ -33,7 +39,6 @@ function islandora_critical_edition_delete_edition_form(array $form, array &$for
     'pid' => t("PID"),
     'label' => t("Label"),
   );
-  $form = array();
   $form['fedora_object'] = array(
     '#type' => 'hidden',
     '#value' => $object->id,
@@ -64,8 +69,6 @@ function islandora_critical_edition_delete_edition_form(array $form, array &$for
  * Submit handler for critical edition deletion.
  * This will destroy children objects of aggregate objects.
  * It will use a batch.
- *
- * @XXX should we implement a recursive deletion option?
  *
  * @param array $form
  *   The form.
