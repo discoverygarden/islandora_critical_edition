@@ -70,64 +70,6 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
  *   The Fedora object to supply the data for
  */
 function islandora_critical_edition_canvas_setup(AbstractObject $fedora_object) {
-  module_load_include('inc', 'islandora_image_annotation', 'includes/build_streams');
-  module_load_include('inc', 'islandora_image_annotation', 'includes/rdf_builder');
-  module_load_include('inc', 'islandora_image_annotation', 'includes/callbacks');
-  module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
-
-
-  $relationships = $fedora_object->relationships->get();
-  foreach ($relationships as $relationship) {
-    if ($relationship['predicate']['value'] == 'hasModel') {
-      $content_model = $relationship['object']['value'];
-    }
-    if ($relationship['predicate']['value'] == 'isEditionOf') {
-      $page_object = islandora_object_load($relationship['object']['value']);
-    }
-  }
-
-  // Establish categories for dropdown.
-  $dropdown = variable_get('islandora_annotation_enforce_taxonomy', TRUE);
-  $mappings = variable_get('islandora_annotation_mappings', array());
-  $vid = isset($mappings[$content_model]['TAX'])? $mappings[$content_model]['TAX']: NULL;
-  $categories = array();
-  if ($dropdown && isset($vid) && module_exists('taxonomy')) {
-    $terms = taxonomy_get_tree($vid, 0, 1);
-    foreach ($terms as $term) {
-      $categories[] = $term->name;
-    }
-  }
-  else {
-    $categories = islandora_annotations_get_type_terms();
-  }
-  if (empty($categories)) {
-    $categories[] = 'unclassified';
-  }
-
-  $page_object_of_relationship = $page_object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isPageOf');
-  $book_object = islandora_object_load($page_object_of_relationship[0]['object']['value']);
-  $pid = $page_object->id;
-  $title = $book_object->label;
-  $pages = islandora_paged_content_get_pages($book_object);
-  $pages = array_keys($pages);
-  $position = array_search($page_object->id, $pages);
-
-  $results = array();
-  $results['page_title'] = $fedora_object->label;
-  $results['object_base'] = "islandora/object/$pid";
-  $results['position'] = $position;
-  $results['pages'] = $pages;
-  $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
-  $results['categories'] = $categories;
-  $results['use_dropdown'] = $dropdown;
-  // The anno callbacks go to islandora_image_annotation.
-  $results['manifest_url'] = "islandora/anno/serve/$pid/Manifest/manifest.xml";
-  $results['islandora_post_url'] = "islandora/anno/add_annotation/$pid";
-  $results['get_annotation_list_url'] = "islandora/anno/get_urns/$pid";
-  // @XXX These links are not dynamic do we need to keep sending them?
-  $results['islandora_get_annotation'] = "islandora/anno/get_annotation/";
-  $results['islandora_delete_annotation'] = "islandora/anno/delete_annotation/";
-  $results['islandora_update_annotation'] = "islandora/anno/update_annotation/";
-
-  echo json_encode($results);
+  module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
+  echo islandora_annotation_canvas_setup($fedora_object->id);
 }
