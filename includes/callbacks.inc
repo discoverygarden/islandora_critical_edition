@@ -71,5 +71,5 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
  */
 function islandora_critical_edition_canvas_setup(AbstractObject $fedora_object) {
   module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
-  echo islandora_annotation_canvas_setup($fedora_object->id);
+  echo islandora_image_annotation_canvas_init($fedora_object->id);
 }
