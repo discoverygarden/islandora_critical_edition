@@ -38,8 +38,9 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $results['title'] = $title;
   $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
   $results['page_count'] = count($pages);
-  $json = json_encode($results);
-  echo $json;
+
+  drupal_json_output($results);
+
 }
 
 /**
