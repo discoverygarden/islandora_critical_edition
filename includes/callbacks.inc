@@ -40,7 +40,6 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $results['page_count'] = count($pages);
 
   drupal_json_output($results);
-
 }
 
 /**
@@ -71,6 +70,6 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
  *   The Fedora object to supply the data for
  */
 function islandora_critical_edition_canvas_setup(AbstractObject $fedora_object) {
-  module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
-  echo islandora_image_annotation_canvas_init($fedora_object->id);
+  module_load_include('inc', 'islandora_image_annotation', 'includes/callbacks');
+  islandora_image_annotation_canvas_setup($fedora_object->id);
 }

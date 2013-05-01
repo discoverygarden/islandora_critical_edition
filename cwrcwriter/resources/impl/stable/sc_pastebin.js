@@ -35,7 +35,7 @@ function islandora_getList() {
   $.ajax({
     type:'GET',
     async:false,
-    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.get_annotation_list_url,
+    url: islandora_canvas_params.get_annotation_list_url,
     success: function(data,status,xhr) {
    
       if(data != 'null'){
