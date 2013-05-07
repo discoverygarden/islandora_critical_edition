@@ -5,19 +5,19 @@ function islandora_postData(title, data, type, color) {
 
   data = encodeURI(data);
   $.ajax({
-    type:'POST',
-    async:false,
-    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.islandora_post_url,
+    type: 'POST',
+    async: false,
+    url: islandora_get_basepath() + islandora_canvas_params.islandora_post_url,
     data: {
-      title:title,
-      data:data,
-      type:type,
-      color:color
+      title: title,
+      data: data,
+      type: type,
+      color: color
     },
-    success: function(data,status,xhr) {
+    success: function(data, status, xhr) {
       islandora_getAnnotation(data);
     },
-    error: function(data,status,xhr) {
+    error: function(data, status, xhr) {
       alert('Failed to post')
     }
   });
@@ -33,31 +33,31 @@ function islandora_getList() {
   tabs.tabs('select', 3);
   islandora_canvas_params.mappings = new Array();
   $.ajax({
-    type:'GET',
-    async:false,
-    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.get_annotation_list_url,
-    success: function(data,status,xhr) {
-   
-      if(data != 'null'){
+    type: 'GET',
+    async: false,
+    url: islandora_get_basepath() + islandora_canvas_params.get_annotation_list_url,
+    success: function(data, status, xhr) {
+
+      if (data != 'null') {
         var listdata = $.parseJSON(data);
         var pids = listdata.pids;
         var types = listdata.types;
 
-       // create the divs
-   
-        if( listdata!= null && types != null){
-          for (var i=0,info;i < types.length;i++){
-            var fixed_cat = types[i].replace(/[^\w]/g,'');
+        // create the divs
+
+        if (listdata != null && types != null) {
+          for (var i = 0, info; i < types.length; i++) {
+            var fixed_cat = types[i].replace(/[^\w]/g, '');
             var type_class = "annoType_" + fixed_cat;
-            var blockId = 'islandora_annoType_'+ fixed_cat;
-            var contentId = 'islandora_annoType_content_'+ fixed_cat;
+            var blockId = 'islandora_annoType_' + fixed_cat;
+            var contentId = 'islandora_annoType_content_' + fixed_cat;
             var idSelector = '#' + blockId;
 
-            if($(idSelector).length == 0){
+            if ($(idSelector).length == 0) {
 
-              header =  '<div class = "islandora_comment_type" id = "'+ blockId + '">';
+              header = '<div class = "islandora_comment_type" id = "' + blockId + '">';
               header += '<div class = "islandora_comment_type_title">' + types[i] + '</div>';
-              header += '<div class = "islandora_comment_type_content" style = "display:none" id = "'+ contentId + '"></div>';
+              header += '<div class = "islandora_comment_type_content" style = "display:none" id = "' + contentId + '"></div>';
               header += '</div>';
 
               $('#comment_annos_block').append(header);
@@ -67,8 +67,8 @@ function islandora_getList() {
         }
 //populate the divs
 
-        if( listdata!= null && pids != null){
-          for (var i=0,info;i < pids.length;i++){
+        if (listdata != null && pids != null) {
+          for (var i = 0, info; i < pids.length; i++) {
             islandora_canvas_params.mappings[pids[i]['urn']] = pids[i]['color']
             var pid = pids[i]['id'];
             $('#canvases .canvas').each(function() {
@@ -76,23 +76,23 @@ function islandora_getList() {
               var cnv = $(this).attr('canvas');
               islandora_getAnnotation(pid);
             });
-      
+
           }
         }
 
         $(".islandora_comment_type_title").off();
 
-        $(".islandora_comment_type_title").ready().on("click", function(){
+        $(".islandora_comment_type_title").ready().on("click", function() {
           $(this).siblings('.islandora_comment_type_content').toggle();
         });
       }
     },
-    error: function(data,status,xhr) {
-    // alert('Failed to retrieve List')
+    error: function(data, status, xhr) {
+      // alert('Failed to retrieve List')
     }
 
   });
- 
+
 }
 
 
@@ -101,14 +101,14 @@ function islandora_getList() {
 function islandora_getAnnotation(pid) {
 
   $.ajax({
-    type:'GET',
-    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.islandora_get_annotation + pid,
-    success: function(data,status,xhr) {
+    type: 'GET',
+    url: islandora_get_basepath() + islandora_canvas_params.islandora_get_annotation + pid,
+    success: function(data, status, xhr) {
       load_commentAnno(data);
-     
+
     },
-    error: function(data,status,xhr) {
-      
+    error: function(data, status, xhr) {
+
     }
   });
 }
@@ -116,67 +116,76 @@ function islandora_getAnnotation(pid) {
 // deletes annotation from fedora
 function islandora_deleteAnno(urn) {
 
-  var selector = '#anno_'+urn;
+  var selector = '#anno_' + urn;
   $parent = $(selector).closest('.islandora_comment_type');
   length = $parent.find('.canvas_annotation').length;
 
-  if (length ==1){
+  if (length == 1) {
     $parent.remove();
   }
 
-  var classSelector = '.svg_'+urn;
+  var classSelector = '.svg_' + urn;
   $.ajax({
-    type:'POST',
-    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.islandora_delete_annotation + urn,
+    type: 'POST',
+    url: islandora_get_basepath() + islandora_canvas_params.islandora_delete_annotation + urn,
     data: urn,
-    success: function(data,status,xhr) {
+    success: function(data, status, xhr) {
       $(selector).next().remove();
       $(selector).remove();
       $(classSelector).remove();
 
     },
-    error: function(data,status,xhr) {
-    //   alert('Failed to delete annotation')
+    error: function(data, status, xhr) {
+      //   alert('Failed to delete annotation')
     }
   });
 }
 
 //updates existing annotations
 
-function islandora_updateAnno(urn, title,annoType, content, color){
+function islandora_updateAnno(urn, title, annoType, content, color) {
   $.ajax({
-    type:'POST',
-    url: window.parent.Drupal.settings.basePath + islandora_canvas_params.islandora_update_annotation,
+    type: 'POST',
+    url: islandora_get_basepath() + islandora_canvas_params.islandora_update_annotation,
     data: {
-      urn:urn,
-      title:title,
-      annoType:annoType,
-      content:content,
-      color:color
+      urn: urn,
+      title: title,
+      annoType: annoType,
+      content: content,
+      color: color
     },
-    success: function(data,status,xhr) {
+    success: function(data, status, xhr) {
       $('#create_annotation_box').hide();
-      var selector = '#anno_'+urn;
-      var text = $(selector).text().trim().substring(2,100);
+      var selector = '#anno_' + urn;
+      var text = $(selector).text().trim().substring(2, 100);
       old_title = $(selector).html();
       new_title = old_title.replace(text, title);
 
       $(selector).html(new_title);
       $(selector).next('.comment_text').find('.comment_type').text(annoType);
       $(selector).next('.comment_text').find('.comment_content').text(content);
-      var fixed_cat = annoType.replace(/[^\w]/g,'');
+      var fixed_cat = annoType.replace(/[^\w]/g, '');
 
       $annotation = $(selector).closest('.canvas_annotation');
       $destination = $('#islandora_annoType_content_' + fixed_cat);
       $annotation.appendTo($destination);
-     
+
     },
-    error: function(data,status,xhr) {
+    error: function(data, status, xhr) {
       alert('Failed to update annotation')
     }
   });
   $('#create_annotation').empty().append('Annotate');
   $('#create_annotation').css({
-    color:'#000000'
+    color: '#000000'
   });
+}
+
+// Prevents urls starting with double slashes.
+function islandora_get_basepath() {
+  var basepath = window.parent.Drupal.settings.basePath;
+  if (basepath === '/') {
+    basepath = '';
+  }
+  return basepath;
 }
