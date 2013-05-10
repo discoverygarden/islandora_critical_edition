@@ -11,7 +11,6 @@ $(document).ready(function() {
     iframeFix: true,
     drag: function(event, ui) {
       resizeColumns(event, ui);
-      console.log("drag fired");
     },
   }).data('ratio', {left: 50, right: 50});
 

@@ -29,7 +29,6 @@ $(document).ready(function() {
 
 $(window).resize(function () {
   // resize columns
-  console.log("resize fired from wrong resize handler");
   resizeColumns();
 });
 
