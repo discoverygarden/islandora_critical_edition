@@ -11,6 +11,7 @@ $(document).ready(function() {
     iframeFix: true,
     drag: function(event, ui) {
       resizeColumns(event, ui);
+      console.log("drag fired");
     },
   }).data('ratio', {left: 50, right: 50});
 
@@ -60,7 +61,6 @@ var resizeColumns = function(event, ui) {
 
 // resize window
 var resizeColumnsDrag = function() {
-
   // set variables
   var widthSeparator = $('#column-separator').outerWidth();
   var widthInit = $('#colright').width();
