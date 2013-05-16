@@ -38,8 +38,8 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $results['title'] = $title;
   $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
   $results['page_count'] = count($pages);
-  $json = json_encode($results);
-  echo $json;
+
+  drupal_json_output($results);
 }
 
 /**
@@ -71,5 +71,26 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
  */
 function islandora_critical_edition_canvas_setup(AbstractObject $fedora_object) {
   module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
-  echo islandora_image_annotation_canvas_init($fedora_object->id);
+  module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
+
+
+  $relationships = $fedora_object->relationships->get();
+  foreach ($relationships as $relationship) {
+    if ($relationship['predicate']['value'] == 'isEditionOf') {
+      $page_object = islandora_object_load($relationship['object']['value']);
+    }
+  }
+
+  $page_object_of_relationship = $page_object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isPageOf');
+  $book_object = islandora_object_load($page_object_of_relationship[0]['object']['value']);
+  $pages = array_keys(islandora_paged_content_get_pages($book_object));
+  $position = array_search($page_object->id, $pages);
+
+  $results = islandora_image_annotation_canvas_init($page_object->id);
+
+  $results['position'] = $position;
+  $results['pages'] = $pages;
+  $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
+
+  drupal_json_output($results);
 }
