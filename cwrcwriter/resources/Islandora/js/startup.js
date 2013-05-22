@@ -33,7 +33,7 @@ $('document').ready(function(){
 
   // Instantiate and initialize writer object.
   writer = new Writer({
-    'project':'EMiC'
+    'project':'local'
   });
   writer.init();
 
