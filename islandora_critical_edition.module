@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   This module is for managing critical editions of Islandora objects.
+ * This module is for managing critical editions of Islandora objects.
  */
 
 // Permissions.
@@ -124,7 +124,6 @@ function islandora_critical_edition_edit_cwrc_access(AbstractObject $object = NU
 }
 /**
  * Implements hook_permission().
- * Additional permissions to come
  */
 function islandora_critical_edition_permission() {
   return array(

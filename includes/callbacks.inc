@@ -1,18 +1,11 @@
 <?php
 /**
  * @file
- *   Holds the ajax callbacks for the cwrcwriter.
+ * Holds the ajax callbacks for the cwrcwriter.
  */
 
 /**
  * Provides all the parameters necessary for CWRCWriter to operate with Fedora.
- *
- * @XXX There is no 7.x authority module yet. Alan knows how to integrate.
- *   @code
- *     $results['authority_url'] = url();
- *     $results['authority_mappings'] =
- *       islandora_critical_edition_get_authority_mappings();
- *   @endcode
  *
  * @global User $user
  *
@@ -38,6 +31,10 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $results['title'] = $title;
   $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
   $results['page_count'] = count($pages);
+
+  $entity_collection = variable_get('islandora_entities_ingest_collection', 'islandora:entity_collection');
+  $results['create_entity_callback'] = url('islandora/object/' . $entity_collection . '/manage/overview/ingest');
+  $results['entities_search_callback'] = url('islandora/entities/search');
 
   drupal_json_output($results);
 }
