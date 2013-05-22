@@ -225,7 +225,7 @@ function init_canvas_div() {
   if(islandora_canvas_params.no_edit == true){
     $('#create_annotation').hide();
   }
-  opts.base = window.parent.Drupal.settings.basePath + islandora_canvas_params.object_base;
+  opts.base = islandora_canvas_params.object_base;
 
   // Build and populate page choice dropdown.
   $('#canvas_page_selector').html('<select id="canvas_page_choose"></select>');
