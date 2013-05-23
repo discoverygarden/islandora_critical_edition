@@ -22,7 +22,7 @@ function islandora_critical_edition_delete_edition_form(array $form, array &$for
   global $user;
   $form = array();
 
-  if (!user_access(DELETE_CRITICAL_EDITION)) {
+  if (!user_access(ISLANDORA_CRITICAL_EDITION_DELETE_CRITICAL_EDITION)) {
     return $form;
   }
 

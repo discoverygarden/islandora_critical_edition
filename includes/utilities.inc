@@ -18,7 +18,7 @@ function islandora_critical_edition_get_critical_editions(AbstractObject $fedora
 
   $query = "
 select \$subject \$title from <#ri>
-where (\$subject <" . ISLANDORA_RELS_EXT_URI . ISLANDORA_CRITICAL_EDITION . ">'" . $fedora_object->id . "'
+where (\$subject <" . ISLANDORA_RELS_EXT_URI . ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF . ">'" . $fedora_object->id . "'
 and \$subject <" . FEDORA_MODEL_URI . "state> <" . FEDORA_MODEL_URI . "Active>
 and \$subject <dc:title> \$title)
 ";
@@ -43,7 +43,7 @@ and \$subject <dc:title> \$title)
  *   The PID of the base object.
  */
 function islandora_critical_edition_get_object_of_critical_edition(AbstractObject $fedora_object) {
-  $critical_edition_relationships = $fedora_object->relationships->get(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION);
+  $critical_edition_relationships = $fedora_object->relationships->get(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF);
   return $critical_edition_relationships[0]['object']['value'];
 }
 

@@ -21,7 +21,7 @@ function islandora_create_edition_form(array $form, array &$form_state, Abstract
   global $user;
   $form = array();
 
-  if (!user_access(CREATE_CRITICAL_EDITION)) {
+  if (!user_access(ISLANDORA_CRITICAL_EDITION_CREATE_CRITICAL_EDITION)) {
     return $form;
   }
 
@@ -68,7 +68,7 @@ function islandora_create_edition_form_submit($form, &$form_state) {
                                                                 $content_models);
 
   $fedora_object = islandora_ingest_form_prepare_new_object($config);
-  $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION, $book_pid, RELS_TYPE_PLAIN_LITERAL);
+  $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF, $book_pid, RELS_TYPE_PLAIN_LITERAL);
   $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:criticalEditionCModel');
   $edition_object = islandora_add_object($fedora_object);
 

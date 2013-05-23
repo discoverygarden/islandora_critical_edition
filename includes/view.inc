@@ -15,7 +15,7 @@ function islandora_critical_edition_view_edition_form($editions) {
 
   $links = array();
 
-  if (!user_access(VIEW_CRITICAL_EDITION)) {
+  if (!user_access(ISLANDORA_CRITICAL_EDITION_VIEW_CRITICAL_EDITION)) {
     return $links;
   }
 
