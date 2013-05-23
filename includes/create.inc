@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Holds code for creating new critical editions.
+ * Holds code for creating new critical editions.
  */
 
 /**
@@ -95,8 +95,10 @@ function islandora_create_edition_form_submit($form, &$form_state) {
  * Created individual page objects for new Critical Edition.
  *
  *
+ * @see islandora_paged_content_get_pages()
+ *
  * @param array $page
- *   A page from an array create by @see islandora_paged_content_get_pages
+ *   A page from an array create by islandora_paged_content_get_pages.
  * @param string $parent
  *   The Fedora PID of the paged parent.
  */
@@ -134,10 +136,12 @@ function islandora_create_edition_page($page, $parent) {
 }
 
 /**
- * This function holds code for constructing an object's attributes while
- * respecting UUIDs.
+ * This function holds code for constructing an object's attributes.
+ *
+ * It respects UUIDs.
  *
  * @global user user
+ * @see islandora_ingest_form_prepare_new_object()
  *
  * @param string $namespace
  *   The namespace to create the object's PID in.
@@ -147,7 +151,7 @@ function islandora_create_edition_page($page, $parent) {
  *   Content models that the object will have.
  *
  * @return array
- *   An array acceptable by @see islandora_ingest_form_prepare_new_object
+ *   An array acceptable by islandora_ingest_form_prepare_new_object.
  */
 function islandora_critical_edition_get_object_configuration($namespace, $label = '', $content_models = array()) {
   global $user;

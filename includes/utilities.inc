@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Holds utility functions for islandora_critical_editions.
+ * Holds utility functions for islandora_critical_editions.
  */
 
 /**
@@ -34,8 +34,7 @@ and \$subject <dc:title> \$title)
 }
 
 /**
- * Returns the Fedora object of the base object associated with a critical
- * edition.
+ * Returns the base object associated with a critical edition.
  *
  * @param AbstractObject $fedora_object
  *   The critical edition object to check for a related base object.

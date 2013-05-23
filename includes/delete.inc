@@ -1,12 +1,11 @@
 <?php
 /**
  * @file
- *   Holds the code for deleting critical editions.
+ * Holds the code for deleting critical editions.
  */
 
 /**
- * Generates a form that lets one delete the critical editions associated with
- * the indicated object.
+ * Generates a form that lets one delete the critical editions of an object.
  *
  * @param array $form
  *   The form.
@@ -67,6 +66,7 @@ function islandora_critical_edition_delete_edition_form(array $form, array &$for
 
 /**
  * Submit handler for critical edition deletion.
+ *
  * This will destroy children objects of aggregate objects.
  * It will use a batch.
  *
@@ -91,8 +91,7 @@ function islandora_critical_edition_delete_edition_form_submit($form, &$form_sta
 }
 
 /**
- * This function will kick off a batch process that will purge an array of
- * PIDs.
+ * This function will kick off a batch process to purge an array of PIDs.
  *
  * @param array $pids_to_purge
  *   The list of PIDs to purge.

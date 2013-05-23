@@ -59,13 +59,12 @@ function islandora_critical_edition_menu() {
 }
 
 /**
- * Checks to see if the user should have access to the CWRC editor for the
- * given object.
+ * Checks if the user has access to the CWRC editor for the given object.
  *
  * @param IslandoraFedora $object
  *   The object to determine functionality for.
  *
- * @return boolean
+ * @return bool
  *   TRUE if the user has access.
  *   FALSE if the user doesn't have access.
  */
@@ -80,13 +79,12 @@ function islandora_critical_edition_cwrc_access(AbstractObject $object = NULL) {
 }
 
 /**
- * Checks to see if the user should have access to critical editions
- * management functionality for the given object.
+ * Checks if the user has access to critical editions management on the object.
  *
  * @param IslandoraFedora $object
  *   The object to determine functionality for.
  *
- * @return boolean
+ * @return bool
  *   TRUE if the user has access.
  *   FALSE if the user doesn't have access.
  */
@@ -109,7 +107,7 @@ function islandora_critical_edition_mangement_access(AbstractObject $object = NU
  * @param IslandoraFedora $object
  *   The object to determine functionality for.
  *
- * @return boolean
+ * @return bool
  *   TRUE if the user has access.
  *   FALSE if the user doesn't have access.
  */

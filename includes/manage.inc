@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Holds top level functionality for management of critical editions.
+ * Holds top level functionality for management of critical editions.
  */
 
 /**

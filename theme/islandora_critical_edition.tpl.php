@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   This is the template file for the critical edition object
+ * This is the template file for the critical edition object
  *
  * Available variables:
  * - $viewer_url (string): The url to the cwrc viewer.
