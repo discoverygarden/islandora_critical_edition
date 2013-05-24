@@ -33,7 +33,7 @@ $('document').ready(function(){
 
   // Instantiate and initialize writer object.
   writer = new Writer({
-    'project':'EMiC'
+    'project':'local'
   });
   writer.init();
 
@@ -171,7 +171,6 @@ $('document').ready(function(){
           var pm = $(this).find('.comment_showhide');
           if (pm.text() == '+ ') {
             pm.empty().append('- ');
-            console.log(this);
             var id = $(this).attr('id').substring(5,100);
             var canvas = $(this).attr('canvas');
             paint_commentAnnoTargets(this, canvas, id);
@@ -279,7 +278,7 @@ function init_canvas_div() {
     $('#anno_color_activated').attr('value', 'active');
   });
   $('.color-picker').miniColors();
-
+  resizeColumnsDrag();
 }
 
 // @XXX openColumn and setReturnParams may not be necessary dependent on theme
@@ -301,4 +300,6 @@ function openColumn() {
 function setReturnParams(){
   cwrc_params.text_annotation_width = $('.col1').css("width");
   cwrc_params.separator_pos = $('#column-separator').css("left");
+  
+  
 }

@@ -109,7 +109,7 @@ var SearchDialog = function(config) {
   
     if (lookupService == 'lookup_project') {
       $.ajax({
-        url: cwrc_params.authority_url + type + '/' + query,
+        url: cwrc_params.entities_search_callback + '/' + type + '?entities_query=' + query,
         // data: {
         // q: 'authlabel:'+query,
         // d: 'orlando',
@@ -317,12 +317,9 @@ var SearchDialog = function(config) {
           searchResult(true);
         }
       },{
-        text: 'Add New '+config.title,
+        text: 'Add New ' + config.title,
         click: function() {
-          // @XXX authority mappings right?
-          window.open(window.parent.Drupal.settings.basePath +
-                        'islandora/object/' +
-                      cwrc_params.authority_mappings[config.title]);
+          window.open(cwrc_params.create_entity_callback);
         }
       },{
         text: 'Tag '+config.title,

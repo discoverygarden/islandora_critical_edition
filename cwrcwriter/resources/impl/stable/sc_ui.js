@@ -305,7 +305,6 @@ function paint_annos() {
 
 
 function mk_raphael(typ, canvas, canvasId) {
-
   if (topinfo['raphaels'][typ][canvas] != undefined) {
     return topinfo['raphaels'][typ][canvas];
   } else {
@@ -320,7 +319,7 @@ function mk_raphael(typ, canvas, canvasId) {
     var scale = topinfo['canvasWidth'] / cvsw;
     var sh = cvsh * scale;
     var sw = cvsw * scale;
-
+    
     var svgWrap = $('#svg_wrapper');
     svgWrap.append('<div class="svg_canvas_wrapper" id="svg_annos_' + typ + '_' + canvasId + '"></div>');
     var svg = $('#svg_annos_' + typ + '_' + canvasId);
@@ -335,13 +334,14 @@ function mk_raphael(typ, canvas, canvasId) {
       'at':'left top',
       'collision':'none'
     });
-
-    var svgcanvas = ScaleRaphael('svg_annos_'+typ + '_' + canvasId, cvsw, cvsh);
-    svgcanvas.changeSize(sw, sh, false, false);
+    // Recent change to fix annotation box when building single page annotation.
+    var svgcanvas = ScaleRaphael('svg_annos_'+typ + '_' + canvasId, $('#canvas-body').width(), $('#canvas-body').height());
+    svgcanvas.changeSize($('#canvas-body').width(), $('#canvas-body').height(), false, false);
     if ($.browser.webkit) {
       svgcanvas.safari();
     }
     topinfo['raphaels'][typ][canvas] = svgcanvas;
+    
     return svgcanvas;
   }
 

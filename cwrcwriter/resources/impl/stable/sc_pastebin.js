@@ -33,12 +33,13 @@ function islandora_getList() {
   tabs.tabs('select', 3);
   islandora_canvas_params.mappings = new Array();
   $.ajax({
-    type: 'GET',
-    async: false,
-    url: islandora_get_basepath() + islandora_canvas_params.get_annotation_list_url,
-    success: function(data, status, xhr) {
 
-      if (data != 'null') {
+    type:'GET',
+    async:false,
+    url: islandora_canvas_params.get_annotation_list_url,
+    success: function(data,status,xhr) {
+   
+      if(data != 'null'){
         var listdata = $.parseJSON(data);
         var pids = listdata.pids;
         var types = listdata.types;
