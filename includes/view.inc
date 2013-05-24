@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Holds functionality to show the critical editions available for an object.
+ * Holds functionality to show the critical editions available for an object.
  */
 
 /**
@@ -15,7 +15,7 @@ function islandora_critical_edition_view_edition_form($editions) {
 
   $links = array();
 
-  if (!user_access(VIEW_CRITICAL_EDITION)) {
+  if (!user_access(ISLANDORA_CRITICAL_EDITION_VIEW_CRITICAL_EDITION)) {
     return $links;
   }
 
@@ -32,7 +32,7 @@ function islandora_critical_edition_view_edition_form($editions) {
 
   return array(
     '#title' => t('Content'),
-    '#description' => t('View '),
+    '#description' => t('View'),
     '#type' => 'markup',
     '#markup' => theme_item_list($links_theme_variables),
     '#id' => "edition_title",

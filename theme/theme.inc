@@ -1,17 +1,14 @@
 <?php
 /**
  * @file
- *   This file contains themeing functions for islandora_critical_edition.
+ * This file contains themeing functions for islandora_critical_edition.
  */
 
 /**
  * Implements hook_preprocess_islandora_critical_edition().
  *
  * Prepares variables for the CWRC viewer.
- *
- * @param array &$variables
- *   Holds variables to modify for the theme template
- *   $variables['islandora_object']
+ * $variables['islandora_object']
  */
 function islandora_critical_edition_preprocess_islandora_critical_edition(&$variables) {
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
