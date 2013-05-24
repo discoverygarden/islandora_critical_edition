@@ -63,11 +63,10 @@ function islandora_create_edition_form_submit($form, &$form_state) {
   // Create Critical edition Fedora Object.
   $content_models = array(array('pid' => 'islandora:criticalEditionCModel'));
 
-  $config = islandora_critical_edition_get_object_configuration(islandora_get_namespace($book_pid),
-                                                                $form_state['values']['title'],
-                                                                $content_models);
+  $fedora_object = islandora_critical_edition_create_object(islandora_get_namespace($book_pid),
+                                                            $form_state['values']['title'],
+                                                            $content_models);
 
-  $fedora_object = islandora_ingest_form_prepare_new_object($config);
   $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF, $book_pid, RELS_TYPE_PLAIN_LITERAL);
   $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:criticalEditionCModel');
   $edition_object = islandora_add_object($fedora_object);
@@ -107,9 +106,8 @@ function islandora_create_edition_page($page, $parent) {
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
 
   $namespace = substr($page['pid'], 0, strpos($page['pid'], ":"));
-  $config = islandora_critical_edition_get_object_configuration($namespace, $page['label']);
+  $fedora_object = islandora_critical_edition_create_object($namespace, $page['label']);
 
-  $fedora_object = islandora_ingest_form_prepare_new_object($config);
   // Add all relationships.
   $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:criticalEditionCModelPage');
   $fedora_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOf', $parent);
@@ -140,8 +138,7 @@ function islandora_create_edition_page($page, $parent) {
  *
  * It respects UUIDs.
  *
- * @global user user
- * @see islandora_ingest_form_prepare_new_object()
+ * @see islandora_prepare_new_object()
  *
  * @param string $namespace
  *   The namespace to create the object's PID in.
@@ -150,29 +147,23 @@ function islandora_create_edition_page($page, $parent) {
  * @param array $content_models
  *   Content models that the object will have.
  *
- * @return array
- *   An array acceptable by islandora_ingest_form_prepare_new_object.
+ * @return AbstractObject
+ *   An object created by islandora_prepare_new_object.
  */
-function islandora_critical_edition_get_object_configuration($namespace, $label = '', $content_models = array()) {
+function islandora_critical_edition_create_object($namespace, $label = '', $content_models = array()) {
+  module_load_include('inc', 'islandora', 'includes/utilities');
   global $user;
-
-  $configuration = array(
-    'label' => $label,
-    'owner' => $user->name,
-  );
-  if ($content_models) {
-    $configuration['models'] = $content_models;
-  }
+  $id_or_namespace = '';
 
   // Choose between 'id' and 'namespace'.
   $make_uuid = variable_get('islandora_basic_collection_generate_uuid', FALSE);
   if (module_exists('islandora_basic_collection') && $make_uuid) {
     $connection = islandora_get_tuque_connection();
-    $configuration['id'] = $connection->repository->getNextIdentifier($namespace, $make_uuid);
+    $id_or_namespace = $connection->repository->getNextIdentifier($namespace, $make_uuid);
   }
   else {
-    $configuration['namespace'] = $namespace;
+    $id_or_namespace = $namespace;
   }
 
-  return $configuration;
+  return islandora_prepare_new_object($id_or_namespace, $label, array(), $content_models);
 }
