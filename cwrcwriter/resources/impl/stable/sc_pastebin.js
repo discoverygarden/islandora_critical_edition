@@ -1,4 +1,3 @@
-
 //add annotation to fedora
 
 function islandora_postData(title, data, type, color) {
