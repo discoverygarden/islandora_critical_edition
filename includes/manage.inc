@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Holds top level functionality for management of critical editions.
+ * Holds top level functionality for management of critical editions.
  */
 
 /**
@@ -30,7 +30,7 @@ function islandora_critical_edition_management(AbstractObject $object) {
     '#prefix' => '',
   );
   $items['manage_book']['create'] = array(
-    '#access' => user_access(CREATE_CRITICAL_EDITION),
+    '#access' => user_access(ISLANDORA_CRITICAL_EDITION_CREATE_CRITICAL_EDITION),
     '#title' => t('Create Critical Edition'),
     '#type' => 'fieldset',
     'form' => drupal_get_form('islandora_create_edition_form', $object),
@@ -39,7 +39,7 @@ function islandora_critical_edition_management(AbstractObject $object) {
   );
   if ($editions) {
     $items['manage_book']['view'] = array(
-      '#access' => user_access(VIEW_CRITICAL_EDITION),
+      '#access' => user_access(ISLANDORA_CRITICAL_EDITION_VIEW_CRITICAL_EDITION),
       '#title' => t('View Critical Editions'),
       '#type' => 'fieldset',
       'view_critical_editions' => islandora_critical_edition_view_edition_form($editions),
@@ -47,7 +47,7 @@ function islandora_critical_edition_management(AbstractObject $object) {
       '#collapsed' => TRUE,
     );
     $items['manage_book']['delete'] = array(
-      '#access' => user_access(DELETE_CRITICAL_EDITION),
+      '#access' => user_access(ISLANDORA_CRITICAL_EDITION_DELETE_CRITICAL_EDITION),
       '#title' => t('Delete Critical Editions'),
       '#type' => 'fieldset',
       'form' => drupal_get_form('islandora_critical_edition_delete_edition_form', $object),

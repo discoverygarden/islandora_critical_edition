@@ -51,7 +51,9 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
 function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
 
   $data = html_entity_decode(stripslashes($_POST['text']), ENT_QUOTES, 'UTF-8');
+  // @codingStandardsIgnoreStart
   $cwrc = str_replace('<br>', '<br />', $data);
+  // @codingStandardsIgnoreEnd
   $cwrc = str_replace('&', '&amp;', $cwrc);
 
   $fedora_object["CWRC"]->content = $cwrc;
@@ -60,7 +62,8 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
 }
 
 /**
- * Ajax callback for Shared Canvas
+ * Ajax callback for Shared Canvas.
+ *
  * Supplies the basic data, including manifest URI.
  *
  * @param AbstractObject $fedora_object
@@ -69,7 +72,6 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
 function islandora_critical_edition_canvas_setup(AbstractObject $fedora_object) {
   module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
-
 
   $relationships = $fedora_object->relationships->get();
   foreach ($relationships as $relationship) {
