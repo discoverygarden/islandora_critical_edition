@@ -334,9 +334,11 @@ function mk_raphael(typ, canvas, canvasId) {
       'at':'left top',
       'collision':'none'
     });
-    // Recent change to fix annotation box when building single page annotation.
-    var svgcanvas = ScaleRaphael('svg_annos_'+typ + '_' + canvasId, $('#canvas-body').width(), $('#canvas-body').height());
-    svgcanvas.changeSize($('#canvas-body').width(), $('#canvas-body').height(), false, false);
+
+    // Allow the annotations to scale.
+    var svgcanvas = ScaleRaphael('svg_annos_' + typ + '_' + canvasId, cvsw, cvsh);
+    svgcanvas.changeSize(sw, sh, false, false);
+
     if ($.browser.webkit) {
       svgcanvas.safari();
     }
