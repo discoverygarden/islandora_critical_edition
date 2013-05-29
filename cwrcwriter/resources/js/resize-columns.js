@@ -12,6 +12,9 @@ $(document).ready(function() {
     drag: function(event, ui) {
       resizeColumns(event, ui);
     },
+    stop: function(event, ui) {
+      resizeCanvas();
+    }
   }).data('ratio', {left: 50, right: 50});
 
   // check starting width
@@ -54,7 +57,8 @@ var resizeColumns = function(event, ui) {
   $('#column-separator').data('ratio', {left: leftRatio, right: rightRatio});
 
   // call resize canvas function
-  resizeCanvas();
+  // Resize canvas seems to break draggable({iframeFix: true}).
+  //resizeCanvas();
 }
 
 
