@@ -7,8 +7,8 @@ CONTENTS OF THIS FILE
 SUMMARY
 -------
 
-A module for creating critical editions of Islandora objects.
-Only supports books.
+A module for creating critical editions of Islandora objects.  Only supports
+books.  The CWRCWriter only supports the Firefox browser.
 
 
 CONFIGURATION
