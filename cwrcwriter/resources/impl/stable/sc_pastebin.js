@@ -70,9 +70,11 @@ function islandora_getList() {
         if( listdata!= null && pids != null){
           for (var i=0,info;i < pids.length;i++){
             islandora_canvas_params.mappings[pids[i]['urn']] = pids[i]['color']
+            // There was a for each loop here, part of the 
+            // excessive server post request fix.
             var pid = pids[i]['id'];
-            console.log("get anno 2");
             islandora_getAnnotation(pids[i]['id']);
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           }
         }
 

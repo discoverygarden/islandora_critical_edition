@@ -76,12 +76,12 @@ function startAnnotating() {
     if (cnv != null) {
       initForCreate(cnv);
     }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   });
   
 }
 
 function startEditting(title, annotation, annoType, urn) {
-	console.log("Edinting");
   $('#anno_color_activated').attr('value', '');
   if ($('#create_annotation').text() == 'Annotating') {
     return;
@@ -107,7 +107,7 @@ function startEditting(title, annotation, annoType, urn) {
     if (cnv != null) {
       initForCreate(cnv);
     }
-    
+    // ~~~~~~~~~~~~
   });
 }
 function saveAndEndAnnotating() {
@@ -195,6 +195,8 @@ function destroyAll(canvas) {
     $(r).remove();
   }
   topinfo['raphaels']['comment'][canvas] = undefined;
+  // There was a call here, 'islandora_getList()', that was 
+  // doubling up server requests, and found it unnecessary.
 }
 
 function saveAnnotation() {
@@ -213,7 +215,6 @@ function saveAnnotation() {
   if($('#saveAnno').text() == 'Update Annotation'){
     urn = $('#saveAnno').attr('urn');
     islandora_updateAnno(urn, title, annoType, content, color);
-    console.log("Save annotation");
     return;
   }
 

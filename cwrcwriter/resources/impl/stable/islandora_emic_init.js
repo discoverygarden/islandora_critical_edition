@@ -89,7 +89,6 @@ function initCanvas(nCanvas) {
   h = h/rows;
 
   for (var x=0;x<nCanvas;x++) {
- // console.log("init Canvas: " + nCanvas);
     $('#canvases').append('<div id="canvas_' + x + '" class="canvas"></div>')
     $('#canvas_'+x).width(w);
     $('#canvas_'+x).height(h);
@@ -116,8 +115,9 @@ function initCanvas(nCanvas) {
   }
   topinfo['canvasWidth'] = w;
   topinfo['numCanvases'] = nCanvas;
-  //Make sure the loading bar is not visible
+  //Make sure the loading bar is not visible ~~~~~~
   $('#loadprogress').css('opacity','0');
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (nCanvas > 2) {
     // Default text off if lots of canvases
     $('#check_show_text').attr('checked',false);
@@ -188,14 +188,13 @@ function init_ui() {
   $(window).resize(function() {
     // call resize function
     resizeCanvas();
-    
   });
 }
 
 var timeout = false;
 var delta = 200;
 function resizeCanvas() {
-  
+  // Updated fix to prevent needless server calls
   var w = $('#canvas-body').width();
   topinfo['bodyWidth'] = w;
   if(timeout === false) {
@@ -203,11 +202,12 @@ function resizeCanvas() {
     closeAndEndAnnotating();
     window.setTimeout(maybeResize, delta);
   }
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 function maybeResize() {
+  // Updated fix to prevent needless server calls
   if(w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
-    // We've been stationary for 1 second
     initCanvas(topinfo['numCanvases']);
   } else {
     timeout = false;
@@ -223,9 +223,9 @@ function maybeResize() {
       $(imgid).css("height", "auto");
       $(baseid).css("height", $(imgid).height());
       $('#canvas_0').css("width", (w));
-      //console.log("in else");
     }
   }
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 
