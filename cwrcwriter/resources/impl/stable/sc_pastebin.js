@@ -14,6 +14,7 @@ function islandora_postData(title, data, type, color) {
       color:color
     },
     success: function(data,status,xhr) {
+    	console.log("get anno 1");
       islandora_getAnnotation(data);
     },
     error: function(data,status,xhr) {
@@ -70,12 +71,8 @@ function islandora_getList() {
           for (var i=0,info;i < pids.length;i++){
             islandora_canvas_params.mappings[pids[i]['urn']] = pids[i]['color']
             var pid = pids[i]['id'];
-            $('#canvases .canvas').each(function() {
-              // console.log(temp + " " + pid)
-              var cnv = $(this).attr('canvas');
-              islandora_getAnnotation(pid);
-            });
-      
+            console.log("get anno 2");
+            islandora_getAnnotation(pids[i]['id']);
           }
         }
 
@@ -98,7 +95,7 @@ function islandora_getList() {
 // get annotation data from Fedora and send it to load_comment_anno to be displayed
 
 function islandora_getAnnotation(pid) {
-
+console.log("islandora_getAnnotation: " + islandora_canvas_params.islandora_get_annotation + pid);
   $.ajax({
     type:'GET',
     url: islandora_canvas_params.islandora_get_annotation + pid,
@@ -122,7 +119,7 @@ function islandora_deleteAnno(urn) {
   if (length ==1){
     $parent.remove();
   }
-
+  
   var classSelector = '.svg_'+urn;
   $.ajax({
     type:'POST',

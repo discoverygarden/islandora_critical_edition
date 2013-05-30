@@ -25,6 +25,7 @@ function fetch_comment_annotations() {
 	
 }
 
+
 function maybe_config_create_annotation() {
 		
   $('#create_annotation').click(startAnnotating);
@@ -67,14 +68,20 @@ function startAnnotating() {
     top:200,
     left:35
   });
-	
   $('#canvases .canvas').each(function() {
     var cnv = $(this).attr('canvas');
-    initForCreate(cnv);
+    // Sanity check. Prevents old canvas's from being
+    // sent to the initForCreate before they are totally 
+    // destroyed.
+    if (cnv != null) {
+      initForCreate(cnv);
+    }
   });
+  
 }
 
 function startEditting(title, annotation, annoType, urn) {
+	console.log("Edinting");
   $('#anno_color_activated').attr('value', '');
   if ($('#create_annotation').text() == 'Annotating') {
     return;
@@ -96,7 +103,11 @@ function startEditting(title, annotation, annoType, urn) {
   $('#saveAnno').attr('urn', urn);
   $('#canvases .canvas').each(function() {
     var cnv = $(this).attr('canvas');
-    initForCreate(cnv);
+    // Sanity check
+    if (cnv != null) {
+      initForCreate(cnv);
+    }
+    
   });
 }
 function saveAndEndAnnotating() {
@@ -104,6 +115,7 @@ function saveAndEndAnnotating() {
   var okay = saveAnnotation();
   if (okay) {
     closeAndEndAnnotating();
+    resizeCanvas();
   }
 }
 
@@ -183,8 +195,6 @@ function destroyAll(canvas) {
     $(r).remove();
   }
   topinfo['raphaels']['comment'][canvas] = undefined;
-
-  islandora_getList();
 }
 
 function saveAnnotation() {
@@ -203,6 +213,7 @@ function saveAnnotation() {
   if($('#saveAnno').text() == 'Update Annotation'){
     urn = $('#saveAnno').attr('urn');
     islandora_updateAnno(urn, title, annoType, content, color);
+    console.log("Save annotation");
     return;
   }
 
@@ -257,7 +268,7 @@ function saveAnnotation() {
     });
   }
     
-  
+  console.log("about to post data");
   islandora_postData(tgt, rdfa, type, color);
 
   return 1;
