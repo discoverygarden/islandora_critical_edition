@@ -272,7 +272,7 @@ function saveAnnotation() {
       source: islandora_canvas_params.categories
     });
   }
-    
+
   console.log("about to post data");
   islandora_postData(tgt, rdfa, type, color);
 
