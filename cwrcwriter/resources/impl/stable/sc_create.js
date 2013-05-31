@@ -52,6 +52,7 @@ function maybe_config_create_annotation() {
 }
 
 function startAnnotating() {
+	console.log("Start annotating");
   // initialize color sctivation boolean
   $('#anno_color_activated').attr('value', '');
   // return if already annotating
@@ -148,16 +149,21 @@ function closeAndEndAnnotating() {
 //converting between page clicks and canvas clicks
 
 function initForCreate(canvas) {
-	
-  var r = mk_raphael('comment', canvas, topinfo['canvasDivHash'][canvas])
+  console.log("Width: " + $('#canvases').children(0).width());
+  console.log("Height: " + $('#canvases').children(0).height());
+
+  var r = mk_raphael('comment', canvas, topinfo['canvasDivHash'][canvas]);
   var invScale = 1.0 / r.newScale;
-  var ch = Math.floor(r.height * invScale);
-  var cw = Math.floor(r.width * invScale);
+
+  var ch = Math.floor($('#canvases').children(0).height() * invScale);
+  var cw = Math.floor($('#canvases').children(0).width() * invScale);
+
+  console.log("ch: " + ch + ", cw: " + cw);
   var prt = r.wrapperElem;
-	
+
   // Ensure we're above all painting annos
   $(prt).css('z-index', 5000);
-	
+
   var bg = r.rect(0,0,cw,ch);
   bg.attr({
     'fill': 'white',
@@ -169,11 +175,9 @@ function initForCreate(canvas) {
   bg.myPaper = r;
   bg.myShapes = [];
   r.annotateRect = bg;
-	
   bg.drag(function(dx,dy) {
     this.creating.resizeFn(dx, dy)
   }, switchDown, switchUp);
-	
 }
 
 function destroyAll(canvas) {
@@ -272,6 +276,12 @@ function saveAnnotation() {
   console.log("about to post data");
   islandora_postData(tgt, rdfa, type, color);
 
+  $(".islandora_comment_type_title").off();
+
+  $(".islandora_comment_type_title").ready().on("click", function(){
+    $(this).siblings('.islandora_comment_type_content').toggle();
+  });
+  
   return 1;
 }
 
