@@ -25,6 +25,7 @@ function fetch_comment_annotations() {
 	
 }
 
+
 function maybe_config_create_annotation() {
 		
   $('#create_annotation').click(startAnnotating);
@@ -67,11 +68,17 @@ function startAnnotating() {
     top:200,
     left:35
   });
-	
   $('#canvases .canvas').each(function() {
     var cnv = $(this).attr('canvas');
-    initForCreate(cnv);
+    // Sanity check. Prevents old canvas's from being
+    // sent to the initForCreate before they are totally 
+    // destroyed.
+    if (cnv != null) {
+      initForCreate(cnv);
+    }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   });
+  
 }
 
 function startEditting(title, annotation, annoType, urn) {
@@ -96,7 +103,11 @@ function startEditting(title, annotation, annoType, urn) {
   $('#saveAnno').attr('urn', urn);
   $('#canvases .canvas').each(function() {
     var cnv = $(this).attr('canvas');
-    initForCreate(cnv);
+    // Sanity check
+    if (cnv != null) {
+      initForCreate(cnv);
+    }
+    // ~~~~~~~~~~~~
   });
 }
 function saveAndEndAnnotating() {
@@ -104,6 +115,7 @@ function saveAndEndAnnotating() {
   var okay = saveAnnotation();
   if (okay) {
     closeAndEndAnnotating();
+    resizeCanvas();
   }
 }
 
@@ -136,16 +148,17 @@ function closeAndEndAnnotating() {
 //converting between page clicks and canvas clicks
 
 function initForCreate(canvas) {
-	
-  var r = mk_raphael('comment', canvas, topinfo['canvasDivHash'][canvas])
+  var r = mk_raphael('comment', canvas, topinfo['canvasDivHash'][canvas]);
   var invScale = 1.0 / r.newScale;
-  var ch = Math.floor(r.height * invScale);
-  var cw = Math.floor(r.width * invScale);
+
+  var ch = Math.floor($('#canvases').children(0).height() * invScale);
+  var cw = Math.floor($('#canvases').children(0).width() * invScale);
+
   var prt = r.wrapperElem;
-	
+
   // Ensure we're above all painting annos
   $(prt).css('z-index', 5000);
-	
+
   var bg = r.rect(0,0,cw,ch);
   bg.attr({
     'fill': 'white',
@@ -157,11 +170,9 @@ function initForCreate(canvas) {
   bg.myPaper = r;
   bg.myShapes = [];
   r.annotateRect = bg;
-	
   bg.drag(function(dx,dy) {
     this.creating.resizeFn(dx, dy)
   }, switchDown, switchUp);
-	
 }
 
 function destroyAll(canvas) {
@@ -183,8 +194,8 @@ function destroyAll(canvas) {
     $(r).remove();
   }
   topinfo['raphaels']['comment'][canvas] = undefined;
-
-  islandora_getList();
+  // There was a call here, 'islandora_getList()', that was 
+  // doubling up server requests, and found it unnecessary.
 }
 
 function saveAnnotation() {
@@ -256,10 +267,15 @@ function saveAnnotation() {
       source: islandora_canvas_params.categories
     });
   }
-    
-  
+
   islandora_postData(tgt, rdfa, type, color);
 
+  $(".islandora_comment_type_title").off();
+
+  $(".islandora_comment_type_title").ready().on("click", function(){
+    $(this).siblings('.islandora_comment_type_content').toggle();
+  });
+  
   return 1;
 }
 
