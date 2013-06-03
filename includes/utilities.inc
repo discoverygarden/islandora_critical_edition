@@ -72,15 +72,11 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
     </body>
 </html>';
   $ocr = "";
-  $count = 100;
   if (is_array($lines)) {
     foreach ($lines as $line) {
       $line = trim(preg_replace('/&£/', '£', $line));
-
       $line = htmlspecialchars($line);
-      $count++;
-      $count++;
-      $ocr .= $line . trim("<span _editable='true' _struct='true' _tag='lb' id='struct_$count' />﻿");
+      $ocr .= $line . '<br />';
     }
   }
   if (empty($ocr)) {
