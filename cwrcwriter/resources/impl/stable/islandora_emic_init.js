@@ -115,9 +115,6 @@ function initCanvas(nCanvas) {
   }
   topinfo['canvasWidth'] = w;
   topinfo['numCanvases'] = nCanvas;
-  //Make sure the loading bar is not visible ~~~~~~
-  //$('#loadprogress').css('opacity','0');
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   if (nCanvas > 2) {
     // Default text off if lots of canvases
     $('#check_show_text').attr('checked',false);
