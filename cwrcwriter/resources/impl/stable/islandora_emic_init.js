@@ -84,7 +84,8 @@ function initCanvas(nCanvas) {
   var rows = Math.floor(Math.sqrt(nCanvas));
   var perrow = Math.ceil(nCanvas/rows);
 
-  var w = w/perrow - (5*perrow);
+  // Not sure what these lines were doing but broke scaling by breaking width.
+  //var w = w/perrow - (5*perrow);
   var h = $(window).height() - 50;
   h = h/rows;
 
