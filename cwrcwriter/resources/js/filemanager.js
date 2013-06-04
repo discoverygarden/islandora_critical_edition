@@ -268,7 +268,6 @@ var FileManager = function(config) {
       fm.openSaver();
     } else {
       var docText = _exportDocument();
-  alert(("saving"))
       $.ajax({
 
         url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
