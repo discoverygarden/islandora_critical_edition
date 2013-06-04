@@ -121,12 +121,38 @@ body {
 
 span[_tag='p'] {
   display: block;
-  margin: 10px 0;
 }
 
 span[_tag='lb'] {
   display: block;
   line-height: 0;
+}
+
+span[rend='bold'] {
+  font-weight: bold;
+}
+span[rend='center'] {
+  text-align: center;
+}
+
+span[rend='italic'] {
+  font-style: italic;
+}
+
+span[rend='indent'] {
+  text-indent: 150px;
+}
+
+span[rend='overstrike'] {
+  text-decoration: line-through;
+}
+
+span[rend='small caps'] {
+  font-variant: small-caps;
+}
+
+span[rend='underline'] {
+  text-decoration: underline;
 }
 
 #annos_menu {
