@@ -5,7 +5,6 @@ function getRemForAggr(uri, qry) {
     var uri = uri.toString();
   }
 
-
   // Check for turtle first, as faster (?)
   qry.reset();
   qry
@@ -282,8 +281,10 @@ function fetch_annotations(which, canvas) {
       var uri2 = getRemForAggr(uri, topQuery);
       for (var x = 0, u2; u2 = topinfo['done'][x]; x++) {
         if (uri2 == u2) {
-          // Breaks refresh - removing for now.
-          // paint_annos(which, canvas);
+          // Function paint_annos only required if no annos exist.
+          if (!test_for_annos()) {
+            paint_annos();
+          }
           return;
         }
       }
@@ -348,7 +349,7 @@ function cb_process_annoList(qry, uri) {
         mtyp = 'zone';
         break;
       } else if (typ == nss['oa'] + 'Annotation') {
-        // don't break in case multi typed
+        // Don't break in case multi typed.
         mtyp = 'comment';
       }
     }
@@ -423,21 +424,20 @@ function cb_process_annoList(qry, uri) {
       allAnnos[mtyp][cnv].push(anno);
 
     } catch (e) {
-      alert(e);
+      alert(e)
     }
   }
   topinfo['annotations'] = allAnnos;
 
-  // Try to force GC on the query
+  // Try to force GC on the query.
   delete qry.databank;
   qry = null;
 
   paint_annos();
 
-  // And launch AJAX queries for any external XML docs
+  // And launch AJAX queries for any external XML docs.
   for (var uri in xmlfiles) {
     ping_progressBar('req:' + uri)
-
     $.ajax(
         {
           url: uri,
@@ -445,7 +445,7 @@ function cb_process_annoList(qry, uri) {
           success: function(data, status, xhr) {
             ping_progressBar('recv:' + uri)
             try {
-              // We have the XML now, so walk through all annos for it
+              // We have the XML now, so walk through all annos for it.
               var remotes = xmlfiles[uri];
               for (var i = 0, inf; inf = remotes[i]; i++) {
                 var anno = inf[0];
@@ -478,10 +478,8 @@ function cb_process_annoList(qry, uri) {
   }
 }
 
-
 function load_commentAnno(data) {
   // RDFA
-
   var lqry = $(data).rdf();
   if (lqry.databank.size() == 0) {
     // Turtle or RDF/XML
@@ -489,8 +487,22 @@ function load_commentAnno(data) {
       lqry = $.rdf(opts).load(data);
     } catch (e) {
       // alert('broken comment annotation: ' + data)
-
     }
   }
   cb_process_annoList(lqry, '');
+}
+
+function test_for_annos() {
+  $.ajax({
+    type: 'GET',
+    async: false,
+    url: islandora_canvas_params.get_annotation_list_url,
+    success: function(data, status, xhr) {
+      has_annos = data.length > 2 ? true : false;
+    },
+    error: function(data, status, xhr) {
+      // alert('Failed to retrieve List')
+    }
+  });
+  return has_annos;
 }
