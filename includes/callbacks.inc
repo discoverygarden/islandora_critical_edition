@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Holds the ajax callbacks for the cwrcwriter.
@@ -21,8 +22,11 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $critical_edition = $critical_edition_relationships[0]['object']['value'];
   $critical_edition_object = islandora_object_load($critical_edition);
   $title = $critical_edition_object->label;
-  $pages = islandora_paged_content_get_pages($critical_edition_object);
-  $pages = array_keys($pages);
+  $page_results = islandora_paged_content_get_pages($critical_edition_object);
+  $pages = array();
+  foreach ($page_results as $result) {
+    $pages[$result['page']] = $result['pid'];
+  }
   $position = array_search($fedora_object->id, $pages);
   $results = array();
   $results['uid'] = $user->uid;

@@ -84,7 +84,8 @@ function initCanvas(nCanvas) {
   var rows = Math.floor(Math.sqrt(nCanvas));
   var perrow = Math.ceil(nCanvas/rows);
 
-  var w = w/perrow - (5*perrow);
+  // Not sure what these lines were doing but broke scaling by breaking width.
+  //var w = w/perrow - (5*perrow);
   var h = $(window).height() - 50;
   h = h/rows;
 
@@ -115,7 +116,6 @@ function initCanvas(nCanvas) {
   }
   topinfo['canvasWidth'] = w;
   topinfo['numCanvases'] = nCanvas;
-
   if (nCanvas > 2) {
     // Default text off if lots of canvases
     $('#check_show_text').attr('checked',false);
@@ -159,7 +159,7 @@ function init_ui() {
   }).css({
     height:15,
     width:300,
-    opacity: 1.0,
+    opacity: 0,
     'z-index': 10000
   });
   $('#loadprogress').position({
@@ -189,42 +189,41 @@ function init_ui() {
   });
 }
 
-
+var timeout = false;
+var delta = 200;
 function resizeCanvas() {
-  closeAndEndAnnotating();
+  // Updated fix to prevent needless server calls
   var w = $('#canvas-body').width();
   topinfo['bodyWidth'] = w;
-  if (toid != null) {
-    // Be considerate and clear previous timeout
-    window.clearTimeout(toid)
+  if(timeout === false) {
+    timeout = true;
+    closeAndEndAnnotating();
+    window.setTimeout(maybeResize, delta);
   }
-  toid = window.setTimeout(maybeResize, 500)
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
-
 function maybeResize() {
-  var baseid = '#' + $('.base_img').attr('id');
-  var imgid = '#' + $('.base_img').children(":first").attr('id');
-
-  var w = $('#canvas-body').width();
-  // Allow for slight tweak on size from original for scrollbars
-  if (w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
-    // We've been stationary for 1 second
+  // Updated fix to prevent needless server calls
+  if(w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
+    initCanvas(topinfo['numCanvases']);
+  } else {
+    timeout = false;
+    var baseid = '#' + $('.base_img').attr('id');
+    var imgid = '#' + $('.base_img').children(":first").attr('id');
+    var w = $('#canvas-body').width();
     toid = null;
     var b = topinfo['origBodyWidth'];
     topinfo['bodyWidth'] = 0;
     if (w != b) {
-    initCanvas(topinfo['numCanvases']);
-
-    $(imgid).width(w);
-    $(imgid).css("height", "auto");
-
-  //  $(baseid).css("width", (w + 30));
-    $(baseid).css("height", $(imgid).height());
-    $('#canvas_0').css("width", (w));
-  //  $('#canvas_0').css("height", $(imgid).height());
+      initCanvas(topinfo['numCanvases']);
+      $(imgid).width(w);
+      $(imgid).css("height", "auto");
+      $(baseid).css("height", $(imgid).height());
+      $('#canvas_0').css("width", (w));
     }
   }
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 
