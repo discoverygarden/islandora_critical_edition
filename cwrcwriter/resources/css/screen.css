@@ -1,4 +1,4 @@
-body {
+.islandora-crited-iframe-wrapper body {
   margin: 0;
   padding: 0;
   border: 0;
@@ -11,26 +11,26 @@ body {
   font-size: 90%;
 }
 
-a {
+.islandora-crited-iframe-wrapper a {
   color: #369;
 }
-a:hover {
+.islandora-crited-iframe-wrapper a:hover {
   color: #fff;
   background: #369;
   text-decoration: none;
 }
 
-h1, h2, h3 {
+.islandora-crited-iframe-wrapper h1, .islandora-crited-iframe-wrapper h2, .islandora-crited-iframe-wrapper h3 {
   margin: .8em 0 .2em 0;
   padding: 0;
 }
 
-p {
+.islandora-crited-iframe-wrapper p {
   margin: .4em 0 .8em 0;
   padding: 0;
 }
 
-img {
+.islandora-crited-iframe-wrapper img {
   margin: 10px 0 5px;
 }
 
@@ -40,17 +40,17 @@ img {
 }
 
 /* Header styles */
-#header {
+.islandora-crited-iframe-wrapper #header {
   clear: both;
   float: left;
   width: 100%;
   border-bottom: 1px solid #000;
 }
-#header p, #header h1, #header h2 {
+islandora-crited-iframe-wrapper #header p, islandora-crited-iframe-wrapper #header h1, islandora-crited-iframe-wrapper #header h2 {
   padding: .4em 15px 0 15px;
   margin: 0;
 }
-#header ul {
+.islandora-crited-iframe-wrapper #header ul {
   clear: left;
   float: left;
   width: 100%;
@@ -58,13 +58,13 @@ img {
   margin: 10px 0 0 0;
   padding: 0;
 }
-#header ul li {
+.islandora-crited-iframe-wrapper #header ul li {
   display: inline;
   list-style: none;
   margin: 0;
   padding: 0;
 }
-#header ul li a {
+.islandora-crited-iframe-wrapper #header ul li a {
   display: block;
   float: left;
   margin: 0 0 0 1px;
@@ -77,21 +77,21 @@ img {
   left: 15px;
   line-height: 1.3em;
 }
-#header ul li a:hover {
+.islandora-crited-iframe-wrapper #header ul li a:hover {
   background: #369;
   color: #fff;
 }
-#header ul li a.active {
+.islandora-crited-iframe-wrapper #header ul li a.active {
   color: #fff;
   background: #000;
   font-weight: bold;
 }
-#header ul li a.active:hover {
+.islandora-crited-iframe-wrapper #header ul li a.active:hover {
   color: #fff;
   background: #000;
   font-weight: bold;
 }
-#header ul li a span {
+.islandora-crited-iframe-wrapper #header ul li a span {
   display: block;
 }
 
@@ -107,7 +107,7 @@ img {
 
 /* column container */
 .colmask {
-  position: absolute;
+/*   position: absolute; */
   /* This fixes the IE7 overflow hidden bug */
   clear: both;
   float: left;
@@ -115,11 +115,11 @@ img {
   /* width of whole page */
   overflow: hidden;
   /* This chops off any overhanging divs */
-  
   top: 28px;
   bottom: 35px;
   left: 0px;
   right: 0px;
+  height: 300px;
 }
 
 /* common column settings */
@@ -170,7 +170,7 @@ img {
 
 
 /* Footer styles */
-#footer {
+#emic_footer {
   clear: both;
   float: left;
   width: 100%;
@@ -180,7 +180,7 @@ img {
   bottom: 0px;
   
 }
-#footer p {
+#emic_footer p {
   padding: 10px;
   margin: 0;
 }

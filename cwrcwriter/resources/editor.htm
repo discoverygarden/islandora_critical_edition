@@ -23,18 +23,13 @@
     <script type="text/javascript" src="js/relations.js"></script>
     <script type="text/javascript" src="Islandora/js/startup.js"></script>
 
-      
     <script type="text/javascript">
       window.onbeforeunload = function() {
         if (this.tinymce.get('editor').isDirty()) {
           return 'You have unsaved changes.';
         }
+        
       }
-      $(function() {
-        writer = null;
-             writer = new Writer();
-            writer.init();
-      });
     </script>
   </head>
   <body>

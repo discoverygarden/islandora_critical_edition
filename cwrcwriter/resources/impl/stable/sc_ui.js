@@ -294,6 +294,7 @@ function paint_annos() {
       var annos = topinfo['annotations'][typ][canvas];
       for (var a in annos) {
         var anno = annos[a];
+        //console.log("paint_annos: " + JSON.stringify(anno));
         if (anno.finished && topinfo['paintedAnnos'].indexOf(anno.id) == -1) {
           topinfo['paintedAnnos'].push(anno.id);
           paint_anno(typ, anno, div);
@@ -352,7 +353,7 @@ function mk_raphael(typ, canvas, canvasId) {
 function paint_anno(typ, anno, div) {
 
   try {
-
+    //console.log("paint_anno: " + JSON.stringify(typ));
     if (typ == 'image') {
       paint_imageAnno(anno, div);
     } else if (typ == 'text') {
@@ -795,7 +796,7 @@ function paint_textAnno(anno, canvasId) {
 // when selected, paint targets (if any)
 
 function paint_commentAnno(anno, canvasId) {
-
+  //console.log("paint_commentAnno");
   var title = anno.title;
   var annoType = anno.annoType;
  
@@ -816,30 +817,33 @@ function paint_commentAnno(anno, canvasId) {
       tgttxt = 'all of ' + tgtttl;
     }
   }
-  txt = txt.replace('\n', '<br/>')
+  txt = txt.replace('\n', '<br/>');
  
-
+  console.log("text in paint_commentAnno: " + txt);
   //block contains complete annotation
-  block = '<div class = "canvas_annotation" ' + 'urn ="' + myid + '" '+ ' >';
+  block = '<div id="ohbugger" class = "canvas_annotation" ' + 'urn ="' + myid + '" '+ ' >';
   block += '<div class="comment_title" id="anno_' + myid + '"><span class="comment_showhide">+ </span>' + title + '</div>';
   block += '<div class="comment_text">' + '<div class="comment_type">' + annoType + '</div><div class="comment_content">' + txt + '</div></div>';
   block += '</div>';
  
 
   selectBlock = "#islandora_annoType_content_" + fixed_annotype;
-
- 
-  $(selectBlock).append(block);
+  console.log("select block: " + JSON.stringify(selectBlock));
+  
+  if($(selectBlock).append(block)) {
+    console.log("Appended .canvas_annotation to " + selectBlock);
+  }
   $('#anno_' + myid).attr('canvas', canvasId);
-
+  
   $('#delete_anno_'+myid).click(function(e){
     if (confirm("Permananently Delete This Annotation?")) {
       islandora_deleteAnno(myid);
     }
     e.preventDefault();
   });
-
+  console.log('#anno_' + myid);
   $('#anno_' + myid).click(function() {
+	  console.log("anno clicked");
     $(this).toggleClass('annotation-opened').next().toggle();
     var pm = $(this).find('.comment_showhide');
     if (pm.text() == '+ ') {
@@ -856,13 +860,12 @@ function paint_commentAnno(anno, canvasId) {
     }
     return false;
   }).next().hide();
-
+  
   $('#comment_annos').show();
 
 }
 
-
-var svgAreaColors = ['#FF0000', '#FF6600', '#FF9400', '#FEC500', '#FFFF00', '#8CC700', '#0FAD00', '#00A3C7', '#0064B5', '#0010A5', '#6300A5', '#C5007C']
+var svgAreaColors = ['#FF0000', '#FF6600', '#FF9400', '#FEC500', '#FFFF00', '#8CC700', '#0FAD00', '#00A3C7', '#0064B5', '#0010A5', '#6300A5', '#C5007C'];
 
 function paint_commentAnnoTargets(ttldiv, canvasId, annoId, annoType) {
 

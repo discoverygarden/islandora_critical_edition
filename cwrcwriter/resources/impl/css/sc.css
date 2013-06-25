@@ -17,7 +17,7 @@ body {
   cursor: move;
 }
 
-.title {
+.islandora-crited-iframe-wrapper .title {
        border: 1px solid black;
        position: relative;
        left: 10%;
@@ -103,7 +103,7 @@ body {
 		background: #f4efd7
 }
 
-A:link {
+.islandora-crited-iframe-wrapper A:link {
        color: #77421c;
        text-decoration: none
 }

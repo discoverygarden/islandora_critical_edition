@@ -1,4 +1,4 @@
-body {
+.islandora-crited-iframe-wrapper body {
 	margin: 0;
 	padding: 0;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -6,28 +6,28 @@ body {
 	color: #333;
 }
 
-h1 {
+.islandora-crited-iframe-wrapper h1 {
 	font-size: 14px;
 }
 
-h2 {
+.islandora-crited-iframe-wrapper h2 {
 	font-size: 12px;
 }
 
-h3 {
+.islandora-crited-iframe-wrapper h3 {
 	font-size: 11px;
 }
 
-h1, h2 {
+.islandora-crited-iframe-wrapper h1, .islandora-crited-iframe-wrapper h2 {
 	margin: 0;
 }
 
-textarea {
+.islandora-crited-iframe-wrapper textarea {
 	overflow: auto;
 	resize: none;
 }
 
-label {
+.islandora-crited-iframe-wrapper label {
 	margin-right: 5px;
 }
 
@@ -36,15 +36,15 @@ label {
 	padding: 0;
 }
 
-#header {
+.islandora-crited-iframe-wrapper #header {
 	height: 17px;
 	padding: 5px 10px;
 	color: #eee;
-	background-color: #455372;
+	background-color: #eee;
 	border-bottom: 1px solid #ccc;
 }
 
-#header h1 {
+.islandora-crited-iframe-wrapper #header h1 {
 	float: left;
 }
 
@@ -67,7 +67,7 @@ label {
 }
 
 #main {
-	margin: 0 0 0 250px;
+/* 	margin: 0 0 0 250px; */
 }
 
 #leftcol {

@@ -435,11 +435,11 @@ var FileManager = function(config) {
   fm.loadEMICDocument = function() {
     w.entities = {};
     w.structs = {};
-    var url = window.parent.Drupal.settings.basePath + 'islandora/object/' + PID + '/datastream/CWRC/view';
+    var url = Drupal.settings.basePath + 'islandora/object/' + PID + '/datastream/CWRC/view';
     var file_content = '';
     $.ajax({
       url: url,
-      async:false,
+      async:true,
       success: _loadDocumentHandler,
       error: function() {
 
@@ -451,7 +451,6 @@ var FileManager = function(config) {
   };
 	
   var _loadDocumentHandler = function(doc) {
-
     var offsets = {};
 		
     var maxId = 0; // track what the largest id num is

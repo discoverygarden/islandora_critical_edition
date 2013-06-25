@@ -31,14 +31,17 @@ function islandora_getList() {
   var tabs = $('#tabs').tabs();
   tabs.tabs('select', 3);
   islandora_canvas_params.mappings = new Array();
+  console.log("islandora_getList(sc_pastebin) url: " + islandora_canvas_params.get_annotation_list_url);
+  
   $.ajax({
     type:'GET',
     async:false,
     url: islandora_canvas_params.get_annotation_list_url,
     success: function(data,status,xhr) {
-   
+      
       if(data != 'null'){
         var listdata = $.parseJSON(data);
+        console.log("list data: " + JSON.stringify(listdata));
         var pids = listdata.pids;
         var types = listdata.types;
 
@@ -58,7 +61,7 @@ function islandora_getList() {
               header += '<div class = "islandora_comment_type_title">' + types[i] + '</div>';
               header += '<div class = "islandora_comment_type_content" style = "display:none" id = "'+ contentId + '"></div>';
               header += '</div>';
-
+              console.log("added islandora_comment_type_content");
               $('#comment_annos_block').append(header);
             }
 
@@ -73,6 +76,7 @@ function islandora_getList() {
             $('#canvases .canvas').each(function() {
               // console.log(temp + " " + pid)
               var cnv = $(this).attr('canvas');
+              console.log("getting annotation in pastebin");
               islandora_getAnnotation(pid);
             });
       
@@ -87,7 +91,7 @@ function islandora_getList() {
       }
     },
     error: function(data,status,xhr) {
-    // alert('Failed to retrieve List')
+      console.log('Failed to retrieve List');
     }
 
   });
@@ -98,16 +102,17 @@ function islandora_getList() {
 // get annotation data from Fedora and send it to load_comment_anno to be displayed
 
 function islandora_getAnnotation(pid) {
-
+  console.log("get anno url: " + islandora_canvas_params.islandora_get_annotation + pid);
   $.ajax({
     type:'GET',
     url: islandora_canvas_params.islandora_get_annotation + pid,
     success: function(data,status,xhr) {
+      //console.log("comment Anno: " + JSON.stringify(data));
       load_commentAnno(data);
      
     },
     error: function(data,status,xhr) {
-      
+      console.log("Error retriving Annotation Data");
     }
   });
 }

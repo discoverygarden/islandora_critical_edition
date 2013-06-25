@@ -51,7 +51,7 @@ function maybe_config_create_annotation() {
 }
 
 function startAnnotating() {
-  // initialize color sctivation boolean
+  // initialize color activation boolean
   $('#anno_color_activated').attr('value', '');
   // return if already annotating
   if ($('#create_annotation').text() == 'Annotating') {
@@ -62,12 +62,20 @@ function startAnnotating() {
     color:'#808080'
   });
   $('#create_annotation').empty().append('Annotating');
-  $('#create_annotation_box').show();
-  $('#create_annotation_box').position({
-    top:200,
-    left:35
-  });
-	
+  //DialogManager.dialogs;
+  writer.d.show('annotate');
+  //console.log("writer: " + JSON.stringify(writer.editor));
+  
+  //$(document.body).append($('#create_annotation_box'));
+  
+  //$('#create_annotation_box').appendTo($(document.body));
+  
+//  $('#create_annotation_box').show();
+//  $('#create_annotation_box').position({
+//    top:200,
+//    left:35
+//  });
+
   $('#canvases .canvas').each(function() {
     var cnv = $(this).attr('canvas');
     initForCreate(cnv);
@@ -84,11 +92,13 @@ function startEditting(title, annotation, annoType, urn) {
     color:'#808080'
   });
   $('#create_annotation').empty().append('Annotating');
+ // var ann = new AnnotationDialog();
+  //ann.show();
   $('#create_annotation_box').show();
-  $('#create_annotation_box').position({
-    top:200,
-    left:35
-  });
+//  $('#create_annotation_box').position({
+//    top:200,
+//    left:35
+//  });
   $('#anno_title').val(title);
   $('#anno_text').val(annotation);
   $('#anno_classification').val(annoType);
