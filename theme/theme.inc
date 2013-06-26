@@ -37,18 +37,10 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
       'islandora_critical_edition' => array(
         'module_base' => $module_path)), 'setting');
   
-  // Add dependant CSS.
   drupal_add_css($module_path . '/cwrcwriter/css/critical_edition.css');
-  
-  //~~~~~~~~ This is the fucky css script breaking things...
   drupal_add_css($module_path . '/cwrcwriter/resources/css/style_2.css');
-  
-  ///////drupal_add_css($module_path . '/cwrcwriter/resources/smoothness/jquery-ui-1.8.13.custom.css');
-  ///////drupal_add_css($module_path . '/cwrcwriter/resources/js/snippet/jquery.snippet.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/js/ContextMenu/src/jquery.contextMenu.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/css/jquery.miniColors.css');
-  
-  //~~~~~~~~ This is a little fucky to
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/css/sc.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/css/emic_canvas.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/css/screen.css');
