@@ -438,7 +438,7 @@ var FileManager = function(config) {
     var file_content = '';
     $.ajax({
       url: url,
-      async:true,
+      async:false,
       success: _loadDocumentHandler,
       error: function() {
 

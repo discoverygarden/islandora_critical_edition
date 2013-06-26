@@ -13,7 +13,7 @@ function buildAllAnnos(query, type) {
     annos[this.anno.value.toString()]=1;
   });
   query.reset();
-  ///console.log("annos: " + JSON.stringify(annos));
+
   return queryToJson(annos, dump);
 }
 

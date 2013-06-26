@@ -31,17 +31,14 @@ function islandora_getList() {
   var tabs = $('#tabs').tabs();
   tabs.tabs('select', 3);
   islandora_canvas_params.mappings = new Array();
-  console.log("islandora_getList(sc_pastebin) url: " + islandora_canvas_params.get_annotation_list_url);
-  
   $.ajax({
     type:'GET',
     async:false,
     url: islandora_canvas_params.get_annotation_list_url,
     success: function(data,status,xhr) {
-      
+
       if(data != 'null'){
         var listdata = $.parseJSON(data);
-        console.log("list data: " + JSON.stringify(listdata));
         var pids = listdata.pids;
         var types = listdata.types;
 
@@ -61,7 +58,7 @@ function islandora_getList() {
               header += '<div class = "islandora_comment_type_title">' + types[i] + '</div>';
               header += '<div class = "islandora_comment_type_content" style = "display:none" id = "'+ contentId + '"></div>';
               header += '</div>';
-              console.log("added islandora_comment_type_content");
+
               $('#comment_annos_block').append(header);
             }
 
@@ -88,7 +85,7 @@ function islandora_getList() {
       }
     },
     error: function(data,status,xhr) {
-      console.log('Failed to retrieve List');
+    // alert('Failed to retrieve List')
     }
 
   });
@@ -107,7 +104,7 @@ function islandora_getAnnotation(pid) {
      
     },
     error: function(data,status,xhr) {
-      console.log("Error retriving Annotation Data");
+
     }
   });
 }

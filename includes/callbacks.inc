@@ -18,7 +18,6 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   global $user;
   $critical_edition_relationships = $fedora_object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isPageOf');
-  dsm($critical_edition_relationships);
   $critical_edition = $critical_edition_relationships[0]['object']['value'];
   $critical_edition_object = islandora_object_load($critical_edition);
   $title = $critical_edition_object->label;
@@ -39,7 +38,7 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $entity_collection = variable_get('islandora_entities_ingest_collection', 'islandora:entity_collection');
   $results['create_entity_callback'] = url('islandora/object/' . $entity_collection . '/manage/overview/ingest');
   $results['entities_search_callback'] = url('islandora/entities/search');
-  dsm($results);
+
   drupal_json_output($results);
 }
 

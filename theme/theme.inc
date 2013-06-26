@@ -31,12 +31,12 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'page_pid' => $pids[0])), 'setting');
-  
+
   // To avoid hard coded values in js, this is the best option.
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'module_base' => $module_path)), 'setting');
-  
+
   drupal_add_css($module_path . '/cwrcwriter/css/critical_edition.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/css/style_2.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/js/ContextMenu/src/jquery.contextMenu.css');
@@ -49,8 +49,8 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_css($module_path . '/cwrcwriter/resources/css/editor_ie.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/css/orlando.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/css/smoothness/jquery-ui-1.8.16.custom.css');
-  
-  // Add dependant javascript
+
+  // Add dependent javascript.
   drupal_add_js($module_path . '/cwrcwriter/js/critical_edition.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/jquery/jquery-1.7.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/jquery/jquery-ui-1.8.13.custom.min.js');
@@ -72,7 +72,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.rdfquery.rdfa.min-1.1.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.rdf.turtle.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.touchSwipe-1.2.4.js');
-  drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.jplayer.min.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/raphael.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/scale.raphael.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/uuid.js');
@@ -83,7 +82,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/stable/sc_rdf.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/stable/sc_rdfjson.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/stable/sc_create.js');
-  drupal_add_js($module_path . '/cwrcwriter/resources/impl/stable/sc_gdata.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/stable/sc_pastebin.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery/jquery.miniColors.js');
 }
