@@ -1427,7 +1427,6 @@ ul.relationsList li:hover
 
 #create_annotation_box
 {
-  z-index: 100000000;
   width: 380px;
   height: 100%;
   -webkit-box-shadow: 0px 0px 5px 0px #666; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */

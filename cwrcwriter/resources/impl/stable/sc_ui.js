@@ -304,7 +304,6 @@ function paint_annos() {
   }
 }
 
-
 function mk_raphael(typ, canvas, canvasId) {
   if (topinfo['raphaels'][typ][canvas] != undefined) {
     return topinfo['raphaels'][typ][canvas];
@@ -338,6 +337,7 @@ function mk_raphael(typ, canvas, canvasId) {
 
     // Allow the annotations to scale.
     var svgcanvas = ScaleRaphael('svg_annos_' + typ + '_' + canvasId, cvsw, cvsh);
+    console.log("width: " + sw + ", Height: " + sh);
     svgcanvas.changeSize(sw, sh, false, false);
 
     if ($.browser.webkit) {

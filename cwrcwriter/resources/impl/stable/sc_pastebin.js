@@ -99,15 +99,10 @@ function islandora_getList() {
 // get annotation data from Fedora and send it to load_comment_anno to be displayed
 
 function islandora_getAnnotation(pid) {
-<<<<<<< HEAD
-  console.log("get anno url: " + islandora_canvas_params.islandora_get_annotation + pid);
-=======
->>>>>>> a67911e14cb709ddda7ece7a6331b0dfe767498d
   $.ajax({
     type:'GET',
     url: islandora_canvas_params.islandora_get_annotation + pid,
     success: function(data,status,xhr) {
-      //console.log("comment Anno: " + JSON.stringify(data));
       load_commentAnno(data);
      
     },

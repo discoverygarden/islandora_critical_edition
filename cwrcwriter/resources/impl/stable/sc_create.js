@@ -120,7 +120,7 @@ function saveAndEndAnnotating() {
 }
 
 function closeAndEndAnnotating() {
-
+  console.log("closeandendannotating");
   $('#create_annotation').empty().append('Annotate');
   $('#create_annotation').css({
     color:'#000000'
@@ -199,7 +199,6 @@ function destroyAll(canvas) {
 }
 
 function saveAnnotation() {
- 
   // Basic Sanity Check
   var title = $('#anno_title').val();
   var content = $('#anno_text').val();

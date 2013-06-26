@@ -43,8 +43,9 @@ var AnnotationDialog = function() {
     autoOpen: false,
     buttons: {
     'Save': function() {
-      closeAndEndAnnotating();
+      saveAndEndAnnotating();
       annotation_dialog.dialog('close');
+      closeAndEndAnnotating();
     },
     'Cancel': function() {
       closeAndEndAnnotating();
@@ -55,14 +56,11 @@ var AnnotationDialog = function() {
   return {
     show: function() {
       annotation_dialog.dialog('open');
-      $('.ui-dialog').css('z-index','1000000');
       $('.ui-widget-overlay').remove();
     },
     hide: function() {
-      $('.ui-dialog').css('z-index','1002');
       annotation_dialog.dialog('close');
       $(this).dialog('destroy').remove();
-      console.log("destroy dialog logged");
     }
   };
 };
