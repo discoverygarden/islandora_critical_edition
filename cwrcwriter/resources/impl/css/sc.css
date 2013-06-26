@@ -1,5 +1,4 @@
 body {
-     background: #eeeeee;
      padding: 5 5 5 5;
 }
 
@@ -108,7 +107,7 @@ body {
        text-decoration: none
 }
 
-:visited {
+.islandora-crited-iframe-wrapper :visited {
        color: #77421c;
        text-decoration: none
 }
