@@ -50,7 +50,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_css($module_path . '/cwrcwriter/resources/css/orlando.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/css/smoothness/jquery-ui-1.8.16.custom.css');
 
-  // Add dependant javascript
+  // Add dependent javascript.
   drupal_add_js($module_path . '/cwrcwriter/js/critical_edition.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/jquery/jquery-1.7.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/jquery/jquery-ui-1.8.13.custom.min.js');

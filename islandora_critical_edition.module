@@ -69,7 +69,6 @@ function islandora_critical_edition_menu() {
  *   FALSE if the user doesn't have access.
  */
 function islandora_critical_edition_cwrc_access(AbstractObject $object = NULL) {
-  //return TRUE;
   if (is_null($object)) {
     return FALSE;
   }
