@@ -69,6 +69,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($module_path . '/cwrcwriter/resources/js/relations.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/resize-columns.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/Islandora/js/startup.js');
+  drupal_add_js($module_path . '/cwrcwriter/resources/Islandora/js/dialog_annotate.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.rdfquery.rdfa.min-1.1.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.rdf.turtle.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.touchSwipe-1.2.4.js');

@@ -64,7 +64,9 @@ function startAnnotating() {
   });
   $('#create_annotation').empty().append('Annotating');
   
-  writer.d.show('annotate');
+  //writer.d.show('annotate');
+  $('#create_annotation_box').dialog('open');
+  $('.ui-widget-overlay').remove();
 
   $('#canvases .canvas').each(function() {
     var cnv = $(this).attr('canvas');
