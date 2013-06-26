@@ -12,9 +12,7 @@
 <div class="islandora-crited-wrapper">
   <input id="full-window-button" type="button" value="<?php print t('Full Window'); ?>" />
   <input id="bookview_button" type="button" value="<?php print t('Return to Book View'); ?>" />
-  <!-- @todo this iframe has been nuked. module wide name references/css references need to change -->
    <div class="islandora-crited-iframe-wrapper">
-    <!-- @todo nuke scrolling and frameborder for CSS they're depricated -->
     <!-- Header -->
       <div id="header">
         <div id="page_selector">Loading....</div>
@@ -166,7 +164,7 @@
       
       
   </div>
-<!--   <div id="emic_footer"> -->
+<!--   <div id="ele_footer"> -->
 <!--     <p>Brought to you by <a href="http://editingmodernism.ca/" title="Editing Modernism in Canada" target="_blank">EMiC</a></p> -->
 <!--   </div> -->
 </div>

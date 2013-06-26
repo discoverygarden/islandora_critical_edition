@@ -170,7 +170,7 @@ islandora-crited-iframe-wrapper #header p, islandora-crited-iframe-wrapper #head
 
 
 /* Footer styles */
-#emic_footer {
+#ele_footer {
   clear: both;
   float: left;
   width: 100%;
@@ -180,7 +180,7 @@ islandora-crited-iframe-wrapper #header p, islandora-crited-iframe-wrapper #head
   bottom: 0px;
   
 }
-#emic_footer p {
+#ele_footer p {
   padding: 10px;
   margin: 0;
 }

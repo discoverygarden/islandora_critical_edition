@@ -200,7 +200,6 @@ function resizeCanvas() {
     closeAndEndAnnotating();
     window.setTimeout(maybeResize, delta);
   }
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 function maybeResize() {
@@ -220,28 +219,3 @@ function maybeResize() {
       }
     }
   }
-
-//function maybeResize() {
-//  // Updated fix to prevent needless server calls
-//  if(w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
-//    initCanvas(topinfo['numCanvases']);
-//  } else {
-//    timeout = false;
-//    var baseid = '#' + $('.base_img').attr('id');
-//    var imgid = '#' + $('.base_img').children(":first").attr('id');
-//    var w = $('#canvas-body').width();
-//    toid = null;
-//    var b = topinfo['origBodyWidth'];
-//    topinfo['bodyWidth'] = 0;
-//    if (w != b) {
-//      initCanvas(topinfo['numCanvases']);
-//      $(imgid).width(w);
-//      $(imgid).css("height", "auto");
-//      $(baseid).css("height", $(imgid).height());
-//      $('#canvas_0').css("width", (w));
-//    }
-//  }
-//  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//}
-
-

@@ -984,7 +984,7 @@ var Writer = function(config) {
     $.ajax({
       url: w.schemaUrl,
       error: function() {
-          alert("Thats a fail.");
+      
         },
       success: function(data, status, xhr) {
         var schema = eval(xhr.responseText)[0];

@@ -816,7 +816,7 @@ function paint_commentAnno(anno, canvasId) {
   txt = txt.replace('\n', '<br/>');
  
   //block contains complete annotation
-  block = '<div id="ohbugger" class = "canvas_annotation" ' + 'urn ="' + myid + '" '+ ' >';
+  block = '<div class = "canvas_annotation" ' + 'urn ="' + myid + '" '+ ' >';
   block += '<div class="comment_title" id="anno_' + myid + '"><span class="comment_showhide">+ </span>' + title + '</div>';
   block += '<div class="comment_text">' + '<div class="comment_type">' + annoType + '</div><div class="comment_content">' + txt + '</div></div>';
   block += '</div>';
