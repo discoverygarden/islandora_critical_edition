@@ -123,7 +123,6 @@ var Writer = function(config) {
     ed.addCommand('exportDocument', w.fm.exportDocument);
     ed.addCommand('loadDocument', w.fm.loadDocument);
     ed.addCommand('getFilteredSchema', w.getFilteredSchema);
-	console.log("ed add commands passed");
     // used in conjunction with the paste plugin
     // needs to be false in order for paste postprocessing to function properly
     ed.pasteAsPlainText = false;
@@ -988,14 +987,8 @@ var Writer = function(config) {
           alert("Thats a fail.");
         },
       success: function(data, status, xhr) {
-    	  console.log("Thats a success");
-    	  //console.log("data: " + JSON.stringify(data));
-    	  //alert("Thats a success");
-    	 // console.log("Derp" + xhr.responseText);
         var schema = eval(xhr.responseText)[0];
-        //console.log("schema: " + schema);
         w.schema = schema.grammar;
-		console.log("about to init editor");
         // need to get the schema before we can initialize the editor
         w._initEditor();
       }
@@ -1013,8 +1006,6 @@ var Writer = function(config) {
     w.relations = new Relations({
       writer: w
     });
-    console.log("Hitting dialog manager");                                                                           
-    console.log("DialogManager endpoint: " + Drupal.settings.basePath + 'islandora/cwrcwriter/resources/js/');
     var module_path = Drupal.settings.islandora_critical_edition.module_base;
     w.d = new DialogManager({
       writer: w,
@@ -1079,7 +1070,7 @@ var Writer = function(config) {
           tinymce.PluginManager.load(name, plugin_dir+'/'+name+'.js');
         }
 		var img_base = Drupal.settings.basePath + Drupal.settings.islandora_critical_edition.module_base + '/cwrcwriter/resources/';
-		console.log("image base: " + img_base);
+
         ed.addButton('addperson', {
           title: 'Tag Person',
           image: img_base + 'img/user.png',

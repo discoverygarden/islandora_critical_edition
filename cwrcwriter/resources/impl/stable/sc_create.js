@@ -122,7 +122,6 @@ function saveAndEndAnnotating() {
 }
 
 function closeAndEndAnnotating() {
-  console.log("closeandendannotating");
   $('#create_annotation').empty().append('Annotate');
   $('#create_annotation').css({
     color:'#000000'

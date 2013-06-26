@@ -321,7 +321,6 @@ function cb_process_annoList(qry, uri) {
 
   try {
     var annos = buildAllAnnos(qry);
-    //console.log("build all annos: " + JSON.stringify(annos));
   } catch (e) {
     alert('error building annos: ' + e)
   }
@@ -419,7 +418,6 @@ function cb_process_annoList(qry, uri) {
         allAnnos[mtyp][cnv] = [];
       }
       allAnnos[mtyp][cnv].push(anno);
-	//console.log("All annos: " + JSON.stringify(allAnnos));
     } catch(e) {
       alert(e)
     };
@@ -478,18 +476,11 @@ function cb_process_annoList(qry, uri) {
 
 function load_commentAnno(data) {
   // RDFA
-  //console.log("load_commentAnno func");
   var lqry = $(data).rdf();
-  //console.log("lqry data: " + JSON.stringify(data));
-  //console.log("lqry: " + JSON.stringify(lqry));
- // console.log("lqry databank size: " + JSON.stringify(lqry.databank.size()));
-//  console.log("lqry databank contents: " + JSON.stringify(lqry.databank));
   if (lqry.databank.size() == 0) {
     // Turtle or RDF/XML
     try {
-     // console.log("opts: " + JSON.stringify(opts));
       lqry = $.rdf(opts).load(data);
-     // console.log("lqry(sc_rdf): " + lqry);
     } catch (e) {
       console.log("Broken comment annotation: " + JSON.stringify(e));
     // alert('broken comment annotation: ' + data)

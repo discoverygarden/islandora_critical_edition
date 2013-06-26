@@ -23,7 +23,6 @@ var DialogManager = function(config) {
 		var url = scripts[i];
 		$.getScript(url, function(data, status) {
 			loadCount++;
-			console.log("loadcount: " + loadCount);
 			if (loadCount == scripts.length) {
 				init();
 			}
@@ -31,7 +30,6 @@ var DialogManager = function(config) {
 	}
 	
 	var init = function() {
-		//console.log("init config for dialogs: " + JSON.stringify(config));
 		dialogs = {
 			message: new MessageDialog(config),
 			search: new SearchDialog(config),
@@ -46,7 +44,6 @@ var DialogManager = function(config) {
 			annotate: new AnnotationDialog(),
 			//teiheader: new TeiHeaderDialog(config)
 		};
-		console.log("Created dialogs ");
 		dialogs.person = dialogs.search;
 		dialogs.place = dialogs.search;
 		dialogs.event = dialogs.search;
@@ -60,8 +57,6 @@ var DialogManager = function(config) {
 			return currentType;
 		},
 		show: function(type, config) {
-			console.log("dialog config: " + JSON.stringify(config));
-			console.log("type: " + type);
 			if (dialogs[type]) {
 				currentType = type;
 				dialogs[type].show(config);

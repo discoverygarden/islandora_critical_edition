@@ -7,7 +7,6 @@ var SettingsDialog = function(writer, config) {
     showEntityBrackets: false,
     showStructBrackets: false
   };
-  console.log("settings config: " + JSON.stringify(config));
   jQuery.extend(settings, config);
 
 //  if(cwrc_params.no_edit == false){

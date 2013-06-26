@@ -209,11 +209,9 @@ function maybeResize() {
     } else {
       timeout = false;
       var w = $('#canvas-body').width();
-      console.log(w);
       var b = topinfo['origBodyWidth'];
       topinfo['bodyWidth'] = 0;
       if (w != b) {
-        console.log('resize');
         initCanvas(topinfo['numCanvases']);
         $('.base_img').children(":first").width(w);
         $('.base_img').children(":first").css("height", "auto");

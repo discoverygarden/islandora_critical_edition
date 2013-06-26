@@ -294,7 +294,6 @@ function paint_annos() {
       var annos = topinfo['annotations'][typ][canvas];
       for (var a in annos) {
         var anno = annos[a];
-        //console.log("paint_annos: " + JSON.stringify(anno));
         if (anno.finished && topinfo['paintedAnnos'].indexOf(anno.id) == -1) {
           topinfo['paintedAnnos'].push(anno.id);
           paint_anno(typ, anno, div);
@@ -337,7 +336,6 @@ function mk_raphael(typ, canvas, canvasId) {
 
     // Allow the annotations to scale.
     var svgcanvas = ScaleRaphael('svg_annos_' + typ + '_' + canvasId, cvsw, cvsh);
-    console.log("width: " + sw + ", Height: " + sh);
     svgcanvas.changeSize(sw, sh, false, false);
 
     if ($.browser.webkit) {
@@ -353,7 +351,6 @@ function mk_raphael(typ, canvas, canvasId) {
 function paint_anno(typ, anno, div) {
 
   try {
-    //console.log("paint_anno: " + JSON.stringify(typ));
     if (typ == 'image') {
       paint_imageAnno(anno, div);
     } else if (typ == 'text') {
@@ -796,7 +793,6 @@ function paint_textAnno(anno, canvasId) {
 // when selected, paint targets (if any)
 
 function paint_commentAnno(anno, canvasId) {
-  //console.log("paint_commentAnno");
   var title = anno.title;
   var annoType = anno.annoType;
  
@@ -819,7 +815,6 @@ function paint_commentAnno(anno, canvasId) {
   }
   txt = txt.replace('\n', '<br/>');
  
-  console.log("text in paint_commentAnno: " + txt);
   //block contains complete annotation
   block = '<div id="ohbugger" class = "canvas_annotation" ' + 'urn ="' + myid + '" '+ ' >';
   block += '<div class="comment_title" id="anno_' + myid + '"><span class="comment_showhide">+ </span>' + title + '</div>';
@@ -828,11 +823,7 @@ function paint_commentAnno(anno, canvasId) {
  
 
   selectBlock = "#islandora_annoType_content_" + fixed_annotype;
-  console.log("select block: " + JSON.stringify(selectBlock));
-  
-  if($(selectBlock).append(block)) {
-    console.log("Appended .canvas_annotation to " + selectBlock);
-  }
+  $(selectBlock).append(block)
   $('#anno_' + myid).attr('canvas', canvasId);
   
   $('#delete_anno_'+myid).click(function(e){
@@ -841,9 +832,7 @@ function paint_commentAnno(anno, canvasId) {
     }
     e.preventDefault();
   });
-  console.log('#anno_' + myid);
   $('#anno_' + myid).click(function() {
-	  console.log("anno clicked");
     $(this).toggleClass('annotation-opened').next().toggle();
     var pm = $(this).find('.comment_showhide');
     if (pm.text() == '+ ') {
