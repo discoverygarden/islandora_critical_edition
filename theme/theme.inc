@@ -14,9 +14,11 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
-
+  
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);
   $pids = array_keys($pages);
+  
+  $variables['images_path'] = url($module_path . '/cwrcwriter/resources', array('absolute' => TRUE));
   $variables['viewer_url'] = url($module_path .
                                  "/cwrcwriter/resources/index.php", array(
                                    'query' => array(
@@ -25,7 +27,10 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
       'islandora_critical_edition' => array(
         'book_pid' => islandora_critical_edition_get_object_of_critical_edition(
           $variables['islandora_object']))), 'setting');
-
+  
+  drupal_add_js(array(
+      'islandora_critical_edition' => array(
+        'images_path' => $variables['images_path'])), 'setting');
   // Passing the page pid, instead of getting if from the
   // URL on the javascript side.
   drupal_add_js(array(
@@ -52,6 +57,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   // Add dependent javascript.
   drupal_add_js($module_path . '/cwrcwriter/js/critical_edition.js');
+  drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery/jquery.svg.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/jquery/jquery-1.7.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/jquery/jquery-ui-1.8.13.custom.min.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/jquery/jquery.contextmenu.js');

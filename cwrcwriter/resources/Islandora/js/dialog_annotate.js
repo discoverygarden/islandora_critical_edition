@@ -1,16 +1,12 @@
-$('document').ready(function(){
-  annotation_dialog();
-  $('#create_annotation_box').dialog('close');
-});
 
 function annotation_dialog() {
-  
+  var img_base_path = Drupal.settings.islandora_critical_edition.images_path;
   $(document.body).append(''+
  '<div id="create_annotation_box">'+
     '<div style="display:inline; margin-top: 3px; padding-left: 5px;">'+
-      '<img id="annoShape_rect" class="annoShape" src="/sites/all/modules/islandora_critical_edition/cwrcwriter/resources/imgs/draw_rect.png" style="padding-left: 2px; padding-top: 1px;"/>'+
-      '<img id="annoShape_circ" class="annoShape" src="/sites/all/modules/islandora_critical_edition/cwrcwriter/resources/imgs/draw_circ.png" style="padding-left: 1px;"/>'+
-      '<img id="annoShape_poly" class="annoShape" src="/sites/all/modules/islandora_critical_edition/cwrcwriter/resources/imgs/draw_poly.png" style="padding: 2px;"/>'+
+      '<img id="annoShape_rect" class="annoShape" src="' + img_base_path + '/imgs/draw_rect.png" style="padding-left: 2px; padding-top: 1px;"/>'+
+      '<img id="annoShape_circ" class="annoShape" src="' + img_base_path + '/imgs/draw_circ.png" style="padding-left: 1px;"/>'+
+      '<img id="annoShape_poly" class="annoShape" src="' + img_base_path + '/imgs/draw_poly.png" style="padding: 2px;"/>'+
       '<hr style="margin: 0px; padding: 0px; height: 1px;"/>'+
     '</div>'+
     '<div id="create_annos_block" class="dragBlock">'+
@@ -38,14 +34,13 @@ function annotation_dialog() {
     '</div>'+
   '</div>');
   var annotation_dialog = $('#create_annotation_box');
-  annotation_dialog.dialog({
+  return annotation_dialog.dialog({
     modal: true,
     title: 'Annotate',
     resizable: false,
     closeOnEscape: false,
     height: 420,
     width: 380,
-    autoOpen: false,
     buttons: {
     'Save': function() {
       saveAndEndAnnotating();
@@ -58,14 +53,4 @@ function annotation_dialog() {
     }
   }
   });
-  return {
-    show: function() {
-      annotation_dialog.dialog('open');
-      $('.ui-widget-overlay').remove();
-    },
-    hide: function() {
-      annotation_dialog.dialog('close');
-      $(this).dialog('destroy').remove();
-    }
-  };
 };

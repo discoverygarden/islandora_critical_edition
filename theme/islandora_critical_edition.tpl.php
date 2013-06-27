@@ -26,7 +26,7 @@
         <div id ="pageChange">
         </div>
         <div id="helpLink">
-           <img title="Help" src="/sites/all/modules/islandora_critical_edition/cwrcwriter/resources/img/help.png">
+           <img title="Help" src="<?php print $images_path; ?>/img/help.png">
            <h2>Help</h2>
         </div>
         <div id="settingsLink">
@@ -55,7 +55,7 @@
                 <ul class="entitiesList"></ul>
               </div>
               <!-- Structure Panel -->
-              <div id="structure">
+             <div id="structure">
                 <div id="tree"></div>
               </div>
               <div id="relations">
@@ -143,7 +143,7 @@
 
                   <!--  At least one visible image needed for GData transport -->
                   <div class="shared-canvas-logo" style="font-size:8pt">
-                    <img height="25" src="/sites/all/modules/islandora_critical_edition/cwrcwriter/resources/impl/imgs/small-logo.png" style="padding: 0px; margin: 0px; border: 0px; border-top: 2px;" />
+                    <img height="25" src="<?php print $images_path; ?>/impl/imgs/small-logo.png" style="padding: 0px; margin: 0px; border: 0px; border-top: 2px;" />
                     Powered by SharedCanvas
                   </div>
 

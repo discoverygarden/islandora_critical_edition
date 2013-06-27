@@ -322,6 +322,7 @@ function mk_raphael(typ, canvas, canvasId) {
     var svgWrap = $('#svg_wrapper');
     svgWrap.append('<div class="svg_canvas_wrapper" id="svg_annos_' + typ + '_' + canvasId + '"></div>');
     var svg = $('#svg_annos_' + typ + '_' + canvasId);
+    
     svg.height(sh);
     svg.width(sw);
     z = topinfo['zOrders'][typ] + 1; // Allow a base image at 1
@@ -333,11 +334,10 @@ function mk_raphael(typ, canvas, canvasId) {
       'at':'left top',
       'collision':'none'
     });
-
     // Allow the annotations to scale.
     var svgcanvas = ScaleRaphael('svg_annos_' + typ + '_' + canvasId, cvsw, cvsh);
     svgcanvas.changeSize(sw, sh, false, false);
-
+    
     if ($.browser.webkit) {
       svgcanvas.safari();
     }
@@ -560,8 +560,9 @@ function paint_imageAnno(anno, canvasId) {
       var imgoffleft = (x*clipScale);
       var imgofftop = (y*clipScale);
     }
-
+    
     var xywh = getRect(anno.targets[0]);
+   // console.log("rect: " + JSON.stringify(xywh));
     if (xywh != null) {
       var tx = xywh[0], ty = xywh[1], tw = xywh[2], th = xywh[3];
       var offset = "" + Math.floor(tx*scale) + ' ' + Math.floor(ty*scale)

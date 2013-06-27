@@ -27,7 +27,6 @@ function fetch_comment_annotations() {
 
 
 function maybe_config_create_annotation() {
-		
   $('#create_annotation').click(startAnnotating);
   $('.diabutton').button();
   $('#cancelAnno').click(closeAndEndAnnotating);
@@ -65,6 +64,7 @@ function startAnnotating() {
   $('#create_annotation').empty().append('Annotating');
   
   $('#create_annotation_box').dialog('open');
+  //annotation_dialog();
   $('.ui-widget-overlay').remove();
 
   $('#canvases .canvas').each(function() {
@@ -151,9 +151,8 @@ function initForCreate(canvas) {
   var r = mk_raphael('comment', canvas, topinfo['canvasDivHash'][canvas]);
   var invScale = 1.0 / r.newScale;
 
-  var ch = Math.floor($('#canvases').children(0).height() * invScale);
-  var cw = Math.floor($('#canvases').children(0).width() * invScale);
-
+  var ch = Math.floor(r.height * invScale);
+  var cw = Math.floor(r.width * invScale);
   var prt = r.wrapperElem;
 
   // Ensure we're above all painting annos

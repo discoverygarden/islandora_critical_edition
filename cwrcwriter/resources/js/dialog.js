@@ -10,7 +10,6 @@ var DialogManager = function(config) {
 	               config.endpoint + 'dialogs/dialog_addorg.js', 
 	               config.endpoint + 'dialogs/dialog_addperson.js', 
 	               config.endpoint + 'dialogs/dialog_addplace.js',
-	               config.endpoint + 'dialogs/dialog_annotate.js',
 	               config.endpoint + 'dialogs/dialog_date.js', 
 	               config.endpoint + 'dialogs/dialog_message.js', 
 	               config.endpoint + 'dialogs/dialog_note.js', 
@@ -41,7 +40,6 @@ var DialogManager = function(config) {
 			addevent: new AddEventDialog(config),
 			addorg: new AddOrganizationDialog(config),
 			triple: new TripleDialog(config),
-			annotate: new AnnotationDialog(),
 			//teiheader: new TeiHeaderDialog(config)
 		};
 		dialogs.person = dialogs.search;

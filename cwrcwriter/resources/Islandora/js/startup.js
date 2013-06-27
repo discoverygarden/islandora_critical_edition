@@ -14,6 +14,11 @@ $.urlParam = function(name){
 // Gets setup information from Islandora.
 //var writer;
 $('document').ready(function(){
+  // Add the annotation dialog box early, so
+  // the click handlers can be attached.
+  var anno_d = annotation_dialog();
+  anno_d.dialog('close');
+  
   // Grab the pid, passed from the theme.inc file
   PID = Drupal.settings.islandora_critical_edition.page_pid;
   $.ajax({
