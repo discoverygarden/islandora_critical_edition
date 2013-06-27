@@ -11,8 +11,10 @@
 
 <div class="islandora-crited-wrapper">
   <div id="iframe_replacement">
+
     <input id="full-window-button" type="button" value="<?php print t('Full Window'); ?>" />
     <input id="bookview_button" type="button" value="<?php print t('Return to Book View'); ?>" />
+
      <div class="islandora-crited-iframe-wrapper">
       <!-- Header -->
         <div id="header">
