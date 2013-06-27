@@ -39,16 +39,15 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   drupal_add_css($module_path . '/cwrcwriter/css/critical_edition.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/css/style_2.css');
+  drupal_add_css($module_path . '/cwrcwriter/resources/smoothness/jquery-ui-1.8.13.custom.css');
+  drupal_add_css($module_path . '/cwrcwriter/resources/js/snippet/jquery.snippet.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/js/ContextMenu/src/jquery.contextMenu.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/css/jquery.miniColors.css');
+
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/css/sc.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/impl/css/emic_canvas.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/css/screen.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/css/style.css');
-  drupal_add_css($module_path . '/cwrcwriter/resources/css/editor.css');
-  drupal_add_css($module_path . '/cwrcwriter/resources/css/editor_ie.css');
-  drupal_add_css($module_path . '/cwrcwriter/resources/css/orlando.css');
-  drupal_add_css($module_path . '/cwrcwriter/resources/impl/css/smoothness/jquery-ui-1.8.16.custom.css');
 
   // Add dependent javascript.
   drupal_add_js($module_path . '/cwrcwriter/js/critical_edition.js');

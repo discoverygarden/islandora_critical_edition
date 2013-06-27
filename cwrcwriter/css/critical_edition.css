@@ -44,7 +44,7 @@
   background: #fff;
 }
 
-.islandora-crited-fullwindow .islandora-crited-iframe-wrapper iframe
+.islandora-crited-fullwindow .islandora-crited-iframe-wrapper #iframe_replacement
 {
   position: absolute;
   top: 0px;
