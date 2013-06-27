@@ -1,16 +1,3 @@
-/**
- * Function to retrieve URL parameters.
- */
-// This function MAY not be needed anymore
-$.urlParam = function(name){
-  var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (!results)
-    {
-      return 0;
-    }
-    return results[1] || 0;
-}
-
 // Gets setup information from Islandora.
 //var writer;
 $('document').ready(function(){
