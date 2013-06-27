@@ -6,18 +6,19 @@
 // Raphael overwrites CSS with defaults :(
 
 
-var outsideStyle = {
-  fill: 'none',
-  opacity: 0.7,
-  'stroke-width': '1%',
-  stroke: 'black'
-};
+var outsideStyle = islandora_getOutsideStyle()
+//{
+//    fill: 'none',
+//    opacity: 'none',
+    
+ //   stroke: 'black'
+//};
 var insideStyle = {
   fill: '#FFFFFF',
-  opacity: 0.1,
-  'stroke-width': 'none',
-  stroke: 'black',
-  'stroke-dasharray': '- '
+    opacity: 0.3,
+    'stroke-width': 'none',
+    stroke: 'black',
+    'stroke-dasharray': '- '
 };
 
 function fetch_comment_annotations() {
@@ -25,8 +26,8 @@ function fetch_comment_annotations() {
 	
 }
 
-
 function maybe_config_create_annotation() {
+
   $('#create_annotation').click(startAnnotating);
   $('.diabutton').button();
   $('#cancelAnno').click(closeAndEndAnnotating);
@@ -440,9 +441,12 @@ function create_rdfAnno() {
 }
 
 switchDown = function(x,y) {
+	console.log("orig xy: " + x + ", y: " + y);
+	
   var fixedxy = fixXY(this,x,y);
   var x = fixedxy[0];
   var y = fixedxy[1];
+  console.log("fixed xy: " + fixedxy[0] + ", y: " + fixedxy[1]);
   var which = topinfo['svgAnnoShape'];
 	
   if (which == 'circ') {
@@ -484,8 +488,8 @@ function fixXY(what, x, y) {
   x -= offsetLeft;
 	
   // And for scroll in window
-  var pageOffsetTop = $('body').scrollTop();
-  var pageOffsetLeft = $('body').scrollLeft();
+  var pageOffsetTop = $(window).scrollTop();//$('body').scrollTop();
+  var pageOffsetLeft = $(window).scrollLeft();//$('body').scrollLeft();
   y += pageOffsetTop;
   x += pageOffsetLeft;
 	
@@ -719,4 +723,22 @@ function mkRect(what, x,y) {
     this.set.remove();
   });
   return outer;
+}
+function islandora_getOutsideStyle(){
+    var color = 'black';
+
+    //check to see if color box has been activated
+    if($('#anno_color_activated').attr('value') == 'active'){
+        color = $('#anno_color').attr('value');
+    }
+     var outsideStyle = {
+        fill: 'none',
+        opacity: 'none',
+        'stroke-width': + $('#stroke_width').val() + '%' ,
+        stroke: color
+    };
+    //if (color != ''){
+    //    outsideStyle.color = color;
+    //}
+    return outsideStyle;
 }
