@@ -14,8 +14,6 @@ define('ISLANDORA_CRITICAL_EDITION_VIEW_CRITICAL_EDITION', 'view critical editio
 // Relationships.
 define('ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF', 'isCriticalEditionOf');
 
-
-
 /**
  * Implements hook_menu().
  */

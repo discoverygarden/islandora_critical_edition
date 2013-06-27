@@ -14,10 +14,10 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
-  
+
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);
   $pids = array_keys($pages);
-  
+
   $variables['images_path'] = url($module_path . '/cwrcwriter/resources', array('absolute' => TRUE));
   $variables['viewer_url'] = url($module_path .
                                  "/cwrcwriter/resources/index.php", array(
@@ -27,7 +27,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
       'islandora_critical_edition' => array(
         'book_pid' => islandora_critical_edition_get_object_of_critical_edition(
           $variables['islandora_object']))), 'setting');
-  
+
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'images_path' => $variables['images_path'])), 'setting');
@@ -76,7 +76,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($module_path . '/cwrcwriter/resources/Islandora/js/startup.js');
 
   drupal_add_js($module_path . '/cwrcwriter/resources/Islandora/js/dialog_annotate.js');
-  
+
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.rdfquery.rdfa.min-1.1.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.rdf.turtle.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/impl/js/jquery.touchSwipe-1.2.4.js');

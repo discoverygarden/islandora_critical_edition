@@ -153,7 +153,7 @@
             </div>
           </div>
         </div>
-<!-- enable once css flows
+        <!--@todo: enable once css flows
         <div id="islandora_critical_edition_footer">
           <p>Brought to you by <a href="http://editingmodernism.ca/" title="Editing Modernism in Canada" target="_blank">EMiC</a></p>
         </div>
