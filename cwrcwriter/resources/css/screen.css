@@ -1,4 +1,4 @@
-.islandora-crited-iframe-wrapper body {
+#iframe_replacement {
   margin: 0;
   padding: 0;
   border: 0;
@@ -170,7 +170,7 @@ islandora-crited-iframe-wrapper #header p, islandora-crited-iframe-wrapper #head
 
 
 /* Footer styles */
-#ele_footer {
+#islandora_critical_edition_footer {
   clear: both;
   float: left;
   width: 100%;
@@ -180,7 +180,7 @@ islandora-crited-iframe-wrapper #header p, islandora-crited-iframe-wrapper #head
   bottom: 0px;
   
 }
-#ele_footer p {
+#islandora_critical_edition_footer p {
   padding: 10px;
   margin: 0;
 }
