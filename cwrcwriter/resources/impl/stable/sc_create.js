@@ -438,12 +438,10 @@ function create_rdfAnno() {
 }
 
 switchDown = function(x,y) {
-  console.log("orig xy: " + x + ", y: " + y);
   
   var fixedxy = fixXY(this,x,y);
   var x = fixedxy[0];
   var y = fixedxy[1];
-  console.log("fixed xy: " + fixedxy[0] + ", y: " + fixedxy[1]);
   var which = topinfo['svgAnnoShape'];
   
   if (which == 'circ') {
@@ -725,18 +723,11 @@ function mkRect(what, x,y) {
   return outer;
 }
 function islandora_getOutsideStyle(){
-    var color = 'black';
-    color = $('#anno_color').attr('value');
-    console.log("Test Value: " + color);
-    //check to see if color box has been activated
-//    if($('#anno_color_activated').attr('value') == 'active'){
-//        
-//    }
     outsideStyle = {
         fill: 'none',
         opacity: 'none',
-        'stroke-width': '1%',//+ $('#stroke_width').val() + '%' ,
-        stroke: color
+        'stroke-width': '1%',
+        stroke: $('#anno_color').attr('value')
     };
     return outsideStyle;
 }
