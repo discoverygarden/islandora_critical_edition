@@ -1,20 +1,15 @@
-/**
- * Function to retrieve URL parameters.
- */
-$.urlParam = function(name){
-  var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(window.location.href);
-  if (!results)
-  {
-    return 0;
-  }
-  return results[1] || 0;
-}
-
 // Gets setup information from Islandora.
+//var writer;
 $('document').ready(function(){
-  PID = $.urlParam('PID');
+  // Add the annotation dialog box early, so
+  // the click handlers can be attached.
+  var anno_d = annotation_dialog();
+  anno_d.dialog('close');
+  
+  // Grab the pid, passed from the theme.inc file
+  PID = Drupal.settings.islandora_critical_edition.page_pid;
   $.ajax({
-    url: window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
+    url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
     async:false,
     success: function(data, status, xhr) {
       cwrc_params = data;
@@ -32,11 +27,12 @@ $('document').ready(function(){
   $('#header h1').text( cwrc_params.title + " - Seq# " + cwrc_params.position);
 
   // Instantiate and initialize writer object.
+  // Updated with schemaUrl
   writer = new Writer({
-    'project':'local'
+    'project':'local',
+    'schemaUrl':Drupal.settings.basePath + Drupal.settings.islandora_critical_edition.module_base,
   });
   writer.init();
-
   init_canvas_div();
   openColumn();
   if(cwrc_params.position == 1){
@@ -210,7 +206,7 @@ function init_canvas_div() {
 
   pagePid = cwrc_params.pages[cwrc_params.position];
   $.ajax({
-    url: window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/setup_canvas/' + pagePid,
+    url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup_canvas/' + pagePid,
     async:false,
     success: function(data, status, xhr) {
       islandora_canvas_params = data;

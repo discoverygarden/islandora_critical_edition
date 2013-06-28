@@ -5,12 +5,21 @@ var DialogManager = function(config) {
 	
 	var dialogs = null;
 	
-	var scripts = ['dialog_addevent.js', 'dialog_addorg.js', 'dialog_addperson.js', 'dialog_addplace.js',
-	               'dialog_date.js', 'dialog_message.js', 'dialog_note.js', 'dialog_search.js',
-	               'dialog_title.js', 'dialog_triple.js', 'dialog_teiheader.js'];
+	// Added a property to 'cofig' called enpoint, why not?
+	var scripts = [config.endpoint + 'dialogs/dialog_addevent.js', 
+	               config.endpoint + 'dialogs/dialog_addorg.js', 
+	               config.endpoint + 'dialogs/dialog_addperson.js', 
+	               config.endpoint + 'dialogs/dialog_addplace.js',
+	               config.endpoint + 'dialogs/dialog_date.js', 
+	               config.endpoint + 'dialogs/dialog_message.js', 
+	               config.endpoint + 'dialogs/dialog_note.js', 
+	               config.endpoint + 'dialogs/dialog_search.js',
+	               config.endpoint + 'dialogs/dialog_title.js', 
+	               config.endpoint + 'dialogs/dialog_triple.js', 
+	               config.endpoint + 'dialogs/dialog_teiheader.js'];
 	var loadCount = 0;
 	for (var i = 0; i < scripts.length; i++) {
-		var url = 'js/dialogs/'+scripts[i];
+		var url = scripts[i];
 		$.getScript(url, function(data, status) {
 			loadCount++;
 			if (loadCount == scripts.length) {
@@ -33,7 +42,6 @@ var DialogManager = function(config) {
 			triple: new TripleDialog(config),
 			//teiheader: new TeiHeaderDialog(config)
 		};
-		
 		dialogs.person = dialogs.search;
 		dialogs.place = dialogs.search;
 		dialogs.event = dialogs.search;

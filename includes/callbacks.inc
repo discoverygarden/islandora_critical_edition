@@ -17,7 +17,6 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   module_load_include('inc', 'islandora_basic_collection', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   global $user;
-
   $critical_edition_relationships = $fedora_object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isPageOf');
   $critical_edition = $critical_edition_relationships[0]['object']['value'];
   $critical_edition_object = islandora_object_load($critical_edition);

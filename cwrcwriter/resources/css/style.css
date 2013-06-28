@@ -1,4 +1,4 @@
-body {
+.islandora-crited-iframe-wrapper body {
 	margin: 0;
 	padding: 0;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -6,24 +6,24 @@ body {
 	color: #333;
 }
 
-h1 {
+.islandora-crited-iframe-wrapper h1 {
 	font-size: 14px;
 }
 
-h2 {
+.islandora-crited-iframe-wrapper h2 {
 	font-size: 12px;
 }
 
-h1, h2 {
+.islandora-crited-iframe-wrapper h1, .islandora-crited-iframe-wrapper h2 {
 	margin: 0;
 }
 
-textarea {
+.islandora-crited-iframe-wrapper textarea {
 	overflow: auto;
 	resize: none;
 }
 
-label {
+.islandora-crited-iframe-wrapper label {
 	margin-right: 5px;
 }
 
@@ -32,7 +32,7 @@ label {
 	padding: 0;
 }
 
-#header {
+.islandora-crited-iframe-wrapper #header {
 	height: 17px;
 	padding: 5px 10px;
 	color: #eee;
@@ -40,7 +40,7 @@ label {
 	border-bottom: 1px solid #ccc;
 }
 
-#header h1 {
+.islandora-crited-iframe-wrapper #header h1 {
 	float: left;
 }
 
@@ -50,7 +50,7 @@ label {
 }
 
 #main {
-	margin: 0 0 0 250px;
+/* 	margin: 0 0 0 250px; */
 }
 
 #leftcol {
@@ -823,17 +823,18 @@ div.mceDropDown {
 
 /* General elements */
 
-body,
+.islandora-crited-iframe-wrapper body,
 .ui-widget
 {
   font-family: 'Trebuchet MS', Tahoma, Arial, sans-serif;
   font-size: 12px;
 }
 
-a,
-a:visited,
-a:link,
-A:link
+
+.islandora-crited-iframe-wrapper a,
+.islandora-crited-iframe-wrapper a:visited,
+.islandora-crited-iframe-wrapper a:link,
+.islandora-crited-iframe-wrapper A:link
 {
   color: #000;
 }
@@ -850,7 +851,7 @@ A:hover
 
 /* Header */
 
-#header
+.islandora-crited-iframe-wrapper #header
 {
   height: 35px;
   padding: 0px 0px 0px 0px;
@@ -929,7 +930,7 @@ A:hover
 /* Footer */
 
 
-#footer
+#islandora_critical_edition_footer_footer
 {
   height: 34px;
   /* Changed from absolute to fixed for IE */
@@ -1427,7 +1428,7 @@ ul.relationsList li:hover
 #create_annotation_box
 {
   width: 380px;
-  
+  height: 100%;
   -webkit-box-shadow: 0px 0px 5px 0px #666; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
           box-shadow: 0px 0px 5px 0px #666; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
 }
@@ -1467,7 +1468,6 @@ ul.relationsList li:hover
 #create_annotation_box #create_annos_block
 {
   float: left;
-  width: 360px;
   padding: 5px 10px 10px 10px;
 }
 
