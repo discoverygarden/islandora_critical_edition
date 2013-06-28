@@ -153,19 +153,12 @@
             </div>
           </div>
         </div>
-
-        <!-- div id="dialogs" width="500"-->
-
-          <!-- Image annotation box -->
-
-          <!-- Footer -->
-
-        <!-- /div-->
-
+        <!--@todo: enable once css flows
+        <div id="islandora_critical_edition_footer">
+          <p>Brought to you by <a href="http://editingmodernism.ca/" title="Editing Modernism in Canada" target="_blank">EMiC</a></p>
+        </div>
+        -->
 
     </div>
-  <!--   <div id="ele_footer"> -->
-  <!--     <p>Brought to you by <a href="http://editingmodernism.ca/" title="Editing Modernism in Canada" target="_blank">EMiC</a></p> -->
-  <!--   </div> -->
   </div>
 </div>
