@@ -36,7 +36,7 @@ function islandora_getList() {
     async:false,
     url: islandora_canvas_params.get_annotation_list_url,
     success: function(data,status,xhr) {
-   
+
       if(data != 'null'){
         var listdata = $.parseJSON(data);
         var pids = listdata.pids;
@@ -104,7 +104,7 @@ function islandora_getAnnotation(pid) {
      
     },
     error: function(data,status,xhr) {
-      
+
     }
   });
 }

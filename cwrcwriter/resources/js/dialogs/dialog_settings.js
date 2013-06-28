@@ -7,14 +7,13 @@ var SettingsDialog = function(writer, config) {
     showEntityBrackets: false,
     showStructBrackets: false
   };
-
   jQuery.extend(settings, config);
 
-  if(cwrc_params.no_edit == false){
-    $('#header').append(''+
-      '<div id="helpLink"><img src="img/help.png" title="Help"/><h2>Help</h2></div>');
-  }
-  $('#header').append('<div id="settingsLink"><h2>Settings</h2></div>');
+//  if(cwrc_params.no_edit == false){
+//    $('#header').append(''+
+//      '<div id="helpLink"><img src="/sites/all/modules/islandora_critical_edition/cwrcwriter/resources/img/help.png" title="Help"/><h2>Help</h2></div>');
+//  }
+//  $('#header').append('<div id="settingsLink"><h2>Settings</h2></div>');
 
   $(document.body).append(''+
     '<div id="settingsDialog">'+

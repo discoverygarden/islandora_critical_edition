@@ -19,16 +19,10 @@
   left: 0px;
   right: 0px;
   top-padding: 20px;
-  top: 65px;
-  z-index: 2000;
+  top: 25px;
+  z-index: 10;
   background: #fff;
 }
-
-.admin-menu .islandora-crited-fullwindow
-{
-  top: 0px;
-}
-
 
 .islandora-crited-fullwindow .islandora-crited-iframe-wrapper
 {
@@ -44,7 +38,7 @@
   background: #fff;
 }
 
-.islandora-crited-fullwindow .islandora-crited-iframe-wrapper iframe
+.islandora-crited-fullwindow .islandora-crited-iframe-wrapper #iframe_replacement
 {
   position: absolute;
   width: 100%;

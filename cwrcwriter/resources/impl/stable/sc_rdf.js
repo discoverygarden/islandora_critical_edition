@@ -418,7 +418,6 @@ function cb_process_annoList(qry, uri) {
         allAnnos[mtyp][cnv] = [];
       }
       allAnnos[mtyp][cnv].push(anno);
-		
     } catch(e) {
       alert(e)
     };
@@ -477,15 +476,14 @@ function cb_process_annoList(qry, uri) {
 
 function load_commentAnno(data) {
   // RDFA
-  
   var lqry = $(data).rdf();
   if (lqry.databank.size() == 0) {
     // Turtle or RDF/XML
     try {
       lqry = $.rdf(opts).load(data);
     } catch (e) {
+      console.log("Broken comment annotation: " + JSON.stringify(e));
     // alert('broken comment annotation: ' + data)
-			
     }
   }
   cb_process_annoList(lqry, '');

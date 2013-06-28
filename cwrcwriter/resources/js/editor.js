@@ -6,14 +6,14 @@ var Writer = function(config) {
     structs: {}, // structs store
     triples: [], // triples store
 
-    schemaUrl: config.schemaUrl || 'js/cwrc_basic_tei.js',
+    schemaUrl: config.schemaUrl + '/cwrcwriter/resources/js/cwrc_basic_tei.js',//config.schemaUrl || 'js/cwrc_basic_tei.js',
     schema: {}, // schema for additional custom tags
 		
     project: config.project, // the current project (cwrc or russell)
 		
     baseUrl: 'http://apps.testing.cwrc.ca/',
 		
-    schemaCSS: 'css/orlando.css', // css for schema tags used in the editor
+    schemaCSS: config.schemaUrl + '/cwrcwriter/resources/css/orlando.css', // css for schema tags used in the editor
 		
     // tag types and their titles
     titles: {
@@ -54,7 +54,6 @@ var Writer = function(config) {
     d: null, // dialog
     settings: null // settings dialog
   };
-	
   var _onInitHandler = function(ed) {
     // parse schema css
     if (w.schemaCSS) {
@@ -124,7 +123,6 @@ var Writer = function(config) {
     ed.addCommand('exportDocument', w.fm.exportDocument);
     ed.addCommand('loadDocument', w.fm.loadDocument);
     ed.addCommand('getFilteredSchema', w.getFilteredSchema);
-		
     // used in conjunction with the paste plugin
     // needs to be false in order for paste postprocessing to function properly
     ed.pasteAsPlainText = false;
@@ -195,7 +193,6 @@ var Writer = function(config) {
     //  DHSI: populate editor, style next and prev buttons
 
     w.fm.loadEMICDocument();
-
     if(cwrc_params.position == 0){
       $('.prevButton').css('opacity', '.2');
     }
@@ -984,14 +981,14 @@ var Writer = function(config) {
     } else {
       w.mode = w.XMLRDF;
     }
-		
     $.ajax({
       url: w.schemaUrl,
+      error: function() {
+      
+        },
       success: function(data, status, xhr) {
         var schema = eval(xhr.responseText)[0];
-
         w.schema = schema.grammar;
-				
         // need to get the schema before we can initialize the editor
         w._initEditor();
       }
@@ -1009,8 +1006,11 @@ var Writer = function(config) {
     w.relations = new Relations({
       writer: w
     });
+    var module_path = Drupal.settings.islandora_critical_edition.module_base;
     w.d = new DialogManager({
-      writer: w
+      writer: w,
+      'endpoint':Drupal.settings.basePath + module_path + '/cwrcwriter/resources/js/',
+      'dialog_img_path':Drupal.settings.basePath + module_path,
     });
     w.settings = new SettingsDialog(w, {
       showEntityBrackets: true,
@@ -1022,14 +1022,14 @@ var Writer = function(config) {
   };
 	
   w._initEditor = function() {
-    $('#editor').tinymce({
-      script_url : 'js/tinymce/jscripts/tiny_mce/tiny_mce.js',
+	$('#editor').tinymce({
+      script_url : '/' + Drupal.settings.islandora_critical_edition.module_base + '/cwrcwriter/resources/js/tinymce/jscripts/tiny_mce/tiny_mce.js',//Drupal.settings.basePath + 'islandora/cwrcwriter/resources/js/tinymce/jscripts/tiny_mce/tiny_mce.js',
       //		tinyMCE.init({
       mode: 'textareas',
       elements: 'editor',
       theme: 'advanced',
       readonly : cwrc_params.no_edit,
-      content_css: 'css/editor.css'+', '+w.schemaCSS,
+      content_css: config.schemaUrl + '/cwrcwriter/resources/css/editor.css'+', '+w.schemaCSS,
 			
       width: '100%',
 			
@@ -1066,12 +1066,14 @@ var Writer = function(config) {
 				
         for (var i = 0; i < plugins.length; i++) {
           var name = plugins[i];
-          tinymce.PluginManager.load(name, '../../../tinymce_plugins/'+name+'.js');
+          var plugin_dir = Drupal.settings.basePath + Drupal.settings.islandora_critical_edition.module_base + '/cwrcwriter/resources/js/tinymce_plugins';
+          tinymce.PluginManager.load(name, plugin_dir+'/'+name+'.js');
         }
-				
+		var img_base = Drupal.settings.basePath + Drupal.settings.islandora_critical_edition.module_base + '/cwrcwriter/resources/';
+
         ed.addButton('addperson', {
           title: 'Tag Person',
-          image: 'img/user.png',
+          image: img_base + 'img/user.png',
           'class': 'entityButton person',
           onclick : function() {
             ed.execCommand('addEntity', 'person');
@@ -1079,7 +1081,7 @@ var Writer = function(config) {
         });
         ed.addButton('addplace', {
           title: 'Tag Place',
-          image: 'img/world.png',
+          image: img_base + 'img/world.png',
           'class': 'entityButton place',
           onclick : function() {
             ed.execCommand('addEntity', 'place');
@@ -1087,7 +1089,7 @@ var Writer = function(config) {
         });
         ed.addButton('adddate', {
           title: 'Tag Date',
-          image: 'img/calendar.png',
+          image: img_base + 'img/calendar.png',
           'class': 'entityButton date',
           onclick : function() {
             ed.execCommand('addEntity', 'date');
@@ -1095,7 +1097,7 @@ var Writer = function(config) {
         });
         ed.addButton('addevent', {
           title: 'Tag Event',
-          image: 'img/cake.png',
+          image: img_base + 'img/cake.png',
           'class': 'entityButton event',
           onclick : function() {
             ed.execCommand('addEntity', 'event');
@@ -1103,7 +1105,7 @@ var Writer = function(config) {
         });
         ed.addButton('addorg', {
           title: 'Tag Organization',
-          image: 'img/group.png',
+          image: img_base + 'img/group.png',
           'class': 'entityButton org',
           onclick : function() {
             ed.execCommand('addEntity', 'org');
@@ -1111,7 +1113,7 @@ var Writer = function(config) {
         });
         ed.addButton('addcitation', {
           title: 'Tag Citation',
-          image: 'img/vcard.png',
+          image: img_base + 'img/vcard.png',
           'class': 'entityButton citation',
           onclick : function() {
             ed.execCommand('addEntity', 'citation');
@@ -1119,7 +1121,7 @@ var Writer = function(config) {
         });
         ed.addButton('addnote', {
           title: 'Tag Note',
-          image: 'img/note.png',
+          image: img_base + 'img/note.png',
           'class': 'entityButton note',
           onclick : function() {
             ed.execCommand('addEntity', 'note');
@@ -1127,7 +1129,7 @@ var Writer = function(config) {
         });
         ed.addButton('addtitle', {
           title: 'Tag Text/Title',
-          image: 'img/book.png',
+          image: img_base + 'img/book.png',
           'class': 'entityButton textTitle',
           onclick : function() {
             ed.execCommand('addEntity', 'title');
@@ -1136,7 +1138,7 @@ var Writer = function(config) {
 				
         ed.addButton('editTag', {
           title: 'Edit Tag',
-          image: 'img/tag_blue_edit.png',
+          image: img_base + 'img/tag_blue_edit.png',
           'class': 'entityButton',
           onclick : function() {
             ed.execCommand('editTag');
@@ -1145,7 +1147,7 @@ var Writer = function(config) {
 				
         ed.addButton('removeTag', {
           title: 'Remove Tag',
-          image: 'img/cross.png',
+          image: img_base + 'img/cross.png',
           'class': 'entityButton',
           onclick : function() {
             ed.execCommand('removeTag');
@@ -1154,7 +1156,7 @@ var Writer = function(config) {
 				
         ed.addButton('savebutton', {
           title: 'Save',
-          image: 'img/save.png',
+          image: img_base + 'img/save.png',
           onclick: function() {
             w.fm.saveDocument();
           }
@@ -1173,7 +1175,7 @@ var Writer = function(config) {
 				
         ed.addButton('editsource', {
           title: 'Edit Source',
-          image: 'img/editsource.gif',
+          image: img_base + 'img/editsource.gif',
           'class': 'wideButton',
           onclick: function() {
             w.fm.editSource();
@@ -1191,7 +1193,7 @@ var Writer = function(config) {
 				
         ed.addButton('addtriple', {
           title: 'Add Relation',
-          image: 'img/link_add.png',
+          image: img_base + 'img/link_add.png',
           'class': 'entityButton',
           onclick: function() {
             $('#tabs').tabs('select', 2);
