@@ -1,0 +1,27 @@
+/* Canvas stylesheet */
+
+/* Annotations */
+
+#annotations img
+{
+  margin: 0px 0px 0px 0px;
+}
+
+#annotations .base_img
+{
+  left: 1px !important;
+  top: 1px !important;
+}
+
+#dialogs
+{
+
+}
+
+
+/* Image annotation dialog boxes */
+
+#create_annotation_box
+{
+  left: auto;
+}
