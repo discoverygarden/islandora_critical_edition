@@ -23,6 +23,10 @@ function annotation_dialog() {
         '<input id ="anno_color" type="hidden" name="color4" value="#91843c" class="color-picker" size="7" />'+
         '<input id ="anno_color_activated" type="hidden" value ="" size="7" />'+
       '</div>'+
+      '<div id ="stroke-width-wrapper" class="element-wrap">'+
+        '<label for="stroke_width">Stroke Width:</label>'+
+        '<input id="stroke_width" type="text" size="5" value=".3"></input>'+
+      '</div>'+
       '<div class="element-wrap">'+
         '<label for="anno_text">Annotation:</label>'+
         '<textarea id="anno_text" cols="40" rows="5"></textarea>'+
@@ -39,7 +43,7 @@ function annotation_dialog() {
     title: 'Annotate',
     resizable: false,
     closeOnEscape: false,
-    height: 420,
+    height: 470,
     width: 380,
     buttons: {
     'Save': function() {

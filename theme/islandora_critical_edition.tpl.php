@@ -29,7 +29,7 @@
           <div id ="pageChange">
           </div>
           <div id="helpLink">
-             <img title="Help" src="<?php print $images_path; ?>/img/help.png">
+             <img title="Help" src="<?php print $images_path; ?>/imgs/help.png">
              <h2>Help</h2>
           </div>
           <div id="settingsLink">
@@ -38,6 +38,9 @@
         </div>
         <!-- Body -->
         <div class="colmask threecol">
+        
+        
+        
           <div class="colleft">
             <div class="col2">
               <!-- Tabs -->
@@ -65,12 +68,13 @@
                   <ul class="relationsList"></ul>
                 </div>
                 <!-- Image Annotations Panel -->
-                <div id="image-annotations">
-                  <div id="comment_annos_block"></div>
-                </div>
+                <?php print $anno_list_pane; ?>
               </div>
             </div>
           </div>
+          
+          
+          
           <div id="colright" class="colright">
             <div class="col1">
               <!-- Text Annotation -->
@@ -91,12 +95,13 @@
                 <div id="canvas-body-wrapper" style="width: 100%; height: 800px;"><div id="canvas-body">
 
                     <ul class="menu_body" id="show_body">
+                      <!-- TODO: Remove this unordered list (jplayer)? -->
                       <li class="show_sort" id="li_comment">
                         <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
                         <span style="margin-left:10px">Commentary:</span>
                         <span style="float:right"><input id="check_show_comment" type="checkbox" checked="true"></input> </span>
                       </li>
-
+                       
                       <li class="show_sort" id="li_audio">
                         <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
                         <span style="margin-left:10px">Audio: </span>
@@ -129,21 +134,11 @@
                       <li>Show Canvas URI: <span style="float:right"><input id="check_view_uri" type="checkbox"></input></li>
                     </ul>
 
-                    <!--  Wrapper to create Canvas divs in -->
-                    <div id="canvases"></div>
-
-                    <!--  Wrapper to create SVG divs in -->
-                    <div id="svg_wrapper"></div>
-
-                    <!--  Wrapper to create annotations in, then reposition -->
-                    <div id="annotations"></div>
-
-                    <!-- Progress bar -->
-                    <!-- div id="loadprogress"></div-->
+                    <?php print $anno_img_pane; ?>
 
                     <!--  At least one visible image needed for GData transport -->
                     <div class="shared-canvas-logo" style="font-size:8pt">
-                      <img height="25" src="<?php print $images_path; ?>/impl/imgs/small-logo.png" style="padding: 0px; margin: 0px; border: 0px; border-top: 2px;" />
+                      <img height="25" src="<?php print $images_path; ?>/imgs/small-logo.png" style="padding: 0px; margin: 0px; border: 0px; border-top: 2px;" />
                       Powered by SharedCanvas
                     </div>
 

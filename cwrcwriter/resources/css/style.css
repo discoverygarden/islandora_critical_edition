@@ -877,7 +877,7 @@ A:hover
   width: 30px;
   height: 35px;
 
-  background-image: url('../imgs/nav-arrows.png'); /* 38px x 85px */ 
+  background-image: url('../img/nav-arrows.png'); /* 38px x 85px */ 
   background-position: 0px 0px;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -937,7 +937,7 @@ A:hover
   position: fixed;
   left: 0px;
   right: 0px;
-  background: url('../imgs/emic-logo') 20px 7px no-repeat transparent;
+  background: url('../img/emic-logo') 20px 7px no-repeat transparent;
 }
 
 #footer p
@@ -1018,7 +1018,7 @@ A:hover
 .image-annotation-wrapper #canvas-body
 {
   position: relative;
-  padding:0px 15px 15px 15px;
+  padding:0px 15px 10px 10px;
 }
 
 .image-annotation-wrapper .shared-canvas-logo
@@ -1294,7 +1294,7 @@ A:hover
   border-left: 1px solid #ccc;
   border-right: 1px solid #ccc;
   
-  background-image: url('../imgs/separator.png'); 
+  background-image: url('../img/separator.png'); 
   background-position: center center;
   background-repeat: no-repeat;
   background-color: #fff;

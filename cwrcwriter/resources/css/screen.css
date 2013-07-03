@@ -142,9 +142,6 @@ islandora-crited-iframe-wrapper #header p, islandora-crited-iframe-wrapper #head
 }
 
 /* 3 Column settings */
-.threecol {
-  background: #eee;
-}
 .threecol .colmid {
   right: 40%;
   background: #fff;
