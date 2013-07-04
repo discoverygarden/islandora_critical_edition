@@ -94,7 +94,9 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($module_path . '/cwrcwriter/resources/js/entitieslist.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/relations.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/resize-columns.js');
-  drupal_add_js($module_path . '/cwrcwriter/resources/Islandora/js/dialog_annotate.js');
+  
+  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/dialog_annotate.js');
+  
   drupal_add_js($module_path . '/cwrcwriter/resources/Islandora/js/startup.js');
   // ~~~~~~~~~~~~~~~~~~~~~
   
