@@ -13,7 +13,7 @@
 function islandora_critical_edition_preprocess_islandora_critical_edition(&$variables) {
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
-  
+
   // Local Critical Editions module path.
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
 
@@ -21,12 +21,12 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   $image_annotation_module_path = drupal_get_path('module', 'islandora_image_annotation');
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);
   $pids = array_keys($pages);
-  
+
   // Use the theme files from image annotation for annotation list
   // and image annotation pane's.
   $variables['anno_list_pane'] = theme('islandora_anno_list_pane');
   $variables['anno_img_pane'] = theme('islandora_anno_image_pane');
-  
+
   // Fill additional session variables.
   $variables['images_path'] = url($image_annotation_module_path . '/shared_canvas', array('absolute' => TRUE));
   $variables['viewer_url'] = url($module_path .
@@ -41,7 +41,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'images_path' => $variables['images_path'])), 'setting');
-  
+
   // Passing the page pid, instead of getting if from the
   // URL on the javascript side.
   drupal_add_js(array(
@@ -52,9 +52,9 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'module_base' => $module_path)), 'setting');
-  
+
   drupal_add_css($module_path . '/cwrcwriter/resources/css/style_2.css');
-  // TODO: this custom css differs from the one in the image annotation module. Amalgamate?
+  // This custom css differs from the one in the image annotation module.
   drupal_add_css($module_path . '/cwrcwriter/resources/smoothness/jquery-ui-1.8.13.custom.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/js/snippet/jquery.snippet.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/css/sc.css');
@@ -64,12 +64,12 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_css($image_annotation_module_path . '/shared_canvas/resources/css/critical_edition.css');
   drupal_add_css($image_annotation_module_path . '/shared_canvas/js/ContextMenu/jquery.contextMenu.css');
   drupal_add_css($image_annotation_module_path . '/shared_canvas/css/jquery.miniColors.css');
-  
+
   // Add dependent javascript.
   drupal_add_js($module_path . '/cwrcwriter/resources/js/critical_edition.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery-1.7.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery-ui-1.8.13.custom.min.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.contextmenu.js'); 
+  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.contextmenu.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.watermark.min.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/ContextMenu/jquery.contextMenu.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.svg.js');
@@ -80,7 +80,8 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/scale.raphael.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/uuid.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.miniColors.js');
-  
+  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/dialog_annotate.js');
+
   // ~~~~~~~~~~~~~ TODO: LIB this stuff up nicly..
   drupal_add_js($module_path . '/cwrcwriter/resources/js/tinymce/jscripts/tiny_mce/jquery.tinymce.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/jstree/jquery.hotkeys.js');
@@ -94,15 +95,11 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($module_path . '/cwrcwriter/resources/js/entitieslist.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/relations.js');
   drupal_add_js($module_path . '/cwrcwriter/resources/js/resize-columns.js');
-  
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/dialog_annotate.js');
-  
   drupal_add_js($module_path . '/cwrcwriter/resources/Islandora/js/startup.js');
-  // ~~~~~~~~~~~~~~~~~~~~~
-  
-  // Critical Editions requires its own js init script, seperate from image annotation.
+
+  // Critical Editions requires its own js init script.
   drupal_add_js($module_path . '/cwrcwriter/resources/js/islandora_emic_init.js');
-  
+
   // Load required dependencies from image annotations Shared Canvas files.
   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_ui.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_utils.js');
