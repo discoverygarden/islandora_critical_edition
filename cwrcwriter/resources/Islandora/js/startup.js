@@ -1,6 +1,7 @@
 // Gets setup information from Islandora.
 //var writer;
 $('document').ready(function(){
+
   // Add the annotation dialog box early, so
   // the click handlers can be attached.
   var anno_d = annotation_dialog();

@@ -16,7 +16,7 @@
           $(this).val(Drupal.t('Full Window'));
         }
         resizeColumnsDrag();
-        
+        console.log("Full Window");
       });
       $("#bookview_button").click(function(){
           location.href = Drupal.settings.basePath + 'islandora/object/' + Drupal.settings.islandora_critical_edition.book_pid;

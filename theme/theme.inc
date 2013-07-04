@@ -61,12 +61,11 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_css($module_path . '/cwrcwriter/resources/css/emic_canvas.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/css/screen.css');
   drupal_add_css($module_path . '/cwrcwriter/resources/css/style.css');
-  drupal_add_css($image_annotation_module_path . '/shared_canvas/resources/css/critical_edition.css');
+  drupal_add_css($module_path . '/cwrcwriter/resources/css/critical_edition.css');
   drupal_add_css($image_annotation_module_path . '/shared_canvas/js/ContextMenu/jquery.contextMenu.css');
   drupal_add_css($image_annotation_module_path . '/shared_canvas/css/jquery.miniColors.css');
 
   // Add dependent javascript.
-  drupal_add_js($module_path . '/cwrcwriter/resources/js/critical_edition.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery-1.7.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery-ui-1.8.13.custom.min.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.contextmenu.js');
@@ -99,7 +98,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   // Critical Editions requires its own js init script.
   drupal_add_js($module_path . '/cwrcwriter/resources/js/islandora_emic_init.js');
-
+  drupal_add_js($module_path . '/cwrcwriter/resources/js/critical_edition.js');
   // Load required dependencies from image annotations Shared Canvas files.
   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_ui.js');
   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_utils.js');
