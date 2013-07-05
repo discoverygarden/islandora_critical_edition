@@ -15,7 +15,8 @@
 function islandora_critical_edition_preprocess_islandora_critical_edition(&$variables) {
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
-
+  module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
+  
   // Local Critical Editions module path.
   $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
 
@@ -64,21 +65,22 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_css($image_annotation_module_path . '/shared_canvas/js/ContextMenu/jquery.contextMenu.css');
   drupal_add_css($image_annotation_module_path . '/shared_canvas/css/jquery.miniColors.css');
 
+  islandora_image_annotation_include_common_js();
   // Add dependent javascript.
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery-1.7.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery-ui-1.8.13.custom.min.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.contextmenu.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.watermark.min.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/ContextMenu/jquery.contextMenu.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.svg.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery.rdfquery.rdfa.min-1.1.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery.rdf.turtle.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery.touchSwipe-1.2.4.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/raphael.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/scale.raphael.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/uuid.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.miniColors.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/dialog_annotate.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery-1.7.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery-ui-1.8.13.custom.min.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.contextmenu.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.watermark.min.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/ContextMenu/jquery.contextMenu.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.svg.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery.rdfquery.rdfa.min-1.1.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery.rdf.turtle.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery.touchSwipe-1.2.4.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/raphael.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/scale.raphael.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/uuid.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.miniColors.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/dialog_annotate.js');
 
   // ~~~~~~~~~~~~~ TODO: LIB this stuff up nicly..
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/tinymce/jscripts/tiny_mce/jquery.tinymce.js');
@@ -99,11 +101,11 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/islandora_emic_init.js');
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/critical_edition.js');
   // Load required dependencies from image annotations Shared Canvas files.
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_ui.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_utils.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_rdf.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_rdfjson.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_create.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_pastebin.js');
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_gdata.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_ui.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_utils.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_rdf.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_rdfjson.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_create.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_pastebin.js');
+//   drupal_add_js($image_annotation_module_path . '/shared_canvas/stable/sc_gdata.js');
 }
