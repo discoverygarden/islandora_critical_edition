@@ -12,8 +12,7 @@ books.  The CWRCWriter only supports the Firefox browser.
 
 
 CONFIGURATION
--------------
-The islandora_image_annotation module is a required module dependency.
+--------------
 
 The islandora_image_annotation module needs to be configured to allow
 annotation of the Islandora Page Content Model on the JPG datastream for

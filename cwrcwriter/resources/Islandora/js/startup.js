@@ -128,7 +128,7 @@ $('document').ready(function(){
 
       var selector = "#page_choose option[value='" + cwrc_params.position + "']";
       $(selector).removeAttr('selected');
-      setReturnParams()
+      setReturnParams();
       cwrc_params.position++;
       openColumn();
       selector = "#page_choose option[value='" + cwrc_params.position + "']";

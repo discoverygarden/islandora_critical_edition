@@ -191,6 +191,26 @@ function init_ui() {
 
 var timeout = false;
 var delta = 200;
+//function resizeCanvas() {
+//    var w = $('#canvas-body').width();
+//    if(timeout === false) {
+//      timeout = true;
+//      closeAndEndAnnotating();
+//      window.setTimeout(maybeResize, delta);
+//    }
+//  }
+//
+//  function maybeResize() {
+//      timeout = false;
+//      var w = $('#canvas-body').width();
+//      var image_element = $('.base_img').children(":first");
+//      console.log("maby resize numCanvases: " + topinfo['numCanvases']);
+//      initCanvas(topinfo['numCanvases']);
+//      image_element.width(w);
+//      image_element.css("height", "auto");
+//      $('.base_img').css("height", image_element.height());
+//      $('#canvas_0').css("width", w);
+//  }
 function resizeCanvas() {
   // Updated fix to prevent needless server calls
   var w = $('#canvas-body').width();
