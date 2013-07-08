@@ -1,4 +1,4 @@
-name = "Islandora CWRC"
+name = "Islandora Critical Editions"
 description = "Create critical editions of Islandora objects."
 package = Islandora
 dependencies[] = islandora
