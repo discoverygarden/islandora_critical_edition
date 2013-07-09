@@ -11,6 +11,7 @@
  * $variables['islandora_object']
  * $variables['anno_list_pane']
  * $variables['anno_img_pane']
+ * $variables['images_path']
  */
 function islandora_critical_edition_preprocess_islandora_critical_edition(&$variables) {
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
@@ -32,7 +33,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   // Fill additional session variables.
   $variables['images_path'] = url($image_annotation_module_path . '/shared_canvas', array('absolute' => TRUE));
-
+  drupal_add_js(array('islandora_image_annotation' => array('images_path' => $variables['images_path'] . '/imgs')), 'setting');
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'book_pid' => islandora_critical_edition_get_object_of_critical_edition(
