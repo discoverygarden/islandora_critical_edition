@@ -5,6 +5,8 @@
  *
  * Available variables:
  * - $viewer_url (string): The url to the cwrc viewer.
+ * - $variables['anno_list_pane']
+ * - $variables['anno_img_pane']
  */
 
 ?>

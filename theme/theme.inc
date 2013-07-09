@@ -82,6 +82,5 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/Islandora/js/startup.js');
 
   // Critical Editions requires its own js init script.
-  drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/islandora_emic_init.js');
-  drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/critical_edition.js');
+  drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/islandora_init.js');
 }
