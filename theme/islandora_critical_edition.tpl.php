@@ -5,8 +5,8 @@
  *
  * Available variables:
  * - $viewer_url (string): The url to the cwrc viewer.
- * - $variables['anno_list_pane']
- * - $variables['anno_img_pane']
+ * - $anno_list_pane (html): The annotation list page, as themed by image annotation.
+ * - $anno_img_pane (html): The image annotation pane, as themed by image annotation.
  */
 
 ?>
