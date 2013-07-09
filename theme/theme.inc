@@ -16,7 +16,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
   module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
-  
+
   // Local Critical Editions module path.
   $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
 
@@ -32,7 +32,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   // Fill additional session variables.
   $variables['images_path'] = url($image_annotation_module_path . '/shared_canvas', array('absolute' => TRUE));
-  
+
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'book_pid' => islandora_critical_edition_get_object_of_critical_edition(
