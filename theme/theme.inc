@@ -67,7 +67,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   islandora_image_annotation_include_common_js();
 
-  // ~~~~~~~~~~~~~ TODO: LIB this stuff up nicly..
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/tinymce/jscripts/tiny_mce/jquery.tinymce.js');
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/jstree/jquery.hotkeys.js');
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/jstree/jquery.jstree.js');
