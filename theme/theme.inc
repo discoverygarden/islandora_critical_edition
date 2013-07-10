@@ -56,18 +56,17 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   drupal_add_css($critical_edition_module_path . '/cwrcwriter/resources/css/style_2.css');
   // This custom css differs from the one in the image annotation module.
-  drupal_add_css($critical_edition_module_path . '/cwrcwriter/resources/smoothness/jquery-ui-1.8.13.custom.css');
+  islandora_image_annotation_include_common_css();
+  
   drupal_add_css($critical_edition_module_path . '/cwrcwriter/resources/js/snippet/jquery.snippet.css');
-  drupal_add_css($critical_edition_module_path . '/cwrcwriter/resources/css/sc.css');
   drupal_add_css($critical_edition_module_path . '/cwrcwriter/resources/css/emic_canvas.css');
   drupal_add_css($critical_edition_module_path . '/cwrcwriter/resources/css/screen.css');
   drupal_add_css($critical_edition_module_path . '/cwrcwriter/resources/css/style.css');
   drupal_add_css($critical_edition_module_path . '/cwrcwriter/resources/css/critical_edition.css');
-  drupal_add_css($image_annotation_module_path . '/shared_canvas/js/ContextMenu/jquery.contextMenu.css');
-  drupal_add_css($image_annotation_module_path . '/shared_canvas/css/jquery.miniColors.css');
-
+  
   islandora_image_annotation_include_common_js();
-
+  
+  
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/tinymce/jscripts/tiny_mce/jquery.tinymce.js');
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/jstree/jquery.hotkeys.js');
   drupal_add_js($critical_edition_module_path . '/cwrcwriter/resources/js/jstree/jquery.jstree.js');
