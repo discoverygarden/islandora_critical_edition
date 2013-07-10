@@ -1,6 +1,7 @@
 // Gets setup information from Islandora.
 //var writer;
 $('document').ready(function(){
+
   // Add the annotation dialog box early, so
   // the click handlers can be attached.
   var anno_d = annotation_dialog();
@@ -127,7 +128,7 @@ $('document').ready(function(){
 
       var selector = "#page_choose option[value='" + cwrc_params.position + "']";
       $(selector).removeAttr('selected');
-      setReturnParams()
+      setReturnParams();
       cwrc_params.position++;
       openColumn();
       selector = "#page_choose option[value='" + cwrc_params.position + "']";

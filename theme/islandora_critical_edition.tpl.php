@@ -4,7 +4,8 @@
  * This is the template file for the critical edition object
  *
  * Available variables:
- * - $viewer_url (string): The url to the cwrc viewer.
+ * - $anno_list_pane (html): The annotation list page, as themed by image annotation.
+ * - $anno_img_pane (html): The image annotation pane, as themed by image annotation.
  */
 
 ?>
@@ -29,7 +30,7 @@
           <div id ="pageChange">
           </div>
           <div id="helpLink">
-             <img title="Help" src="<?php print $images_path; ?>/img/help.png">
+             <img title="Help" src="<?php print $images_path; ?>/imgs/help.png">
              <h2>Help</h2>
           </div>
           <div id="settingsLink">
@@ -65,9 +66,7 @@
                   <ul class="relationsList"></ul>
                 </div>
                 <!-- Image Annotations Panel -->
-                <div id="image-annotations">
-                  <div id="comment_annos_block"></div>
-                </div>
+                <?php print $anno_list_pane; ?>
               </div>
             </div>
           </div>
@@ -89,64 +88,12 @@
 
                 <!-- Persist a single player and build new interface to it -->
                 <div id="canvas-body-wrapper" style="width: 100%; height: 800px;"><div id="canvas-body">
-
-                    <ul class="menu_body" id="show_body">
-                      <li class="show_sort" id="li_comment">
-                        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-                        <span style="margin-left:10px">Commentary:</span>
-                        <span style="float:right"><input id="check_show_comment" type="checkbox" checked="true"></input> </span>
-                      </li>
-
-                      <li class="show_sort" id="li_audio">
-                        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-                        <span style="margin-left:10px">Audio: </span>
-                        <span style="float:right"><input id="check_show_audio" type="checkbox" checked="true"></input></span>
-                        <br/>
-                        <span>Volume:</span>
-                        <div id="slider_volume" style="height:8px;"></div>
-                      </li>
-                      <li class="show_sort" id="li_text">
-                        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-                        <span style="margin-left:10px">Texts: </span>
-                        <span style="float:right"><input id="check_show_text" type="checkbox" checked="true"></input></span>
-                      </li>
-                      <li class="show_sort" id="li_detailImg">
-                        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-                        <span style="margin-left:10px">Detail Images: </span>
-                        <span style="float:right"><input id="check_show_detailImg" type="checkbox" checked="true"></input></span>
-                      </li>
-                      <li class="show_sort" id="li_baseImg">
-                        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-                        <span style="margin-left:10px">Base Images:</span>
-                        <span style="float:right"><input id="check_show_baseImg" type="checkbox" checked="true"></input>
-                      </li>
-                    </ul>
-                    <ul class="menu_body" id="view_body">
-                      <li>Show Image Selection: <span style="float:right"><input id="check_view_imgSel" type="checkbox"></input></li>
-                      <li>Number of Folios: <span style="float:right" id="viewNumCanvas">1</span>
-                        <div id="slider_folios" style="height:8px;"></div></li>
-                      <li>Show Zoom Button: <span style="float:right"><input id="check_view_zpr" type="checkbox"></input></li>
-                      <li>Show Canvas URI: <span style="float:right"><input id="check_view_uri" type="checkbox"></input></li>
-                    </ul>
-
-                    <!--  Wrapper to create Canvas divs in -->
-                    <div id="canvases"></div>
-
-                    <!--  Wrapper to create SVG divs in -->
-                    <div id="svg_wrapper"></div>
-
-                    <!--  Wrapper to create annotations in, then reposition -->
-                    <div id="annotations"></div>
-
-                    <!-- Progress bar -->
-                    <!-- div id="loadprogress"></div-->
-
+                    <?php print $anno_img_pane; ?>
                     <!--  At least one visible image needed for GData transport -->
                     <div class="shared-canvas-logo" style="font-size:8pt">
-                      <img height="25" src="<?php print $images_path; ?>/impl/imgs/small-logo.png" style="padding: 0px; margin: 0px; border: 0px; border-top: 2px;" />
+                      <img height="25" src="<?php print $images_path; ?>/imgs/small-logo.png" style="padding: 0px; margin: 0px; border: 0px; border-top: 2px;" />
                       Powered by SharedCanvas
                     </div>
-
                   </div>
                 </div>
               </div>

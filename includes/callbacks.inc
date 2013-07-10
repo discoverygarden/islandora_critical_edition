@@ -17,6 +17,7 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   module_load_include('inc', 'islandora_basic_collection', 'includes/utilities');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   global $user;
+  $stroke_width = variable_get('image_annotation_annotation_stroke_width', '1%');
   $critical_edition_relationships = $fedora_object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isPageOf');
   $critical_edition = $critical_edition_relationships[0]['object']['value'];
   $critical_edition_object = islandora_object_load($critical_edition);
@@ -34,7 +35,7 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $results['title'] = $title;
   $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
   $results['page_count'] = count($pages);
-
+  $results['islandora_anno_stroke_width'] = $stroke_width;
   $entity_collection = variable_get('islandora_entities_ingest_collection', 'islandora:entity_collection');
   $results['create_entity_callback'] = url('islandora/object/' . $entity_collection . '/manage/overview/ingest');
   $results['entities_search_callback'] = url('islandora/entities/search');
@@ -75,7 +76,7 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
 function islandora_critical_edition_canvas_setup(AbstractObject $fedora_object) {
   module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
-
+  $stroke_width = variable_get('image_annotation_annotation_stroke_width', '1%');
   $relationships = $fedora_object->relationships->get();
   foreach ($relationships as $relationship) {
     if ($relationship['predicate']['value'] == 'isEditionOf') {
@@ -89,7 +90,7 @@ function islandora_critical_edition_canvas_setup(AbstractObject $fedora_object) 
   $position = array_search($page_object->id, $pages);
 
   $results = islandora_image_annotation_canvas_init($page_object->id);
-
+  $results['islandora_anno_stroke_width'] = $stroke_width;
   $results['position'] = $position;
   $results['pages'] = $pages;
   $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
