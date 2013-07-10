@@ -161,6 +161,12 @@ function islandora_critical_edition_theme($existing, $type, $theme, $path) {
       'pattern' => 'islandora_critical_edition__',
       'variables' => array('islandora_object' => NULL),
     ),
+    'islandora_anno_list_pane' => array(
+      'template' => drupal_get_path('module', 'islandora_image_annotation') . 'theme/islandora-list-pane',
+    ),
+    'islandora_anno_image_pane' => array(
+      'template' => drupal_get_path('module', 'islandora_image_annotation') . 'theme/islandora-img-pane',
+    ),
   );
 }
 
