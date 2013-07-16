@@ -201,7 +201,25 @@ $('document').ready(function(){
       source: islandora_canvas_params.categories
     });
   }
+  
+  // Recent fix to add resizeable feature to colleft.
+  $( ".colleft" ).resizable({
+    resize: function( event, ui ) {
+      var pos = $( ".colleft" ).position();
+      var nPos = pos.left + $( ".colleft" ).width();
+      console.log("pos: " + nPos);
+      $("#colleft").css({height:$("#colleft").parent().height()});
+      $("#colright").css({left:nPos});
+      //$( ".colright" ).css("x",nPos);
+    }
+  });
+
+  $( ".colleft" ).resizable( "option", "maxHeight", 470 );
+  $( ".colleft" ).resizable( "option", "minHeight", 470 );
+  
+  //$( ".colright" ).resizable();
 });
+
 
 function init_canvas_div() {
 

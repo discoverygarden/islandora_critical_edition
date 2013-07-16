@@ -70,6 +70,8 @@
               </div>
             </div>
           </div>
+          
+          
           <div id="colright" class="colright">
             <div class="col1">
               <!-- Text Annotation -->
@@ -87,7 +89,7 @@
               <div class="image-annotation-wrapper">
 
                 <!-- Persist a single player and build new interface to it -->
-                <div id="canvas-body-wrapper" style="width: 100%; height: 800px;"><div id="canvas-body">
+                <div id="canvas-body-wrapper" style="width: 100%; height: 100%; background-color:white"><div id="canvas-body">
                     <?php print $anno_img_pane; ?>
                     <!--  At least one visible image needed for GData transport -->
                     <div class="shared-canvas-logo" style="font-size:8pt">
