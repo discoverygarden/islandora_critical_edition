@@ -37,7 +37,7 @@ var SearchDialog = function(config) {
     '</div>'+
     '</div>'+
     '</div>'+
-    '<div id="certainty" style="position: absolute; bottom: 0; left: 10px; right: 10px; height: 65px;">'+
+    '<div id="certainty" style="position: absolute; bottom: 0; left: 10px; right: 10px;">'+
     '<p>This identification is:</p>'+
     '<input type="radio" id="c_definite" name="certainty" value="definite" /><label for="c_definite">Definite</label>'+
     '<input type="radio" id="c_reasonable" name="certainty" value="reasonable" /><label for="c_reasonable">Reasonably Certain</label>'+
