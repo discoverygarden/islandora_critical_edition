@@ -213,6 +213,8 @@ $('document').ready(function(){
   $( ".colleft" ).resizable( "option", "maxHeight", $( ".colleft" ).parent().height );
   $( ".colleft" ).resizable( "option", "minHeight", $( ".colleft" ).parent().height );
   
+  resizeColumnsDrag();
+  
 });
 
 function drag_handle_resize() {
