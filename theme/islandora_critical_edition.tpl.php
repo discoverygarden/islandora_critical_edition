@@ -39,7 +39,7 @@
         </div>
         <!-- Body -->
         <div class="colmask threecol">
-          <div class="colleft">
+          <div class="colleft" style="height: 360px;">
             <div class="col2">
               <!-- Tabs -->
               <div id="tabs">
@@ -72,7 +72,7 @@
           </div>
           
           
-          <div id="colright" class="colright">
+          <div id="colright" class="colright" style="height: 360px;">
             <div class="col1">
               <!-- Text Annotation -->
               <div class="text-annotation-wrapper">
