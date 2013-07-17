@@ -385,6 +385,7 @@
 
 .ui-dialog-content div {
 	margin-bottom: 10px;
+	line-height: 0.0em;
 }
 
 #schemaDialog {
