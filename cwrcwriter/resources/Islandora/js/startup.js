@@ -206,19 +206,22 @@ $('document').ready(function(){
   // Recent fix to add resizeable feature to colleft.
   $( ".colleft" ).resizable({
     resize: function( event, ui ) {
-      var pos = $( ".colleft" ).position();
-      var nPos = pos.left + $( ".colleft" ).width();
-      console.log("pos: " + nPos);
-      $("#colleft").css({height:$("#colleft").parent().height()});
-      $("#colright").css({left:nPos});
+      drag_handle_resize();
     }
   });
-
+  drag_handle_resize();
   $( ".colleft" ).resizable( "option", "maxHeight", $( ".colleft" ).parent().height );
   $( ".colleft" ).resizable( "option", "minHeight", $( ".colleft" ).parent().height );
+  
 });
 
-
+function drag_handle_resize() {
+  var pos = $( ".colleft" ).position();
+  var nPos = pos.left + $( ".colleft" ).width();
+  console.log("pos: " + nPos);
+  $("#colleft").css({height:$("#colleft").parent().height()});
+  $("#colright").css({left:nPos});
+}
 function init_canvas_div() {
 
   pagePid = cwrc_params.pages[cwrc_params.position];
