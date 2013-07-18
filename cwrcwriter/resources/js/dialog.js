@@ -42,11 +42,11 @@ var DialogManager = function(config) {
 			triple: new TripleDialog(config),
 			//teiheader: new TeiHeaderDialog(config)
 		};
-		dialogs.person = dialogs.addperson;
-		dialogs.place = dialogs.addplace;
-		dialogs.event = dialogs.addevent;
-		dialogs.org = dialogs.addorg;
-		dialogs.citation = dialogs.note;
+		dialogs.person = dialogs.search;
+		dialogs.place = dialogs.search;
+		dialogs.event = dialogs.search;
+		dialogs.org = dialogs.search;
+		dialogs.citation = dialogs.search;
 	};
 	
 	return {
