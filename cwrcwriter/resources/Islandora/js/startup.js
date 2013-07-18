@@ -204,14 +204,14 @@ $('document').ready(function(){
   
   
   // Recent fix to add resizeable feature to colleft.
-  $( ".colleft" ).resizable({
-    resize: function( event, ui ) {
-      drag_handle_resize();
-    }
-  });
+//  $( ".colleft" ).resizable({
+//    resize: function( event, ui ) {
+//      drag_handle_resize();
+//    }
+//  });
   drag_handle_resize();
-  $( ".colleft" ).resizable( "option", "maxHeight", $( ".colleft" ).parent().height );
-  $( ".colleft" ).resizable( "option", "minHeight", $( ".colleft" ).parent().height );
+  //$( ".colleft" ).resizable( "option", "maxHeight", $( ".colleft" ).parent().height );
+  //$( ".colleft" ).resizable( "option", "minHeight", $( ".colleft" ).parent().height );
   
   resizeColumnsDrag();
   
