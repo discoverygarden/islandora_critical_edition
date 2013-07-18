@@ -8,10 +8,11 @@
 
         if ($(this).val() == Drupal.t('Full Window')) {
           $(this).val(Drupal.t('Exit Full Window'));
-
+          $('.islandora-crited-wrapper').css("height","100%");
         }
         else {
           $(this).val(Drupal.t('Full Window'));
+          $('.islandora-crited-wrapper').css("height","400px");
         }
         resizeColumnsDrag();
       });
