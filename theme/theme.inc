@@ -65,11 +65,10 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/jquery.tinymce.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jstree/jquery.hotkeys.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-latest.js");
-        
-        
+
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/tiny_mce_src.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/copy_event.js");
-        
+
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/moment/moment.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/objtree/ObjTree.js");
 
@@ -105,9 +104,11 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/selection.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/delegator.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/editor.js");
-       // drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/smoothness/jquery-ui-1.9.0.custom.css");
-        //drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/layout-default-latest.css");
-        //drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.css");
+        
+        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/smoothness/jquery-ui-1.9.0.custom.css");
+        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/layout-default-latest.css");
+        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.css");
+        
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout.resizeTabLayout-1.3.js");
         
         

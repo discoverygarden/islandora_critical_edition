@@ -523,18 +523,18 @@ function Writer(config) {
 	 * Begin init functions
 	 */
 	w.init = function() {
-		var cssFiles = ['http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/smoothness/$-ui-1.9.0.custom.css', 
-		                'http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/css/layout-default-latest.css', 
-		                'http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/js/lib/snippet/$.snippet.css'];
-		for (var i = 0; i < cssFiles.length; i++) {
-			var css = $('<style/>');
-			css.attr({
-				rel: 'stylesheet',
-				type: 'text/css',
-				href: cssFiles[i]
-			});
-			$(document.head).append(css);
-		}
+//		var cssFiles = ['http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/smoothness/$-ui-1.9.0.custom.css', 
+//		                'http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/css/layout-default-latest.css', 
+//		                'http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/js/lib/snippet/$.snippet.css'];
+//		for (var i = 0; i < cssFiles.length; i++) {
+//			var css = $('<style/>');
+//			css.attr({
+//				rel: 'stylesheet',
+//				type: 'text/css',
+//				href: cssFiles[i]
+//			});
+//			$(document.head).append(css);
+//		}
 		console.log("before layout");
 		w.layout = $(document.body).layout({
 			defaults: {
