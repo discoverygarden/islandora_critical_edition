@@ -54,9 +54,9 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
       'islandora_critical_edition' => array(
         'module_base' => $critical_edition_module_path)), 'setting');
   
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-1.8.3.js");
+        //drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-1.8.3.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-ui-1.9.0.custom.js");
-        
+
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.contextmenu.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.tmpl.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.watermark.min.js");
@@ -64,7 +64,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/jquery.tinymce.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jstree/jquery.hotkeys.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-latest.js");
 
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/tiny_mce_src.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/copy_event.js");
@@ -90,6 +89,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_triple.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_filemanager.js");
         
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-latest.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout-latest.min.js");
         
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/tagger.js");

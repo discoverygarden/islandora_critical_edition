@@ -536,7 +536,7 @@ function Writer(config) {
 //			$(document.head).append(css);
 //		}
 		console.log("before layout");
-		w.layout = $(document.body).layout({
+		w.layout = jQuery(document.body).layout({
 			defaults: {
 				maskIframesOnResize: true,
 				resizable: true,

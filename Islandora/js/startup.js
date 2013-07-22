@@ -1,7 +1,7 @@
 // Gets setup information from Islandora.
 //var writer;
 //$.noConflict(true);
-$(function() {
+(function($) {
 				
 				PID = null;
 				cwrc_params = {};
@@ -24,4 +24,4 @@ $(function() {
 						writer.layout.close('east');
 					}
 				});
-			});
+			})(jQuery);
