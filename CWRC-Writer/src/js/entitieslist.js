@@ -5,7 +5,7 @@ var EntitiesList = function(config) {
 	var metaKeys = ['_id', '_ref'];
 	var showMetaKeys = false;
 	
-	$(config.parentId).append('<div id="entities" class="tabWithLayout">'+
+	jQuery(config.parentId).append('<div id="entities" class="tabWithLayout">'+
 			'<ul class="entitiesList ui-layout-center"></ul>'+
 			'<div id="entitiesOptions" class="ui-layout-south tabButtons">'+
 			'<div id="sortBy"><span>Sort By</span> '+
@@ -13,7 +13,7 @@ var EntitiesList = function(config) {
 			'<input type="radio" id="category" name="sortBy" /><label for="category">Category</label></div>'+
 			'<div><input type="checkbox" id="metaKeys" /><label for="metaKeys">Show Metadata</label></div>'+
 			'</div></div>');
-	$(document.body).append(''+
+	jQuery(document.body).append(''+
 		'<div id="entitiesMenu" class="contextMenu" style="display: none;"><ul>'+
 		'<li id="editEntity"><ins style="background:url(img/tag_blue_edit.png) center center no-repeat;" />Edit Entity</li>'+
 		'<li id="removeEntity"><ins style="background:url(img/cross.png) center center no-repeat;" />Remove Entity</li>'+
@@ -21,16 +21,16 @@ var EntitiesList = function(config) {
 		'</ul></div>'
 	);
 	
-	$('#sequence').button().click(function() {
+	jQuery('#sequence').button().click(function() {
 		w.entitiesList.update('sequence');
 		w.highlightEntity(w.editor.currentEntity);
 	});
-	$('#category').button().click(function() {
+	jQuery('#category').button().click(function() {
 		w.entitiesList.update('category');
 		w.highlightEntity(w.editor.currentEntity);
 	});
-	$('#sortBy').buttonset();
-	$('#metaKeys').button().click(function() {
+	jQuery('#sortBy').buttonset();
+	jQuery('#metaKeys').button().click(function() {
 		showMetaKeys = !showMetaKeys;
 		w.entitiesList.update();
 		w.highlightEntity(w.editor.currentEntity);
@@ -38,7 +38,7 @@ var EntitiesList = function(config) {
 	
 	var pm = {};
 	
-	pm.layout = $('#entities').layout({
+	pm.layout = jQuery('#entities').layout({
 		defaults: {
 			resizable: false,
 			slidable: false,
@@ -56,23 +56,23 @@ var EntitiesList = function(config) {
 	 */
 	pm.update = function(sort) {
 		if (sort == null) {
-			if ($('#sequence').prop('checked')) {
+			if (jQuery('#sequence').prop('checked')) {
 				sort = 'sequence';
 			} else {
 				sort = 'category';
 			}
 		}
 		
-		$('#entities > ul').empty(); // remove previous nodes and event handlers
+		jQuery('#entities > ul').empty(); // remove previous nodes and event handlers
 		
 		var id, entry, i;
 		var entitiesString = '';
 		
-		var entityTags = $('span[class~=start]', w.editor.getBody());
+		var entityTags = jQuery('span[class~=start]', w.editor.getBody());
 		if (sort == 'category') {
 			var categories = {};
 			entityTags.each(function(index, el) {
-				id = $(el).attr('name');
+				id = jQuery(el).attr('name');
 				if (w.entities[id] == null) {
 					var deleted = w.deletedEntities[id];
 					if (deleted != null) {
@@ -101,7 +101,7 @@ var EntitiesList = function(config) {
 			}
 		} else if (sort == 'sequence') {
 			entityTags.each(function(index, el) {
-				id = $(this).attr('name');
+				id = jQuery(this).attr('name');
 				if (w.entities[id] == null) {
 					var deleted = w.deletedEntities[id];
 					if (deleted != null) {
@@ -122,28 +122,28 @@ var EntitiesList = function(config) {
 			});
 		}
 		
-		$('#entities > ul').html(entitiesString);
-		$('#entities > ul > li').hover(function() {
-			if (!$(this).hasClass('selected')) {
-				$(this).addClass('over');
+		jQuery('#entities > ul').html(entitiesString);
+		jQuery('#entities > ul > li').hover(function() {
+			if (!jQuery(this).hasClass('selected')) {
+				jQuery(this).addClass('over');
 			}
 		}, function() {
-			if (!$(this).hasClass('selected')) {
-				$(this).removeClass('over');
+			if (!jQuery(this).hasClass('selected')) {
+				jQuery(this).removeClass('over');
 			}
 		}).mousedown(function(event) {
-			$(this).removeClass('over');
+			jQuery(this).removeClass('over');
 			w.highlightEntity(this.getAttribute('name'), null, true);
 		}).contextMenu('entitiesMenu', {
 			bindings: {
 				'editEntity': function(tag) {
-					w.tagger.editTag($(tag).attr('name'));
+					w.tagger.editTag(jQuery(tag).attr('name'));
 				},
 				'removeEntity': function(tag) {
-					w.removeEntity($(tag).attr('name'));
+					w.removeEntity(jQuery(tag).attr('name'));
 				},
 				'copyEntity': function(tag) {
-					w.copyEntity($(tag).attr('name'));
+					w.copyEntity(jQuery(tag).attr('name'));
 				}
 			},
 			shadow: false,
@@ -171,7 +171,7 @@ var EntitiesList = function(config) {
 		});
 		
 		if (w.editor.currentEntity) {
-			$('#entities > ul > li[name="'+w.editor.currentEntity+'"]').addClass('selected').find('div[class="info"]').show();
+			jQuery('#entities > ul > li[name="'+w.editor.currentEntity+'"]').addClass('selected').find('div[class="info"]').show();
 		}
 	};
 	
@@ -181,7 +181,7 @@ var EntitiesList = function(config) {
 			for (var infoKey in infoObject) {
 				if (showMetaKeys || metaKeys.indexOf(infoKey) == -1) {
 					var info = infoObject[infoKey];
-					if ($.isPlainObject(info)) {
+					if (jQuery.isPlainObject(info)) {
 						buildString(info);
 					} else {
 						infoString += '<li><strong>'+infoKey+'</strong>: '+info+'</li>';
@@ -197,7 +197,7 @@ var EntitiesList = function(config) {
 	};
 	
 	pm.remove = function(id) {
-		$('#entities li[name="'+id+'"]').remove();
+		jQuery('#entities li[name="'+id+'"]').remove();
 	};
 	
 	return pm;

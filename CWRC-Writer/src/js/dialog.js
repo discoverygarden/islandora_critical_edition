@@ -51,7 +51,7 @@ function DialogManager(config) {
 		}
 	};
 	
-	$.extend(pm, dialogs);
+	jQuery.extend(pm, dialogs);
 	
 	return pm;
 };

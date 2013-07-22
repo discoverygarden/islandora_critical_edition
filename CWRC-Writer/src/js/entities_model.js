@@ -5,7 +5,7 @@ var EntitiesModel = function() {
 		person: {
 			title: 'Person',
 			mapping: {
-				cwrcbasic: '<person cert="${info.certainty}">[[[editorText]]]</person>',
+				cwrcbasic: '<person cert="jQuery{info.certainty}">[[[editorText]]]</person>',
 				events: '<NAME>[[[editorText]]]</NAME>'
 			}
 		},
@@ -15,56 +15,56 @@ var EntitiesModel = function() {
 				cwrcbasic: ''+
 				'<date '+
 				'{{if info.date}}'+
-					'when="${info.date}"'+
+					'when="jQuery{info.date}"'+
 				'{{else info.startDate}}'+
-					'from="${info.startDate}" to="${info.endDate}"'+
+					'from="jQuery{info.startDate}" to="jQuery{info.endDate}"'+
 				'{{/if}}'+
 				'>[[[editorText]]]</date>',
 				events: ''+
 				'{{if info.date}}'+
-					'<DATE VALUE="${info.date}">[[[editorText]]]</DATE>'+
+					'<DATE VALUE="jQuery{info.date}">[[[editorText]]]</DATE>'+
 				'{{else info.startDate}}'+
-					'<DATERANGE FROM="${info.startDate}" TO="${info.endDate}">[[[editorText]]]</DATERANGE>'+
+					'<DATERANGE FROM="jQuery{info.startDate}" TO="jQuery{info.endDate}">[[[editorText]]]</DATERANGE>'+
 				'{{/if}}'
 			}
 		},
 		place: {
 			title: 'Place',
 			mapping: {
-				cwrcbasic: '<place cert="${info.certainty}">[[[editorText]]]</place>',
+				cwrcbasic: '<place cert="jQuery{info.certainty}">[[[editorText]]]</place>',
 				events: '<PLACE>[[[editorText]]]</PLACE>'
 			}
 		},
 		event: {
 			title: 'Event',
 			mapping: {
-				cwrcbasic: '<event cert="${info.certainty}">[[[editorText]]]</event>'
+				cwrcbasic: '<event cert="jQuery{info.certainty}">[[[editorText]]]</event>'
 			}
 		},
 		org: {
 			title: 'Organization',
 			mapping: {
-				cwrcbasic: '<org cert="${info.certainty}">[[[editorText]]]</org>',
+				cwrcbasic: '<org cert="jQuery{info.certainty}">[[[editorText]]]</org>',
 				events: '<ORGNAME>[[[editorText]]]</ORGNAME>'
 			}
 		},
 		citation: {
 			title: 'Citation',
 			mapping: {
-				cwrcbasic: '<cit><quote>[[[editorText]]]</quote><ref>${info.citation}</ref></cit>'
+				cwrcbasic: '<cit><quote>[[[editorText]]]</quote><ref>jQuery{info.citation}</ref></cit>'
 			}
 		},
 		note: {
 			title: 'Note',
 			mapping: {
-				cwrcbasic: '<note type="${info.type}" ana="${info.content}">[[[editorText]]]</note>'
+				cwrcbasic: '<note type="jQuery{info.type}" ana="jQuery{info.content}">[[[editorText]]]</note>'
 			}
 		},
 		correction: {
 			title: 'Correction',
 			mapping: {
-				cwrcbasic: '<sic><corr cert="${info.certainty}" type="${info.type}" ana="${info.content}">[[[editorText]]]</corr></sic>',
-				events: '<SIC CORR="${info.content}">[[[editorText]]]</SIC>'
+				cwrcbasic: '<sic><corr cert="jQuery{info.certainty}" type="jQuery{info.type}" ana="jQuery{info.content}">[[[editorText]]]</corr></sic>',
+				events: '<SIC CORR="jQuery{info.content}">[[[editorText]]]</SIC>'
 			}
 		},
 		keyword: {
@@ -74,11 +74,11 @@ var EntitiesModel = function() {
 				'<keywords scheme="http://classificationweb.net">'+
 					'<term '+
 					'{{if info.id}}'+
-						'sameAs="${info.id}"'+
+						'sameAs="jQuery{info.id}"'+
 					'{{else info.keyword}}'+
-						'sameAs="${info.keyword}"'+
+						'sameAs="jQuery{info.keyword}"'+
 					'{{/if}}'+
-					' type="${info.type}">[[[editorText]]]</term>'+
+					' type="jQuery{info.type}">[[[editorText]]]</term>'+
 				'</keywords>',
 				events: '<KEYWORDCLASS>[[[editorText]]]</KEYWORDCLASS>'
 			}
@@ -86,21 +86,21 @@ var EntitiesModel = function() {
 		link: {
 			title: 'Link',
 			mapping: {
-				cwrcbasic: '<ref target="${info.url}">[[[editorText]]]</ref>',
-				events: '<XREF URL="${info.url}">[[[editorText]]]</XREF>'
+				cwrcbasic: '<ref target="jQuery{info.url}">[[[editorText]]]</ref>',
+				events: '<XREF URL="jQuery{info.url}">[[[editorText]]]</XREF>'
 			}
 		},
 		title: {
 			title: 'Text/Title',
 			mapping: {
-				cwrcbasic: '<title level="${info.level}">[[[editorText]]]</title>',
-				events: '<TITLE TITLETYPE="${info.level}">[[[editorText]]]</TITLE>'
+				cwrcbasic: '<title level="jQuery{info.level}">[[[editorText]]]</title>',
+				events: '<TITLE TITLETYPE="jQuery{info.level}">[[[editorText]]]</TITLE>'
 			}
 		}
 	};
 	
 	function doMapping(entity, map) {		
-		var result = $.tmpl(map, entity);
+		var result = jQuery.tmpl(map, entity);
 		if (result[0]) return result[0].outerHTML;
 		else return '';
 	}

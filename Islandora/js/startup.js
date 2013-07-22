@@ -1,6 +1,8 @@
 // Gets setup information from Islandora.
 //var writer;
+//$.noConflict(true);
 $(function() {
+				
 				PID = null;
 				cwrc_params = {};
 				writer = null;

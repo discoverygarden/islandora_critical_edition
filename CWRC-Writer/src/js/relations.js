@@ -2,23 +2,23 @@ function Relations(config) {
 	
 	var w = config.writer;
 	
-	$(config.parentId).append('<div id="relations" class="tabWithLayout">'+
+	jQuery(config.parentId).append('<div id="relations" class="tabWithLayout">'+
 			'<div class="ui-layout-center"><ul class="relationsList"></ul></div>'+
 			'<div class="ui-layout-south tabButtons">'+
 			'<button>Add Relation</button><button>Remove Relation</button>'+
 			'</div>'+
 		'</div>');
-	$(document.body).append(''+
+	jQuery(document.body).append(''+
 		'<div id="relationsMenu" class="contextMenu" style="display: none;"><ul>'+
 		'<li id="removeRelation"><ins style="background:url(img/cross.png) center center no-repeat;" />Remove Relation</li>'+
 		'</ul></div>'
 	);
 	
-	$('#relations div.ui-layout-south button:eq(0)').button().click(function() {
+	jQuery('#relations div.ui-layout-south button:eq(0)').button().click(function() {
 		w.dialogs.show('triple');
 	});
-	$('#relations div.ui-layout-south button:eq(1)').button().click(function() {
-		var selected = $('#relations ul li.selected');
+	jQuery('#relations div.ui-layout-south button:eq(1)').button().click(function() {
+		var selected = jQuery('#relations ul li.selected');
 		if (selected.length == 1) {
 			var i = selected.data('index');
 			w.triples.splice(i, 1);
@@ -36,7 +36,7 @@ function Relations(config) {
 		currentlySelectedNode: null
 	};
 	
-	pm.layout = $('#relations').layout({
+	pm.layout = jQuery('#relations').layout({
 		defaults: {
 			resizable: false,
 			slidable: false,
@@ -52,7 +52,7 @@ function Relations(config) {
 	 * @memberOf pm
 	 */
 	pm.update = function() {
-		$('#relations ul').empty();
+		jQuery('#relations ul').empty();
 		
 		var relationsString = '';
 		
@@ -61,16 +61,16 @@ function Relations(config) {
 			relationsString += '<li>'+triple.subject.text+' '+triple.predicate.text+' '+triple.object.text+'</li>';
 		}
 		
-		$('#relations ul').html(relationsString);
+		jQuery('#relations ul').html(relationsString);
 		
-		$('#relations ul li').each(function(index, el) {
-			$(this).data('index', index);
+		jQuery('#relations ul li').each(function(index, el) {
+			jQuery(this).data('index', index);
 		}).click(function() {
-			$(this).addClass('selected').siblings().removeClass('selected');
+			jQuery(this).addClass('selected').siblings().removeClass('selected');
 		}).contextMenu('relationsMenu', {
 			bindings: {
 				'removeRelation': function(r) {
-					var i = $(r).data('index');
+					var i = jQuery(r).data('index');
 					w.triples.splice(i, 1);
 					pm.update();
 				}

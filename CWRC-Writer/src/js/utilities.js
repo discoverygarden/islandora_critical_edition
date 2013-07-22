@@ -33,7 +33,7 @@ function Utilities(config) {
 	};
 	
 	u.xmlToJSON = function(xml) {
-		if ($.type(xml) == 'string') {
+		if (jQuery.type(xml) == 'string') {
 			xml = u.stringToXML(xml);
 		}
 		var xotree = new XML.ObjTree();
@@ -175,7 +175,7 @@ function Utilities(config) {
 			if (match != null) {
 				leadingSpaces = match[0].length;
 			}
-			match = content.match(/\s+$/);
+			match = content.match(/\s+jQuery/);
 			if (match != null) {
 				trailingSpaces = match[0].length;
 			}
@@ -220,7 +220,7 @@ function Utilities(config) {
 		
 		if (!structAction) {
 			// check for and fix selections inside of entity boundary tags
-			var node = $(range.startContainer);
+			var node = jQuery(range.startContainer);
 			var entParent = node.parent('[_entity]');
 			if (entParent.length > 0) {
 				if (entParent.hasClass('start')) {
@@ -230,7 +230,7 @@ function Utilities(config) {
 					}
 				}
 			}
-			node = $(range.endContainer);
+			node = jQuery(range.endContainer);
 			entParent = node.parent('[_entity]');
 			if (entParent.length > 0) {
 				if (entParent.hasClass('end')) {
@@ -261,7 +261,7 @@ function Utilities(config) {
 			var ents = {};
 			while (currentNode != range.endContainer) {
 				currentNode = currentNode.nextSibling;
-				c = $(currentNode);
+				c = jQuery(currentNode);
 				if (c.attr('entity') != null) {
 					if (c.hasClass('start')) {
 						ents[c.attr('name')] = true;
@@ -294,12 +294,12 @@ function Utilities(config) {
 	};
 	
 	u.getRootTag = function() {
-		return $('[_tag='+w.root+']', w.editor.getBody());
+		return jQuery('[_tag='+w.root+']', w.editor.getBody());
 	};
 	
 	u.getDocumentationForTag = function(tag) {
-		var element = $('element[name="'+tag+'"]', w.schemaXML);
-		var doc = $('a\\:documentation, documentation', element).first().text();
+		var element = jQuery('element[name="'+tag+'"]', w.schemaXML);
+		var doc = jQuery('a\\:documentation, documentation', element).first().text();
 		return doc;
 	};
 	
@@ -316,7 +316,7 @@ function Utilities(config) {
 		while (continueQuery && context != null) {
 			continueQuery = matchingFunc.call(this, context);
 			if (continueQuery == undefined) continueQuery = true;
-			context = context['$parent'];
+			context = context['jQueryparent'];
 		}
 	}
 
@@ -329,7 +329,7 @@ function Utilities(config) {
 				if (continueQuery == undefined) continueQuery = true;
 				for (var key in c) {
 					// filter out attributes
-					if (key != '$parent' && key.search('@') != 0) {
+					if (key != 'jQueryparent' && key.search('@') != 0) {
 						var prop = c[key];
 						if (isArray(prop)) {
 							for (var i = 0; i < prop.length; i++) {
@@ -386,24 +386,24 @@ function Utilities(config) {
 	function _getChildren(currEl, defHits, level, type, children) {
 		// first get the direct types
 		currEl.find(type).each(function(index, el) {
-			var child = $(el);
+			var child = jQuery(el);
 			if (child.parents('element').length > 0 && level > 0) {
 				return; // don't get elements/attributes from other elements
 			}
 			var childObj = {
 				name: child.attr('name'),
 				level: level+0,
-				documentation: $('a\\:documentation, documentation', child).first().text()
+				documentation: jQuery('a\\:documentation, documentation', child).first().text()
 			};
 			if (type == 'attribute') {
 				childObj.required = child.parent('optional').length == 0;
 				// TODO confirm defaultValue is being retrieved, seems like it's only in attributes
-				childObj.defaultValue = $('a\\:defaultValue, defaultValue', child).first().text();
-				var choice = $('choice', child).first();
+				childObj.defaultValue = jQuery('a\\:defaultValue, defaultValue', child).first().text();
+				var choice = jQuery('choice', child).first();
 				if (choice.length == 1) {
 					var choices = [];
-					$('value', choice).each(function(index, el) {
-						choices.push($(el).text());
+					jQuery('value', choice).each(function(index, el) {
+						choices.push(jQuery(el).text());
 					});
 					childObj.choices = choices;
 				}
@@ -412,13 +412,13 @@ function Utilities(config) {
 		});
 		// now process the references
 		currEl.find('ref').each(function(index, el) {
-			var name = $(el).attr('name');
-			if ($(el).parents('element').length > 0 && level > 0) {
+			var name = jQuery(el).attr('name');
+			if (jQuery(el).parents('element').length > 0 && level > 0) {
 				return; // don't get attributes from other elements
 			}
 			if (!defHits[name]) {
 				defHits[name] = true;
-				var def = $('define[name="'+name+'"]', writer.schemaXML);
+				var def = jQuery('define[name="'+name+'"]', writer.schemaXML);
 				_getChildren(def, defHits, level+1, type, children);
 			}
 		});
@@ -444,7 +444,7 @@ function Utilities(config) {
 			var child = hits[i];
 			if (level > 0) {
 				var match = false;
-				_queryUp(child['$parent']['$parent'], function(item) {
+				_queryUp(child['jQueryparent']['jQueryparent'], function(item) {
 					if (item.element) {
 						match = true;
 						return false;
@@ -477,7 +477,7 @@ function Utilities(config) {
 					childObj.required = !refParentProps.optional;
 				} else {
 					childObj.required = true;
-					_queryUp(child['$parent'], function(item) {
+					_queryUp(child['jQueryparent'], function(item) {
 						if (item.optional) {
 							childObj.required = false;
 							return false;
@@ -615,11 +615,11 @@ function Utilities(config) {
 	};
 	
 	function _getParentElementsFromDef(defName, defHits, level, parents) {
-		$('define:has(ref[name="'+defName+'"])', writer.schemaXML).each(function(index, el) {
-			var name = $(el).attr('name');
+		jQuery('define:has(ref[name="'+defName+'"])', writer.schemaXML).each(function(index, el) {
+			var name = jQuery(el).attr('name');
 			if (!defHits[name]) {
 				defHits[name] = true;
-				var element = $(el).find('element').first();
+				var element = jQuery(el).find('element').first();
 				if (element.length == 1) {
 					parents.push({name: element.attr('name'), level: level+0});
 				} else {
@@ -644,7 +644,7 @@ function Utilities(config) {
 			}
 		}
 		if (parents.length == 0) {
-			var element = $('element[name="'+tag+'"]', writer.schemaXML);
+			var element = jQuery('element[name="'+tag+'"]', writer.schemaXML);
 			var defName = element.parents('define').attr('name');
 			var defHits = {};
 			var level = 0;
@@ -698,13 +698,13 @@ function Utilities(config) {
 		
 		// now process the references
 		currEl.find('ref').each(function(index, el) {
-			var name = $(el).attr('name');
-			if ($(el).parents('element').length > 0 && level > 0) {
+			var name = jQuery(el).attr('name');
+			if (jQuery(el).parents('element').length > 0 && level > 0) {
 				return; // don't get attributes from other elements
 			}
 			if (!defHits[name]) {
 				defHits[name] = true;
-				var def = $('define[name="'+name+'"]', writer.schemaXML);
+				var def = jQuery('define[name="'+name+'"]', writer.schemaXML);
 				return checkForText(def, defHits, level+1, canContainText);
 			}
 		});
@@ -723,7 +723,7 @@ function Utilities(config) {
 			if (localData) return localData == 'true';
 		}
 		
-		var element = $('element[name="'+tag+'"]', writer.schemaXML);
+		var element = jQuery('element[name="'+tag+'"]', writer.schemaXML);
 		var defHits = {};
 		var level = 0;
 		var canContainText = {isTrue: false}; // needs to be an object so change is visible outside of checkForText

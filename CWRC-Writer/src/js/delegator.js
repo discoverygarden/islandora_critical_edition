@@ -9,11 +9,11 @@ function Delegator(config) {
 		var lookupService = params.lookupService;
 		
 		if (lookupService == 'project') {
-			$.ajax({
+			jQuery.ajax({
 				url: cwrc_params.authority_url + type + '/' + query,
 				dataType: 'text json',
 				success: function(data, status, xhr) {
-					if ($.isPlainObject(data)) data = [data];
+					if (jQuery.isPlainObject(data)) data = [data];
 					if (data != null) {
 						callback.call(w, data);
 					} else {
@@ -27,7 +27,7 @@ function Delegator(config) {
 							lines.pop();
 						}
 						var string = lines.join(',');
-						var data = $.parseJSON('['+string+']');
+						var data = jQuery.parseJSON('['+string+']');
 						callback.call(w, data);
 					} else {
 						callback.call(w, null);
@@ -35,7 +35,7 @@ function Delegator(config) {
 				}
 			});
 		} else if (lookupService == 'viaf') {
-			$.ajax({
+			jQuery.ajax({
 				url: 'http://viaf.org/viaf/AutoSuggest',
 				data: {
 					query: query
@@ -57,7 +57,7 @@ function Delegator(config) {
 	
 	del.validate = function(callback) {
 		var docText = w.fm.getDocumentContent(false);
-		$.ajax({
+		jQuery.ajax({
 			url: w.baseUrl+'services/validator/validate.html',
 			type: 'POST',
 			dataType: 'XML',
@@ -68,18 +68,18 @@ function Delegator(config) {
 			},
 			success: function(data, status, xhr) {
 				if (callback) {
-					var valid = $('status', data).text() == 'pass';
+					var valid = jQuery('status', data).text() == 'pass';
 					callback(valid);
 				} else {
 					w.validation.showValidationResult(data, docText);
 				}
 			},
 			error: function() {
-//				 $.ajax({
+//				 jQuery.ajax({
 //					url : 'xml/validation.xml',
 //					success : function(data, status, xhr) {
 //						if (callback) {
-//							var valid = $('status', data).text() == 'pass';
+//							var valid = jQuery('status', data).text() == 'pass';
 //							callback(valid);
 //						} else {
 //							w.validation.showValidationResult(data, docText);

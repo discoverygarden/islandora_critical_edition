@@ -47,7 +47,7 @@ function Tagger(config) {
 	 * @param {element} tag
 	 */
 	tagger.getCorrespondingEntityTag = function(tag) {
-		tag = $(tag);
+		tag = jQuery(tag);
 		var corrTag;
 		if (tag.hasClass('start')) {
 			corrTag = tagger.findEntityBoundary('end', tag[0].nextSibling);
@@ -171,13 +171,13 @@ function Tagger(config) {
 	 */
 	tagger.findDuplicateTags = function() {
 		for (var id in w.entities) {
-			var match = $('span[class~="start"][name="'+id+'"]', w.editor.getBody());
+			var match = jQuery('span[class~="start"][name="'+id+'"]', w.editor.getBody());
 			if (match.length > 1) {
 				match.each(function(index, el) {
 					if (index > 0) {
 						var newId = tinymce.DOM.uniqueId('ent_');
-						var newTagStart = $(el);
-						var newTagEnd = $(tagger.getCorrespondingEntityTag(newTagStart));
+						var newTagStart = jQuery(el);
+						var newTagEnd = jQuery(tagger.getCorrespondingEntityTag(newTagStart));
 						newTagStart.attr('name', newId);
 						newTagEnd.attr('name', newId);
 
@@ -189,7 +189,7 @@ function Tagger(config) {
 			}
 		}
 		for (var id in w.structs) {
-			var match = $('*[id='+id+']', w.editor.getBody());
+			var match = jQuery('*[id='+id+']', w.editor.getBody());
 			if (match.length == 2) {
 				var newStruct = match.last();
 				var newId = tinymce.DOM.uniqueId('struct_');
@@ -207,10 +207,10 @@ function Tagger(config) {
 		var tag = {entity: null, struct: null};
 		if (id != null) {
 			if (w.entities[id]) tag.entity = w.entities[id];
-			else if (w.structs[id]) tag.struct = $('#'+id, w.editor.getBody());
+			else if (w.structs[id]) tag.struct = jQuery('#'+id, w.editor.getBody());
 		} else {
 			if (w.editor.currentEntity != null) tag.entity = w.entities[w.editor.currentEntity];
-			else if (w.editor.currentStruct != null) tag.struct = $('#'+w.editor.currentStruct, w.editor.getBody());
+			else if (w.editor.currentStruct != null) tag.struct = jQuery('#'+w.editor.currentStruct, w.editor.getBody());
 		}
 		return tag;
 	};
@@ -219,7 +219,7 @@ function Tagger(config) {
 	tagger.editTag = function(id, pos) {
 		var tag = tagger.getCurrentTag(id);
 		if (tag.struct) {
-			if ($(tag.struct, w.editor.getBody()).attr('_tag')) {
+			if (jQuery(tag.struct, w.editor.getBody()).attr('_tag')) {
 				w.editor.execCommand('editSchemaTag', tag.struct, pos);
 			} else {
 				w.editor.execCommand('editCustomTag', tag.struct, pos);
@@ -234,7 +234,7 @@ function Tagger(config) {
 	tagger.changeTag = function(params) {
 		var tag = tagger.getCurrentTag(params.id);
 		if (tag.struct) {
-			if ($(tag.struct, w.editor.getBody()).attr('_tag')) {
+			if (jQuery(tag.struct, w.editor.getBody()).attr('_tag')) {
 				w.editor.execCommand('changeSchemaTag', {tag: tag.struct, pos: params.pos, key: params.key});
 			}
 		} else if (tag.entity) {
@@ -269,11 +269,11 @@ function Tagger(config) {
 		// trim whitespace
 		if (range.startContainer == range.endContainer) {
 			var leftTrimAmount = content.match(/^\s{0,1}/)[0].length;
-			var rightTrimAmount = content.match(/\s{0,1}$/)[0].length;
+			var rightTrimAmount = content.match(/\s{0,1}jQuery/)[0].length;
 			range.setStart(range.startContainer, range.startOffset+leftTrimAmount);
 			range.setEnd(range.endContainer, range.endOffset-rightTrimAmount);
 			sel.setRng(range);
-			content = content.replace(/^\s+|\s+$/g, '');
+			content = content.replace(/^\s+|\s+jQuery/g, '');
 		}
 		
 		var title = w.u.getTitleFromContent(content);
@@ -314,7 +314,7 @@ function Tagger(config) {
 		var node;
 		if (bookmark.tagId) {
 			// this is used when adding tags through the structure tree
-			node = $('#'+bookmark.tagId, w.editor.getBody())[0];
+			node = jQuery('#'+bookmark.tagId, w.editor.getBody())[0];
 		} else {
 			// this is meant for user text selections
 			node = bookmark.rng.commonAncestorContainer;
@@ -336,13 +336,13 @@ function Tagger(config) {
 		var selection = '\uFEFF';
 		var content = open_tag + selection + close_tag;
 		if (action == 'before') {
-			$(node).before(content);
+			jQuery(node).before(content);
 		} else if (action == 'after') {
-			$(node).after(content);
+			jQuery(node).after(content);
 		} else if (action == 'around') {
-			$(node).wrap(content);
+			jQuery(node).wrap(content);
 		} else if (action == 'inside') {
-			$(node).wrapInner(content);
+			jQuery(node).wrapInner(content);
 		} else {
 			w.editor.selection.moveToBookmark(bookmark);
 			selection = w.editor.selection.getContent();
@@ -350,7 +350,7 @@ function Tagger(config) {
 			content = open_tag + selection + close_tag;
 
 			var range = w.editor.selection.getRng(true);
-			var tempNode = $('<span data-mce-bogus="1">', w.editor.getDoc());
+			var tempNode = jQuery('<span data-mce-bogus="1">', w.editor.getDoc());
 			range.surroundContents(tempNode[0]);
 			tempNode.replaceWith(content);
 		}
@@ -364,7 +364,7 @@ function Tagger(config) {
 	tagger.editStructureTag = function(tag, attributes) {
 		var id = tag.attr('id');
 		attributes.id = id;
-		$.each($(tag[0].attributes), function(index, att) {
+		jQuery.each(jQuery(tag[0].attributes), function(index, att) {
 			if (att.name != 'id') {
 				tag.removeAttr(att.name);
 			}
@@ -387,7 +387,7 @@ function Tagger(config) {
 			}
 		}
 		
-		var node = $('#'+id, w.editor.getBody());
+		var node = jQuery('#'+id, w.editor.getBody());
 		if (removeContents) {
 			node.remove();
 		} else {

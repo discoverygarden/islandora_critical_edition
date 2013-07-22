@@ -2,13 +2,13 @@ function Validation(config) {
 	
 	var w = config.writer;
 	
-	$(config.parentId).append('<div id="validation"><button>Validate</button><button>Clear</button><ul class="validationList"></ul></div>');
+	jQuery(config.parentId).append('<div id="validation"><button>Validate</button><button>Clear</button><ul class="validationList"></ul></div>');
 	
-	$('#validation button:eq(0)').button().click(function() {
+	jQuery('#validation button:eq(0)').button().click(function() {
 		w.delegator.validate();
 	});
-	$('#validation button:eq(1)').button().click(function() {
-		$('#validation > ul').empty();
+	jQuery('#validation button:eq(1)').button().click(function() {
+		jQuery('#validation > ul').empty();
 	});
 	
 	var validation = {};
@@ -20,12 +20,12 @@ function Validation(config) {
 	 * @param docString The doc string sent to the server for validation  
 	 */
 	validation.showValidationResult = function(resultDoc, docString) {
-		var list = $('#validation > ul');
+		var list = jQuery('#validation > ul');
 		list.empty();
 		
 		docString = docString.split('\n')[1]; // remove the xml header
 		
-		var status = $('status', resultDoc).text();
+		var status = jQuery('status', resultDoc).text();
 		
 		if (status == 'pass') {
 			list.append(''+
@@ -34,13 +34,13 @@ function Validation(config) {
 				'</li>');
 		}
 		
-		$('error, warning', resultDoc).each(function(index, el) {
+		jQuery('error, warning', resultDoc).each(function(index, el) {
 			var id = '';
 			
 			var type = el.nodeName;
-			var message = $(this).find('message').text();
-			var parentId = $(this).find('parentId').text();
-			var column = parseInt($(this).find('column').text());
+			var message = jQuery(this).find('message').text();
+			var parentId = jQuery(this).find('parentId').text();
+			var column = parseInt(jQuery(this).find('column').text());
 			
 			if (parentId != '') {
 				id = parentId;
@@ -96,14 +96,14 @@ function Validation(config) {
 		});
 		
 		list.find('li').click(function() {
-			var id = $(this).data('id');
+			var id = jQuery(this).data('id');
 			if (id) {
 				w.selectStructureTag(id);
 			}
 		});
 		
 		w.layout.center.children.layout1.open('south');
-		$('#southTabs').tabs('option', 'active', 0);
+		jQuery('#southTabs').tabs('option', 'active', 0);
 	};
 	
 	return validation;

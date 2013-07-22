@@ -3,7 +3,7 @@ function Writer(config) {
 	
 	var w = this;
 	
-	w.layout = null; // jquery ui layout object
+	w.layout = null; // $ ui layout object
 	w.editor = null; // reference to the tinyMCE instance we're creating, set in setup
 	w.entities = {}; // entities store
 	w.structs = {}; // structs store
@@ -172,7 +172,7 @@ function Writer(config) {
 				type: 'error'
 			});
 		} else {
-			var newEntity = jQuery.extend(true, {}, w.editor.entityCopy);
+			var newEntity = $.extend(true, {}, w.editor.entityCopy);
 			newEntity.props.id = tinymce.DOM.uniqueId('ent_');
 			
 			w.editor.selection.moveToBookmark(w.editor.currentBookmark);
@@ -295,7 +295,7 @@ function Writer(config) {
 		w.editor.onNodeChange.dispatch(w.editor, w.editor.controlManager, nodeEl, false, w.editor);
 	};
 	
-	// webkit has trouble deleting divs, so use the tree and jquery as a workaround
+	// webkit has trouble deleting divs, so use the tree and $ as a workaround
 	function _webKitOnKeyDownDeleteHandler(ed, evt) {
 		if (evt.which == 8 || evt.which == 46) {
 			if (w.tree.currentlySelectedNode != null) {
@@ -523,9 +523,9 @@ function Writer(config) {
 	 * Begin init functions
 	 */
 	w.init = function() {
-		var cssFiles = ['http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/smoothness/jquery-ui-1.9.0.custom.css', 
+		var cssFiles = ['http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/smoothness/$-ui-1.9.0.custom.css', 
 		                'http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/css/layout-default-latest.css', 
-		                'http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/js/lib/snippet/jquery.snippet.css'];
+		                'http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/js/lib/snippet/$.snippet.css'];
 		for (var i = 0; i < cssFiles.length; i++) {
 			var css = $('<style/>');
 			css.attr({
@@ -535,7 +535,7 @@ function Writer(config) {
 			});
 			$(document.head).append(css);
 		}
-		
+		console.log("before layout");
 		w.layout = $(document.body).layout({
 			defaults: {
 				maskIframesOnResize: true,
@@ -562,13 +562,13 @@ function Writer(config) {
 				size: 'auto',
 				minSize: 375,
 				onresize: function(region, pane, state, options) {
-					var tabsHeight = $('#westTabs > ul').outerHeight();
-					$('#westTabsContent').height(state.layoutHeight - tabsHeight);
+					//var tabsHeight = $('#westTabs > ul').outerHeight();
+					//$('#westTabsContent').height(state.layoutHeight - tabsHeight);
 //					$.layout.callbacks.resizeTabLayout(region, pane);
 				}
 			}
 		});
-		console.log("Before");
+		console.log("after layout");
 		//console.log(JSON.stringify(w.layout.panes));
 		w.layout.panes.center.layout({
 			defaults: {

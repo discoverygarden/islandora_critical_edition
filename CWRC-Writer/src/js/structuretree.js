@@ -11,21 +11,21 @@ function StructureTree(config) {
 	
 	var ignoreSelect = false; // used when we want to highlight a node without selecting it's counterpart in the editor
 	
-	var $tree; // tree reference
+	var jQuerytree; // tree reference
 	
 	/**
 	 * @memberOf tree
 	 */
 	tree.update = function() {
-		var treeRef = $.jstree._reference('#tree');
+		var treeRef = jQuery.jstree._reference('#tree');
 		
 		var openNodes = [];
-		$('#tree #root').find('li.jstree-open').each(function () {
-			var id = $(this).attr('name');
+		jQuery('#tree #root').find('li.jstree-open').each(function () {
+			var id = jQuery(this).attr('name');
 			openNodes.push(id);
 		});
 		
-		$tree.jstree('delete_node', '#root');
+		jQuerytree.jstree('delete_node', '#root');
 		
 		var root = {
 			data: 'Tags',
@@ -33,17 +33,17 @@ function StructureTree(config) {
 			state: 'open',
 			children: []
 		};
-		_doUpdate($(w.editor.getBody()).children(), root, 0);
+		_doUpdate(jQuery(w.editor.getBody()).children(), root, 0);
 		
 		var settings = treeRef._get_settings();
 		settings.json_data.data = root;
 		treeRef._set_settings(settings);
 		treeRef.load_node_json(-1, false, false);
 		treeRef._themeroller();
-		_onNodeLoad($('#tree #root li').first());
+		_onNodeLoad(jQuery('#tree #root li').first());
 		
-		$.each(openNodes, function (i, val) {
-			treeRef.open_node($('li[name='+val+']', $tree), false, true); 
+		jQuery.each(openNodes, function (i, val) {
+			treeRef.open_node(jQuery('li[name='+val+']', jQuerytree), false, true); 
 		});
 	};
 	
@@ -51,24 +51,24 @@ function StructureTree(config) {
 		var id = node.id;
 		if (id) {
 			ignoreSelect = true;
-			var treeNode = $('#tree [name="'+id+'"]');
+			var treeNode = jQuery('#tree [name="'+id+'"]');
 			if (treeNode.length == 0) {
 				var parents = [];
-				$(node).parentsUntil('#tinymce').each(function(index, el) {
+				jQuery(node).parentsUntil('#tinymce').each(function(index, el) {
 					parents.push(el.id);
 				});
 				parents.reverse();
 				for (var i = 0; i < parents.length; i++) {
 					var parentId = parents[i];
-					var parentNode = $('#tree [name="'+parentId+'"]');
-					var isOpen = $tree.jstree('is_open', parentNode);
+					var parentNode = jQuery('#tree [name="'+parentId+'"]');
+					var isOpen = jQuerytree.jstree('is_open', parentNode);
 					if (!isOpen) {
-						$tree.jstree('open_node', parentNode, false, true);
+						jQuerytree.jstree('open_node', parentNode, false, true);
 					}
 				}
-				treeNode = $('#tree [name="'+id+'"]');
+				treeNode = jQuery('#tree [name="'+id+'"]');
 			}
-			var result = $tree.jstree('select_node', treeNode, true);
+			var result = jQuerytree.jstree('select_node', treeNode, true);
 			if (result.attr('id') == 'tree') ignoreSelect = false;
 		}
 	};
@@ -77,7 +77,7 @@ function StructureTree(config) {
 	
 	function _doUpdate(children, nodeParent, level) {
 		children.each(function(index, el) {
-			var node = $(this);
+			var node = jQuery(this);
 			var newNodeParent = nodeParent;
 			if (node.attr('_tag')) {
 				var id = node.attr('id');
@@ -98,11 +98,11 @@ function StructureTree(config) {
 					}					
 				// duplicate struct check
 				} else {
-					var match = $('[id='+id+']', w.editor.getBody());
+					var match = jQuery('[id='+id+']', w.editor.getBody());
 					if (match.length > 1) {
 						match.each(function(index, el) {
 							if (index > 0) {
-								var newStruct = $(el);
+								var newStruct = jQuery(el);
 								var newId = tinymce.DOM.uniqueId('struct_');
 								newStruct.attr('id', newId);
 								w.structs[newId] = {};
@@ -144,8 +144,8 @@ function StructureTree(config) {
 	}
 	
 	function _onNodeLoad(context) {
-		$('li', context).each(function(index, el) {
-			var li = $(this);
+		jQuery('li', context).each(function(index, el) {
+			var li = jQuery(this);
 			var indent = (li.parents('ul').length - 2) * 16;
 			li.prepend("<span class='jstree-indent' style='width: "+indent+"px;'/>");
 		});
@@ -193,8 +193,8 @@ function StructureTree(config) {
 	
 	function _onDragDrop(event, data) {
 		var params = data.rslt.obj;
-		var dropNode = $('#'+params.dropNode.attr('name'), w.editor.getBody());
-		var dragNode = $('#'+params.dragNode.attr('name'), w.editor.getBody());
+		var dropNode = jQuery('#'+params.dropNode.attr('name'), w.editor.getBody());
+		var dragNode = jQuery('#'+params.dragNode.attr('name'), w.editor.getBody());
 		if (params.isCopy) {
 			dragNode = dragNode.clone();
 		}
@@ -216,16 +216,16 @@ function StructureTree(config) {
 	}
 	
 	function _removeCustomClasses() {
-		var nodes = $('a[class*=Selected]', '#tree');
+		var nodes = jQuery('a[class*=Selected]', '#tree');
 		nodes.removeClass('nodeSelected contentsSelected');
 	}
 	
 	function _showPopup(content) {
-		$('#tree_popup').html(content).show();
+		jQuery('#tree_popup').html(content).show();
 	}
 	
 	function _hidePopup() {
-		$('#tree_popup').hide();
+		jQuery('#tree_popup').hide();
 	}
 	
 	function _getSubmenu(tags, info) {
@@ -247,13 +247,13 @@ function StructureTree(config) {
 				action: function(obj) {
 					var actionType = obj.parents('li.submenu').children('a').attr('rel');
 					var key = obj.text();
-					var offset = $('#vakata-contextmenu').offset();
+					var offset = jQuery('#vakata-contextmenu').offset();
 					var pos = {
 						x: offset.left,
 						y: offset.top
 					};
 					if (actionType == 'change') {
-						var id = $('#tree a.ui-state-active').closest('li').attr('name');
+						var id = jQuery('#tree a.ui-state-active').closest('li').attr('name');
 						w.editor.execCommand('changeTag', {key: key, pos: pos, id: id});
 					} else {
 						w.editor.currentBookmark = w.editor.selection.getBookmark(1);
@@ -273,18 +273,18 @@ function StructureTree(config) {
 		return inserts;
 	}
 	
-	$(config.parentId).append('<div id="structure" class="tabWithLayout">'+
+	jQuery(config.parentId).append('<div id="structure" class="tabWithLayout">'+
 			'<div id="tree" class="ui-layout-center"></div>'+
 			'<div id="structureTreeActions" class="ui-layout-south tabButtons">'+
 			'<button>Edit Tag</button><button>Remove Tag</button><button>Remove Tag and All Content</button>'+
 			'</div>'+
 	'</div>');
-//	$(document.body).append('<div id="tree_popup"></div>');
+//	jQuery(document.body).append('<div id="tree_popup"></div>');
 	
-	$tree = $('#tree');
+	jQuerytree = jQuery('#tree');
 	
-	$tree.bind('loaded.jstree', function(event, data) {
-		tree.layout = $('#structure').layout({
+	jQuerytree.bind('loaded.jstree', function(event, data) {
+		tree.layout = jQuery('#structure').layout({
 			defaults: {
 				resizable: false,
 				slidable: false,
@@ -297,10 +297,10 @@ function StructureTree(config) {
 		});
 	});
 	
-	$.vakata.dnd.helper_left = 15;
-	$.vakata.dnd.helper_top = 20;
+	jQuery.vakata.dnd.helper_left = 15;
+	jQuery.vakata.dnd.helper_top = 20;
 	
-	$tree.jstree({
+	jQuerytree.jstree({
 		core: {},
 		themeroller: {},
 		ui: {
@@ -380,7 +380,7 @@ function StructureTree(config) {
 						label: 'Edit Tag',
 						icon: 'img/tag_blue_edit.png',
 						action: function(obj) {
-							var offset = $('#vakata-contextmenu').offset();
+							var offset = jQuery('#vakata-contextmenu').offset();
 							var pos = {
 								x: offset.left,
 								y: offset.top
@@ -421,17 +421,17 @@ function StructureTree(config) {
 		},
 		plugins: ['json_data', 'ui', 'contextmenu', 'hotkeys', 'dnd', 'themeroller']
 	});
-	$tree.bind('select_node.jstree', _onNodeSelect);
-	$tree.bind('deselect_node.jstree', _onNodeDeselect);
-	$tree.bind('dnd_finish.jstree', _onDragDrop);
-	$tree.bind('load_node.jstree', function(event, data) {
+	jQuerytree.bind('select_node.jstree', _onNodeSelect);
+	jQuerytree.bind('deselect_node.jstree', _onNodeDeselect);
+	jQuerytree.bind('dnd_finish.jstree', _onDragDrop);
+	jQuerytree.bind('load_node.jstree', function(event, data) {
 		_onNodeLoad(data.rslt.obj);
 	});
-//	$tree.mousemove(function(e) {
-//		$('#tree_popup').offset({left: e.pageX+15, top: e.pageY+5});
+//	jQuerytree.mousemove(function(e) {
+//		jQuery('#tree_popup').offset({left: e.pageX+15, top: e.pageY+5});
 //	});
-//	$tree.bind('hover_node.jstree', function(event, data) {
-//		if ($('#vakata-contextmenu').css('visibility') == 'visible') return;
+//	jQuerytree.bind('hover_node.jstree', function(event, data) {
+//		if (jQuery('#vakata-contextmenu').css('visibility') == 'visible') return;
 //		
 //		var node = data.rslt.obj;
 //		
@@ -448,11 +448,11 @@ function StructureTree(config) {
 //		content += '</ul>';
 //		_showPopup(content);
 //	});
-//	$tree.bind('dehover_node.jstree', function(event, data) {
+//	jQuerytree.bind('dehover_node.jstree', function(event, data) {
 //		_hidePopup();
 //	});
 	
-	$('#structureTreeActions button:eq(0)').button().click(function() {
+	jQuery('#structureTreeActions button:eq(0)').button().click(function() {
 		if (tree.currentlySelectedNode != null) {
 			w.editor.execCommand('editTag', tree.currentlySelectedNode);
 		} else {
@@ -463,7 +463,7 @@ function StructureTree(config) {
 			});
 		}
 	});
-	$('#structureTreeActions button:eq(1)').button().click(function() {
+	jQuery('#structureTreeActions button:eq(1)').button().click(function() {
 		if (tree.currentlySelectedNode != null) {
 			w.tagger.removeStructureTag(tree.currentlySelectedNode, false);
 			tree.currentlySelectedNode = null;
@@ -476,7 +476,7 @@ function StructureTree(config) {
 			});
 		}
 	});
-	$('#structureTreeActions button:eq(2)').button().click(function() {
+	jQuery('#structureTreeActions button:eq(2)').button().click(function() {
 		if (tree.currentlySelectedNode != null) {
 			w.tagger.removeStructureTag(tree.currentlySelectedNode, true);
 			tree.currentlySelectedNode = null;
