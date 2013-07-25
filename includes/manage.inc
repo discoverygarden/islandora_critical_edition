@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Holds top level functionality for management of critical editions.
@@ -29,14 +30,6 @@ function islandora_critical_edition_management(AbstractObject $object) {
     '#weight' => 0,
     '#prefix' => '',
   );
-  $items['manage_book']['create'] = array(
-    '#access' => user_access(ISLANDORA_CRITICAL_EDITION_CREATE_CRITICAL_EDITION),
-    '#title' => t('Create Critical Edition'),
-    '#type' => 'fieldset',
-    'form' => drupal_get_form('islandora_create_edition_form', $object),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
   if ($editions) {
     $items['manage_book']['view'] = array(
       '#access' => user_access(ISLANDORA_CRITICAL_EDITION_VIEW_CRITICAL_EDITION),
@@ -46,6 +39,16 @@ function islandora_critical_edition_management(AbstractObject $object) {
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     );
+  }
+  $items['manage_book']['create'] = array(
+    '#access' => user_access(ISLANDORA_CRITICAL_EDITION_CREATE_CRITICAL_EDITION),
+    '#title' => t('Create Critical Edition'),
+    '#type' => 'fieldset',
+    'form' => drupal_get_form('islandora_create_edition_form', $object),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+  if ($editions) {
     $items['manage_book']['delete'] = array(
       '#access' => user_access(ISLANDORA_CRITICAL_EDITION_DELETE_CRITICAL_EDITION),
       '#title' => t('Delete Critical Editions'),
@@ -55,5 +58,6 @@ function islandora_critical_edition_management(AbstractObject $object) {
       '#collapsed' => TRUE,
     );
   }
+
   return $items;
 }
