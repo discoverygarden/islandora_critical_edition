@@ -18,7 +18,7 @@ define('ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF', 'isCriticalEditionOf
  * Implements hook_menu().
  */
 function islandora_critical_edition_menu() {
-  $items['islandora/object/%islandora_object/manage/critical_editions'] = array(
+  $items['islandora/object/%islandora_object/critical_editions'] = array(
     'title' => 'Critical Editions',
     'page callback' => 'islandora_critical_edition_management',
     'page arguments' => array(2),
