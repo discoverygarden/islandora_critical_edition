@@ -30,7 +30,7 @@ $('document').ready(function() {
   var prolog = cwrc_params.title + ' - Seq# ';
   var epilog = '';
   if (cwrc_params.no_edit === false) {
-    prolog = '<a target = "_blank" style = "color:white" href = "' + address + '">' + cwrc_params.title + ' - Seq# ';
+    prolog = '<a style = "color:white" href = "' + address + '">' + cwrc_params.title + ' - Seq# ';
     epilog = '</a>';
   }
   $('#header h1').html(prolog + cwrc_params.position + epilog);
