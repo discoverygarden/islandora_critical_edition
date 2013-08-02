@@ -308,7 +308,7 @@ function setReturnParams() {
  */
 
 function setHeader() {
-  var address = window.parent.Drupal.settings.basePath + 'islandora/object/' + cwrc_params.pages[cwrc_params.position];
+  var address = Drupal.settings.basePath + 'islandora/object/' + cwrc_params.pages[cwrc_params.position];
   var prolog = cwrc_params.title + ' - Seq# ';
   var epilog = '';
   if (cwrc_params.no_edit === false) {
