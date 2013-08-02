@@ -25,7 +25,6 @@ $('document').ready(function() {
   // Get initial positions of the text annotation div and separator.
   setReturnParams();
   $(this).attr("title", cwrc_params.title);
-  var current_page = cwrc_params.pages[cwrc_params.position];
   setHeader();
 
   // Instantiate and initialize writer object.
