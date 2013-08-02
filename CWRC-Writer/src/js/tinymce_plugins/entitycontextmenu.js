@@ -112,7 +112,8 @@
 			
 			t._menu = m;
 
-			var url = t.url+'/../../img/';
+			var url = Drupal.settings.islandora_critical_edition.images_path;//t.url+'/../../img/';
+			console.log("context menu url: " + url);
 			m.add({
 				title: 'Tag Person',
 				icon_src: url+'user.png',

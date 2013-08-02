@@ -1,3 +1,33 @@
+//var $ = jQuery.noConflict();
+$('document').ready(function() {
+				
+		PID = Drupal.settings.islandora_critical_edition.page_pid;
+		cwrc_params = {};
+		writer = null;
+		var derp = Drupal;
+		console.log(derp.settings.islandora_critical_edition);
+		console.log(Drupal.settings.basePath);
+		$.ajax({
+			url: '../../islandora/cwrcwriter/setup/' + PID,
+			success: function(data, status, xhr) {
+				console.log(data);
+				cwrc_params=data;
+				writer = new Writer({
+					project: data,
+					delegator: Delegator
+				});
+				writer.init();
+				writer.layout.close('east');
+			},
+			error: function() {
+				writer = new Writer({
+					delegator: Delegator
+				});
+				writer.init();
+				writer.layout.close('east');
+			}
+		});
+
 function Writer(config) {
 	config = config || {};
 	
@@ -536,7 +566,7 @@ function Writer(config) {
 //			$(document.head).append(css);
 //		}
 		console.log("before layout");
-		w.layout = jQuery(document.body).layout({
+		w.layout = $('#cwrc_wrapper').layout({
 			defaults: {
 				maskIframesOnResize: true,
 				resizable: true,
@@ -626,6 +656,7 @@ function Writer(config) {
 			showStructBrackets: false
 		});
 		if (config.delegator != null) {
+			console.log("delegator not null");
 			w.delegator = new config.delegator({writer: w});
 		} else {
 			alert('Error: you must specify a delegator in the Writer config for full functionality!');
@@ -814,108 +845,111 @@ function Writer(config) {
 				
 				// add custom plugins and buttons
 				var plugins = ['treepaste','schematags','currenttag','entitycontextmenu','viewsource','scrolling_dropmenu'];
-				
+				console.log("editor prior");
 				for (var i = 0; i < plugins.length; i++) {
 					var name = plugins[i];
-					tinymce.PluginManager.load(name, '../../tinymce_plugins/'+name+'.js');
+					if(tinymce.PluginManager.load(name, '../../tinymce_plugins/'+name+'.js')){
+						console.log("Loaded tinymcd pluging named: " + name);
+					}
 				}
+				var img_path = Drupal.settings.islandora_critical_edition.images_path;
 				
-				ed.addButton('addperson', {title: 'Tag Person', image: 'img/user.png', 'class': 'entityButton person',
+				ed.addButton('addperson', {title: 'Tag Person', image: img_path + 'user.png', 'class': 'entityButton person',
 					onclick : function() {
 						ed.execCommand('addEntity', 'person');
 					}
 				});
-				ed.addButton('addplace', {title: 'Tag Place', image: 'img/world.png', 'class': 'entityButton place',
+				ed.addButton('addplace', {title: 'Tag Place', image: img_path + 'world.png', 'class': 'entityButton place',
 					onclick : function() {
 						ed.execCommand('addEntity', 'place');
 					}
 				});
-				ed.addButton('adddate', {title: 'Tag Date', image: 'img/calendar.png', 'class': 'entityButton date',
+				ed.addButton('adddate', {title: 'Tag Date', image: img_path + 'calendar.png', 'class': 'entityButton date',
 					onclick : function() {
 						ed.execCommand('addEntity', 'date');
 					}
 				});
-				ed.addButton('addevent', {title: 'Tag Event', image: 'img/cake.png', 'class': 'entityButton event',
+				ed.addButton('addevent', {title: 'Tag Event', image: img_path + 'cake.png', 'class': 'entityButton event',
 					onclick : function() {
 						ed.execCommand('addEntity', 'event');
 					}
 				});
-				ed.addButton('addorg', {title: 'Tag Organization', image: 'img/group.png', 'class': 'entityButton org',
+				ed.addButton('addorg', {title: 'Tag Organization', image: img_path + 'group.png', 'class': 'entityButton org',
 					onclick : function() {
 						ed.execCommand('addEntity', 'org');
 					}
 				});
-				ed.addButton('addcitation', {title: 'Tag Citation', image: 'img/vcard.png', 'class': 'entityButton citation',
+				ed.addButton('addcitation', {title: 'Tag Citation', image: img_path + 'vcard.png', 'class': 'entityButton citation',
 					onclick : function() {
 						ed.execCommand('addEntity', 'citation');
 					}
 				});
-				ed.addButton('addnote', {title: 'Tag Note', image: 'img/note.png', 'class': 'entityButton note',
+				ed.addButton('addnote', {title: 'Tag Note', image: img_path + 'note.png', 'class': 'entityButton note',
 					onclick : function() {
 						ed.execCommand('addEntity', 'note');
 					}
 				});
-				ed.addButton('addcorrection', {title: 'Tag Correction', image: 'img/error.png', 'class': 'entityButton correction',
+				ed.addButton('addcorrection', {title: 'Tag Correction', image: img_path + 'error.png', 'class': 'entityButton correction',
 					onclick : function() {
 						ed.execCommand('addEntity', 'correction');
 					}
 				});
-				ed.addButton('addkeyword', {title: 'Tag Keyword', image: 'img/page_key.png', 'class': 'entityButton keyword',
+				ed.addButton('addkeyword', {title: 'Tag Keyword', image: img_path + 'page_key.png', 'class': 'entityButton keyword',
 					onclick : function() {
 						ed.execCommand('addEntity', 'keyword');
 					}
 				});
-				ed.addButton('addlink', {title: 'Tag Link', image: 'img/link.png', 'class': 'entityButton link',
+				ed.addButton('addlink', {title: 'Tag Link', image: img_path + 'link.png', 'class': 'entityButton link',
 					onclick : function() {
 						ed.execCommand('addEntity', 'link');
 					}
 				});
-				ed.addButton('addtitle', {title: 'Tag Text/Title', image: 'img/book.png', 'class': 'entityButton textTitle',
+				ed.addButton('addtitle', {title: 'Tag Text/Title', image: img_path + 'book.png', 'class': 'entityButton textTitle',
 					onclick : function() {
 						ed.execCommand('addEntity', 'title');
 					}
 				});
-				ed.addButton('editTag', {title: 'Edit Tag', image: 'img/tag_blue_edit.png', 'class': 'entityButton',
+				ed.addButton('editTag', {title: 'Edit Tag', image: img_path + 'tag_blue_edit.png', 'class': 'entityButton',
 					onclick : function() {
 						ed.execCommand('editTag');
 					}
 				});
-				ed.addButton('removeTag', {title: 'Remove Tag', image: 'img/tag_blue_delete.png', 'class': 'entityButton',
+				ed.addButton('removeTag', {title: 'Remove Tag', image: img_path + 'tag_blue_delete.png', 'class': 'entityButton',
 					onclick : function() {
 						ed.execCommand('removeTag');
 					}
 				});
-				ed.addButton('newbutton', {title: 'New', image: 'img/page_white_text.png', 'class': 'entityButton',
+				ed.addButton('newbutton', {title: 'New', image: img_path + 'page_white_text.png', 'class': 'entityButton',
 					onclick: function() {
 						w.fm.newDocument();
 					}
 				});
-				ed.addButton('savebutton', {title: 'Save', image: 'img/save.png',
+				ed.addButton('savebutton', {title: 'Save', image: img_path + 'save.png',
 					onclick: function() {
 						w.fm.saveDocument();
 					}
 				});
-				ed.addButton('saveasbutton', {title: 'Save As', image: 'img/save_as.png',
+				ed.addButton('saveasbutton', {title: 'Save As', image: img_path + 'save_as.png',
 					onclick: function() {
 						w.dialogs.filemanager.showSaver();
 					}
 				});
-				ed.addButton('loadbutton', {title: 'Load', image: 'img/folder_page.png', 'class': 'entityButton',
+				ed.addButton('loadbutton', {title: 'Load', image: img_path + 'folder_page.png', 'class': 'entityButton',
 					onclick: function() {
 						w.dialogs.filemanager.showLoader();
 					}
 				});
-				ed.addButton('editsource', {title: 'Edit Source', image: 'img/editsource.gif', 'class': 'wideButton',
+				ed.addButton('editsource', {title: 'Edit Source', image: img_path + 'editsource.gif', 'class': 'wideButton',
 					onclick: function() {
 						w.fm.editSource();
 					}
 				});
-				ed.addButton('validate', {title: 'Validate', image: 'img/validate.png', 'class': 'entityButton',
+				ed.addButton('validate', {title: 'Validate', image: img_path + 'validate.png', 'class': 'entityButton',
 					onclick: function() {
 						w.delegator.validate();
 					}
 				});
-				ed.addButton('addtriple', {title: 'Add Relation', image: 'img/chart_org.png', 'class': 'entityButton',
+				ed.addButton('addtriple', {title: 'Add Relation', image: img_path + 'chart_org.png', 'class': 'entityButton',
 					onclick: function() {
 						$('#westTabs').tabs('select', 2);
 						w.dialogs.show('triple');
@@ -932,3 +966,5 @@ function Writer(config) {
 		});
 	};
 }
+
+});

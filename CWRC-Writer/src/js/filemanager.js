@@ -351,6 +351,7 @@ function FileManager(config) {
 	};
 	
 	fm.loadDocumentFromUrl = function(docUrl) {
+		console.log("loadDocumentFromUrl: " + docUrl);
 		w.currentDocId = docUrl;
 		
 		w.entities = {};
@@ -374,10 +375,12 @@ function FileManager(config) {
 	};
 	
 	fm.loadDocumentFromXml = function(docXml) {
+		console.log("loadDocumentFromXml: " + docXml);
 		_loadDocumentHandler(docXml);
 	};
 	
 	fm.loadDocument = function(docName) {
+		console.log("loadDocument: " + docName);
 		w.currentDocId = docName;
 		
 		w.entities = {};
@@ -402,12 +405,13 @@ function FileManager(config) {
 	
 
 	fm.loadEMICDocument = function() {
+		console.log("loadEMICDocument");
 		w.currentDocId = PID;
 		
 		w.entities = {};
 		w.structs = {};
 		w.triples = [];
-		
+		console.log("Request sent to: " + 'islandora/cwrcwriter/setup/islandora:54799c01-4392-4a05-8926-16f9f8560a95');
 		jQuery.ajax({
 			url: cwrc_params.BASE_PATH + '/cwrc/getCWRC/' + PID,
 			async: false,
@@ -492,11 +496,13 @@ function FileManager(config) {
 	
 	function _loadDocumentHandler(doc) {
 		if (doc.firstChild.nodeName == 'xml-model') {
+			console.log("in if");
 			var xmlModelData = doc.firstChild.data;
 			var schemaUrl = xmlModelData.match(/href="([^"]*)"/)[1];
 			var urlParts = schemaUrl.match(/^(.*):\/\/([a-z\-.]+)(?=:[0-9]+)?\/(.*)/);
 			var fileName = urlParts[3];
-			fm.loadSchema(fileName, false, processDocument);
+			console.log("File Name: " + fileName);
+			fm.loadSchema('192.168.168.52/' + Drupal.settings.islandora_critical_edition.module_base + '/CWRC-Writer/src/' + fileName, false, processDocument);
 		} else {
 			var rootName;
 			if (jQuery('[_tag='+w.root+']', doc.body).attr('_tag') == 'EVENTS') {
@@ -509,13 +515,14 @@ function FileManager(config) {
 			if (rootName != w.root.toLowerCase()) {
 				// roots don't match so load the appropriate schema
 				if (rootName == 'events') {
-					fm.loadSchema('schema/events.rng', false, processDocument);
+					fm.loadSchema('../schema/events.rng', false, processDocument);
 				} else {
-					fm.loadSchema('schema/CWRC-TEIBasic.rng', false, processDocument);
+					fm.loadSchema('../schema/CWRC-TEIBasic.rng', false, processDocument);
 				}
 			} else {
 				processDocument();
 			}
+			console.log("in else");
 		}
 		
 		function processDocument() {
@@ -656,7 +663,7 @@ function FileManager(config) {
 				}
 				processEntities(jQuery(doc.firstChild), offsets);
 			}
-
+console.log("Root Info: " +w.root+', '+w.root.toLowerCase());
 			// FIXME temp fix until document format is correct
 			var root = jQuery(w.root+', '+w.root.toLowerCase(), doc)[0];
 			
@@ -793,16 +800,20 @@ function FileManager(config) {
 	fm.loadSchema = function(schemaFile, startText, callback) {
 		var baseUrl = ''; //w.project == null ? '' : w.baseUrl; // handling difference between local and server urls
 		w.validationSchema = schemaFile;
-		
-		jQuery.ajax({
-			url: baseUrl + schemaFile,
+		console.log("Load Schema url: " + schemaFile);
+		$.ajax({
+			url: 'http://' + schemaFile,
 			dataType: 'xml',
 			success: function(data, status, xhr) {
+				console.log("Load schema success");
+				console.log("Status: " + status);
 				w.schemaXML = data;
-				
+				console.log("data: " + JSON.stringify(data));
+				console.log("w.schemaXML: " + JSON.stringify(w.schemaXML));
 				// get root element
-				var startName = jQuery('start ref:first', w.schemaXML).attr('name');
-				var startEl = jQuery('define[name="'+startName+'"] element', w.schemaXML).attr('name');
+				var startName = $('start ref:first', w.schemaXML).attr('name');
+				var startEl = $('define[name="'+startName+'"] element', w.schemaXML).attr('name');
+				console.log("startEL: " + startEl);
 				w.root = startEl;
 //				w.editor.settings.forced_root_block = w.root;
 //				w.editor.schema.addCustomElements(w.root);
@@ -888,6 +899,7 @@ function FileManager(config) {
 				var include = jQuery('include:first', w.schemaXML); // TODO add handling for multiple includes
 				if (include.length == 1) {
 					var href = include.attr('href');
+					console.log("redefinitions: " + baseUrl+ 'schema/'+href);
 					jQuery.ajax({
 						url: baseUrl + 'schema/'+href,
 						dataType: 'xml',
@@ -917,6 +929,7 @@ function FileManager(config) {
 				}
 			},
 			error: function(xhr, status, error) {
+				console.log("error: " + error + ", status: " + status);
 				w.dialogs.show('message', {title: 'Error', msg: 'Error loading schema: '+status, type: 'error'});
 			}
 		});
@@ -1002,8 +1015,11 @@ function FileManager(config) {
 	};
 	
 	function _loadTemplate(url) {
+	//	console.log("url in load template: " + Drupal.settings.islandora_critical_edition.module_base);
+		var nurl = 'http://192.168.168.52/' + Drupal.settings.islandora_critical_edition.module_base + '/CWRC-Writer/src/' + url;
+		console.log("Url in load templates: " + nurl);
 		jQuery.ajax({
-			url: url,
+			url: nurl,
 			dataType: 'xml',
 			success: function(data, status, xhr) {
 				var rdf = data.createElement('rdf:RDF');

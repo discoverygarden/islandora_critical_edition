@@ -4,6 +4,9 @@
  * This file contains themeing functions for islandora_critical_edition.
  */
 
+function islandora_critical_edition_js_alter(&$javascript) {
+ $javascript['misc/jquery.js']['data'] = drupal_get_path('module', 'islandora_critical_edition') . '/CWRC-Writer/src/js/lib/jquery/jquery-1.8.3.js';
+}
 /**
  * Implements hook_preprocess_islandora_critical_edition().
  *
@@ -28,11 +31,11 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   // Use the theme files from image annotation for annotation list
   // and image annotation pane's.
- // $variables['anno_list_pane'] = theme('islandora_anno_list_pane');
- // $variables['anno_img_pane'] = theme('islandora_anno_image_pane');
+  $variables['anno_list_pane'] = theme('islandora_anno_list_pane');
+  $variables['anno_img_pane'] = theme('islandora_anno_image_pane');
 
   // Fill additional session variables.
-  $variables['images_path'] = url($image_annotation_module_path . '/shared_canvas', array('absolute' => TRUE));
+  $variables['images_path'] = url($critical_edition_module_path . '/CWRC-Writer/src/img/', array('absolute' => TRUE));
   drupal_add_js(array('islandora_image_annotation' => array('images_path' => $variables['images_path'] . '/imgs')), 'setting');
   drupal_add_js(array(
       'islandora_critical_edition' => array(
@@ -54,23 +57,41 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
       'islandora_critical_edition' => array(
         'module_base' => $critical_edition_module_path)), 'setting');
   
-        //drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-1.8.3.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-ui-1.9.0.custom.js");
-
+  drupal_add_js($critical_edition_module_path . '/CWRC-Writer/src/js/lib/jquery/jquery-1.8.3.js');
+  drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout-latest.min.js");
+  drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-ui-1.9.0.custom.min.js");
+  
+  drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout-latest.js");
+    //drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-1.8.3.js");
+      
+  drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout.resizeTabLayout-1.3.js");
+        
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.contextmenu.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.tmpl.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.watermark.min.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/tiny_mce_src.js");
+  drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/jquery.tinymce.js");
+        
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/copy_event.js");
+        
+        
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jstree/jquery.hotkeys.js");
+        
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jstree/jquery.jstree.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.min.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/jquery.tinymce.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jstree/jquery.hotkeys.js");
-
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/tiny_mce_src.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/copy_event.js");
-
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/moment/moment.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/objtree/ObjTree.js");
-
+        
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/utilities.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/filemanager.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/structuretree.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/entitieslist.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/entities_model.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/relations.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/validation.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/selection.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/delegator.js");
+        
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_addevent.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_addorg.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_addperson.js");
@@ -89,33 +110,30 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_triple.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_filemanager.js");
         
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-latest.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout-latest.min.js");
         
+//        // 
+        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/layout-default-latest.css");
+        
+        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/islandora_style.css");
+        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/style.css");
+        
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/editor.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/tagger.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialog.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/utilities.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/filemanager.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/structuretree.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/entitieslist.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/entities_model.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/relations.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/validation.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/selection.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/delegator.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/editor.js");
+        drupal_add_js($critical_edition_module_path . "/Islandora/js/startup.js");
         
-        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/smoothness/jquery-ui-1.9.0.custom.css");
-        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/layout-default-latest.css");
-        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.css");
+         drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/smoothness/jquery-ui-1.9.0.custom.css");
+//         drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/layout-default-latest.css");
+//         drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.css");
         
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout.resizeTabLayout-1.3.js");
+//         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/jquery.tinymce.js");
         
         
-        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/style.css");
-        drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/islandora_style.css");
         
-        drupal_add_js($critical_edition_module_path . '/Islandora/js/startup.js');
+        
+        
+        
+       // 
   // Critical Editions requires its own js init script.
 
   

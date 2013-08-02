@@ -19,9 +19,11 @@
  *	Version:	1.3 - 2013-01-12
  *	Author:		Kevin Dalman (kevin.dalman@gmail.com)
  */
-;(function ($) {
-var _ = $.layout;
 
+var $ = jQuery.noConflict();
+(function ($) {
+var _ = jQuery.layout;
+console.log($.layout);
 // make sure the callbacks branch exists
 if (!_.callbacks) _.callbacks = {};
 

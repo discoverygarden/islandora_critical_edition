@@ -2,7 +2,7 @@
 
 /* General elements */
 
-body,
+body .cwrc_wrapper,
 .ui-widget
 {
   font-family: 'Trebuchet MS', Tahoma, Arial, sans-serif;
@@ -28,7 +28,7 @@ A:hover
 
 /* Header */
 
-#header
+.cwrc_wrapper #header
 {
   padding: 0px 0px 0px 0px;
   background-color: #000;
@@ -592,4 +592,8 @@ ul.relationsList li:hover
   border: 1px solid #aaa;
   color: #212121;
   font-weight: normal;
+}
+
+body .cwrc_wrapper {
+	overflow:show !important;
 }
