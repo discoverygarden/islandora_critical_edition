@@ -26,14 +26,7 @@ $('document').ready(function() {
   setReturnParams();
   $(this).attr("title", cwrc_params.title);
   var current_page = cwrc_params.pages[cwrc_params.position];
-  var address = window.parent.Drupal.settings.basePath + 'islandora/object/' + current_page;
-  var prolog = cwrc_params.title + ' - Seq# ';
-  var epilog = '';
-  if (cwrc_params.no_edit === false) {
-    prolog = '<a style = "color:white" href = "' + address + '">' + cwrc_params.title + ' - Seq# ';
-    epilog = '</a>';
-  }
-  $('#header h1').html(prolog + cwrc_params.position + epilog);
+  setHeader();
 
   // Instantiate and initialize writer object.
   // Updated with schemaUrl
@@ -80,7 +73,7 @@ $('document').ready(function() {
     PID = cwrc_params.pages[ cwrc_params.position];
     writer.fm.loadEMICDocument();
     init_canvas_div();
-    $('#header h1').html(prolog + (parseInt(cwrc_params.position)) + epilog);
+    setHeader();
     $('#page-prev').css('opacity', '1').removeClass('disabled');
     $('#page-next').css('opacity', '1').removeClass('disabled');
 
@@ -116,7 +109,7 @@ $('document').ready(function() {
       PID = cwrc_params.pages[ cwrc_params.position];
       writer.fm.loadEMICDocument();
       init_canvas_div();
-      $('#header h1').html(prolog + (parseInt(cwrc_params.position)) + epilog);
+      setHeader();
       if (cwrc_params.position == 0) {
         $('#page-prev').css('opacity', '.6').addClass('disabled');
       }
@@ -145,7 +138,7 @@ $('document').ready(function() {
 
       writer.fm.loadEMICDocument();
       init_canvas_div();
-      $('#header h1').html(prolog + (parseInt(cwrc_params.position)) + epilog);
+      setHeader();
       if (cwrc_params.position == cwrc_params.page_count) {
         $('#page-next').css('opacity', '.2').addClass('disabled');
       }
@@ -308,4 +301,20 @@ function setReturnParams() {
   cwrc_params.separator_pos = $('#column-separator').css("left");
 
 
+}
+
+/**
+ * Sets clickable page header.
+ *
+ */
+
+function setHeader() {
+  var address = window.parent.Drupal.settings.basePath + 'islandora/object/' + cwrc_params.pages[cwrc_params.position];
+  var prolog = cwrc_params.title + ' - Seq# ';
+  var epilog = '';
+  if (cwrc_params.no_edit === false) {
+    prolog = '<a style = "color:white" href = "' + address + '">' + cwrc_params.title + ' - Seq# ';
+    epilog = '</a>';
+  }
+  $('#header h1').html(prolog + cwrc_params.position + epilog);
 }
