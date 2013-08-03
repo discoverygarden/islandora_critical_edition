@@ -298,15 +298,12 @@ function openColumn() {
 function setReturnParams() {
   cwrc_params.text_annotation_width = $('.col1').css("width");
   cwrc_params.separator_pos = $('#column-separator').css("left");
-
-
 }
 
 /**
  * Sets clickable page header.
  *
  */
-
 function setHeader() {
   var address = Drupal.settings.basePath + 'islandora/object/' + cwrc_params.pages[cwrc_params.position];
   var prolog = cwrc_params.title + ' - Seq# ';
