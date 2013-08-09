@@ -83,6 +83,7 @@ Islandora = {
       writer.init();
     },
     load_next_anno_page: function() {
+    	writer.entitiesList.update();
       // Pagenation on images/annotations.
       $('#annotations').children(":first").children(":first").attr('src', Drupal.settings.islandora_critical_edition.base_url + 
           '/islandora/object/' +
