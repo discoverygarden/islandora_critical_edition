@@ -508,9 +508,11 @@ function FileManager(config) {
 				if (rootName == 'events') {
 					fm.loadSchema('../schema/events.rng', false, processDocument);
 				} else {
-					//TODO: Fix the static load url. Our schema doc is not properly format
-					//fm.loadSchema('../schema/CWRC-TEIBasic.rng', false, processDocument);
-					fm.loadSchema('192.168.168.52/' + Drupal.settings.islandora_critical_edition.module_base + '/CWRC-Writer/src/schema/CWRC-TEIBasic.rng', false, processDocument);
+					// Had to hack this into the API. This is just another endpoint that
+					// was statically convifigured. Must be exposed to the Delegator class.
+					fm.loadSchema(Drupal.settings.islandora_critical_edition.base_url + '/' + 
+							Drupal.settings.islandora_critical_edition.module_base + 
+							'/CWRC-Writer/src/schema/CWRC-TEIBasic.rng', false, processDocument);
 				}
 			} else {
 				processDocument();
@@ -790,7 +792,7 @@ function FileManager(config) {
 		var baseUrl = ''; //w.project == null ? '' : w.baseUrl; // handling difference between local and server urls
 		w.validationSchema = schemaFile;
 		$.ajax({
-			url: 'http://' + schemaFile,
+			url: schemaFile,
 			dataType: 'xml',
 			success: function(data, status, xhr) {
 				w.schemaXML = data;
