@@ -61,7 +61,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
       'islandora_critical_edition' => array(
         'module_base' => $critical_edition_module_path)), 'setting');
   
-  drupal_add_js($critical_edition_module_path . '/Islandora/js/islandora_cwrc_wrapper.js');
+  drupal_add_js($critical_edition_module_path . '/Islandora/js/islandora_writer_wrapper.js');
   
   drupal_add_js($critical_edition_module_path . '/CWRC-Writer/src/js/lib/jquery/jquery-1.8.3.js');
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout-latest.min.js");
