@@ -36,7 +36,7 @@ A:hover
 
 #header #page_selector
 {
-  margin: 8px 0px 0px 15px;
+  margin: 8px 0px 0px 50px;
 }
 
 #header .header-nav
@@ -44,7 +44,7 @@ A:hover
   float: left;
   height: 35px;
   width: 60px;
-  margin: 0px 0px 0px 20px;
+  margin: 0px 0px 0px 45px;
 }
 
 #header .header-nav a
@@ -53,7 +53,7 @@ A:hover
   width: 30px;
   height: 35px;
 
-  background-image: url('../imgs/nav-arrows.png'); /* 38px x 85px */ 
+  background-image: url('../img/nav-arrows.png'); /* 38px x 85px */ 
   background-position: 0px 0px;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -547,7 +547,7 @@ ul.relationsList li:hover
 {
   float: left;
   width: 360px;
-  padding: 5px 10px 10px 10px;
+/*   padding: 5px 10px 10px 10px; */
 }
 
 .ui-dialog .ui-dialog-titlebar

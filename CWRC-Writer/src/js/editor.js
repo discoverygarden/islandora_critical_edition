@@ -1,33 +1,3 @@
-//var $ = jQuery.noConflict();
-$('document').ready(function() {
-				
-		PID = Drupal.settings.islandora_critical_edition.page_pid;
-		cwrc_params = {};
-		writer = null;
-		var derp = Drupal;
-		console.log(derp.settings.islandora_critical_edition);
-		console.log(Drupal.settings.basePath);
-		$.ajax({
-			url: '../../islandora/cwrcwriter/setup/' + PID,
-			success: function(data, status, xhr) {
-				console.log(data);
-				cwrc_params=data;
-				writer = new Writer({
-					project: data,
-					delegator: Delegator
-				});
-				writer.init();
-				writer.layout.close('east');
-			},
-			error: function() {
-				writer = new Writer({
-					delegator: Delegator
-				});
-				writer.init();
-				writer.layout.close('east');
-			}
-		});
-
 function Writer(config) {
 	config = config || {};
 	
@@ -548,7 +518,26 @@ function Writer(config) {
 		w.highlightEntity(id, ed.selection.getBookmark());
 	};
 
-	
+	var timeout = false;
+	//var delta = 200;
+	function maybeResize() {
+	    if(w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
+	      initCanvas(topinfo['numCanvases']);
+	    } else {
+	      timeout = false;
+	      var w = $('#canvas-body').width();
+	      var b = topinfo['origBodyWidth'];
+	      topinfo['bodyWidth'] = 0;
+	      if (w != b) {
+	        initCanvas(topinfo['numCanvases']);
+	        //$('.base_img').children(":first").width(w);
+	        $('.base_img').children(":first").css("width", "100%");
+	        $('.base_img').children(":first").css("height", "auto");
+	        $('.base_img').css("height", $('.base_img').children(":first").height());
+	       // $('#canvas_0').css("width", (w));
+	      }
+	    }
+	}
 	/**
 	 * Begin init functions
 	 */
@@ -565,7 +554,6 @@ function Writer(config) {
 //			});
 //			$(document.head).append(css);
 //		}
-		console.log("before layout");
 		w.layout = $('#cwrc_wrapper').layout({
 			defaults: {
 				maskIframesOnResize: true,
@@ -580,7 +568,10 @@ function Writer(config) {
 			},
 			east: {
 				size: 'auto',
-				minSize: 300
+				minSize: 300,
+				onresize_end: function() {
+					resizeCanvas();
+				}
 			},
 			south: {
 				size: 34,
@@ -598,8 +589,6 @@ function Writer(config) {
 				}
 			}
 		});
-		console.log("after layout");
-		//console.log(JSON.stringify(w.layout.panes));
 		w.layout.panes.center.layout({
 			defaults: {
 				maskIframesOnResize: true,
@@ -630,7 +619,6 @@ function Writer(config) {
 				}
 			}
 		});
-		console.log("After");
 		$('#header h1').click(function() {
 			window.location = 'http://www.cwrc.ca';
 		});
@@ -655,8 +643,8 @@ function Writer(config) {
 			showEntityBrackets: true,
 			showStructBrackets: false
 		});
+		
 		if (config.delegator != null) {
-			console.log("delegator not null");
 			w.delegator = new config.delegator({writer: w});
 		} else {
 			alert('Error: you must specify a delegator in the Writer config for full functionality!');
@@ -684,7 +672,6 @@ function Writer(config) {
 		
 		// TODO not getting fired
 		window.addEventListener('unload', function(e) {
-			alert('unload');
 			// clear the editor first (large docs can cause the browser to freeze)
 			w.u.getRootTag().remove();
 		});
@@ -699,7 +686,7 @@ function Writer(config) {
 			elements: 'editor',
 			theme: 'advanced',
 			
-			content_css: 'css/editor.css',
+			content_css: '../css/editor.css',
 			
 			width: '100%',
 			
@@ -845,12 +832,9 @@ function Writer(config) {
 				
 				// add custom plugins and buttons
 				var plugins = ['treepaste','schematags','currenttag','entitycontextmenu','viewsource','scrolling_dropmenu'];
-				console.log("editor prior");
 				for (var i = 0; i < plugins.length; i++) {
 					var name = plugins[i];
-					if(tinymce.PluginManager.load(name, '../../tinymce_plugins/'+name+'.js')){
-						console.log("Loaded tinymcd pluging named: " + name);
-					}
+					tinymce.PluginManager.load(name, '../../tinymce_plugins/'+name+'.js')
 				}
 				var img_path = Drupal.settings.islandora_critical_edition.images_path;
 				
@@ -966,5 +950,3 @@ function Writer(config) {
 		});
 	};
 }
-
-});

@@ -184,6 +184,7 @@ var KeywordDialog = function(config) {
 					$('#keyword_lookup').val(config.entry.info.lookup);
 				}
 			}
+			$('#keywordDialog').css("height", "auto");
 		},
 		hide: function() {
 			keyword.dialog('close');

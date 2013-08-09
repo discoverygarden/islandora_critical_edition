@@ -23,7 +23,6 @@
 var $ = jQuery.noConflict();
 (function ($) {
 var _ = jQuery.layout;
-console.log($.layout);
 // make sure the callbacks branch exists
 if (!_.callbacks) _.callbacks = {};
 

@@ -17,7 +17,7 @@ var SearchDialog = function(config) {
 	    '<div style="position: absolute; top: 41px; left: 10px; right: 10px; bottom: 70px;">'+
 		    '<div id="lookupServices">'+
 		    	'<div id="lookup_project">'+
-			    '<h3>Results from '+w.project+' Project</h3>'+
+			    '<h3>Results from '+w.project.title+' Project</h3>'+
 			    '<div><div class="searchResultsParent"><ul class="searchResults"></ul></div></div>'+
 			    '</div>'+
 			    '<div id="lookup_viaf">'+

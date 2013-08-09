@@ -53,9 +53,7 @@ function Relations(config) {
 	 */
 	pm.update = function() {
 		jQuery('#relations ul').empty();
-		
 		var relationsString = '';
-		
 		for (var i = 0; i < w.triples.length; i++) {
 			var triple = w.triples[i];
 			relationsString += '<li>'+triple.subject.text+' '+triple.predicate.text+' '+triple.object.text+'</li>';

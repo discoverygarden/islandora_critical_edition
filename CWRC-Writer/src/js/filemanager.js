@@ -55,10 +55,10 @@ function FileManager(config) {
 			function doSave() {
 				var docText = fm.getDocumentContent(true);
 				jQuery.ajax({
-					url : w.baseUrl+'editor/documents/'+w.currentDocId,
-					type: 'PUT',
-					dataType: 'json',
-					data: docText,
+					url : w.baseUrl+'islandora/cwrcwriter/save_data/'+w.currentDocId,
+					type: 'POST',
+					dataType: 'text',
+					data: {"text":docText},
 					success: function(data, status, xhr) {
 						w.editor.isNotDirty = 1; // force clean state
 						w.dialogs.show('message', {
@@ -143,8 +143,8 @@ function FileManager(config) {
 				nodes.push(currentNode);
 			}
 			
-			w.editor.jQuery(nodes).wrapAll('<entity id="'+id+'" _type="'+w.entities[id].props.type+'" />');			
-			w.editor.jQuery(markers).remove();
+			jQuery(nodes).wrapAll('<entity id="'+id+'" _type="'+w.entities[id].props.type+'" />');			
+			jQuery(markers).remove();
 		}
 	}
 	
@@ -184,7 +184,7 @@ function FileManager(config) {
 		
 		var xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n';
 		
-		var body = jQuery(w.editor.getBody());
+		var body = jQuery(w.editor.getDoc());
 		var clone = body.clone(false, true); // make a copy, don't clone body events, but clone child events
 		
 		_entitiesToUnicode(body);
@@ -200,7 +200,6 @@ function FileManager(config) {
 			
 			var offsets = _getNodeOffsetsFromRoot(body);
 			var relationships = _determineOffsetRelationships(offsets);
-			
 			// entity and struct listings
 			for (var i = 0; i < offsets.length; i++) {
 				var o = offsets[i];
@@ -351,7 +350,6 @@ function FileManager(config) {
 	};
 	
 	fm.loadDocumentFromUrl = function(docUrl) {
-		console.log("loadDocumentFromUrl: " + docUrl);
 		w.currentDocId = docUrl;
 		
 		w.entities = {};
@@ -375,12 +373,10 @@ function FileManager(config) {
 	};
 	
 	fm.loadDocumentFromXml = function(docXml) {
-		console.log("loadDocumentFromXml: " + docXml);
 		_loadDocumentHandler(docXml);
 	};
 	
 	fm.loadDocument = function(docName) {
-		console.log("loadDocument: " + docName);
 		w.currentDocId = docName;
 		
 		w.entities = {};
@@ -405,15 +401,12 @@ function FileManager(config) {
 	
 
 	fm.loadEMICDocument = function() {
-		console.log("loadEMICDocument");
 		w.currentDocId = PID;
-		
 		w.entities = {};
 		w.structs = {};
 		w.triples = [];
-		console.log("Request sent to: " + 'islandora/cwrcwriter/setup/islandora:54799c01-4392-4a05-8926-16f9f8560a95');
 		jQuery.ajax({
-			url: cwrc_params.BASE_PATH + '/cwrc/getCWRC/' + PID,
+			url: cwrc_params.BASE_PATH.replace("-X_X_X-",PID),
 			async: false,
 			dataType : 'xml',
 			success: _loadDocumentHandler,
@@ -496,13 +489,11 @@ function FileManager(config) {
 	
 	function _loadDocumentHandler(doc) {
 		if (doc.firstChild.nodeName == 'xml-model') {
-			console.log("in if");
 			var xmlModelData = doc.firstChild.data;
 			var schemaUrl = xmlModelData.match(/href="([^"]*)"/)[1];
 			var urlParts = schemaUrl.match(/^(.*):\/\/([a-z\-.]+)(?=:[0-9]+)?\/(.*)/);
 			var fileName = urlParts[3];
-			console.log("File Name: " + fileName);
-			fm.loadSchema('192.168.168.52/' + Drupal.settings.islandora_critical_edition.module_base + '/CWRC-Writer/src/' + fileName, false, processDocument);
+			fm.loadSchema(fileName, false, processDocument);
 		} else {
 			var rootName;
 			if (jQuery('[_tag='+w.root+']', doc.body).attr('_tag') == 'EVENTS') {
@@ -517,17 +508,17 @@ function FileManager(config) {
 				if (rootName == 'events') {
 					fm.loadSchema('../schema/events.rng', false, processDocument);
 				} else {
-					fm.loadSchema('../schema/CWRC-TEIBasic.rng', false, processDocument);
+					//TODO: Fix the static load url. Our schema doc is not properly format
+					//fm.loadSchema('../schema/CWRC-TEIBasic.rng', false, processDocument);
+					fm.loadSchema('192.168.168.52/' + Drupal.settings.islandora_critical_edition.module_base + '/CWRC-Writer/src/schema/CWRC-TEIBasic.rng', false, processDocument);
 				}
 			} else {
 				processDocument();
 			}
-			console.log("in else");
 		}
 		
 		function processDocument() {
 			var offsets = [];
-			
 			var rdfs = jQuery(doc).find('rdf\\:RDF, RDF');
 			
 			var docMode;
@@ -549,7 +540,6 @@ function FileManager(config) {
 				
 				w.mode = docMode;
 			}
-			
 			if (docMode == w.XMLRDF) {
 				rdfs.children().each(function(i1, el1) {
 					var rdf = jQuery(this);
@@ -663,7 +653,6 @@ function FileManager(config) {
 				}
 				processEntities(jQuery(doc.firstChild), offsets);
 			}
-console.log("Root Info: " +w.root+', '+w.root.toLowerCase());
 			// FIXME temp fix until document format is correct
 			var root = jQuery(w.root+', '+w.root.toLowerCase(), doc)[0];
 			
@@ -800,20 +789,14 @@ console.log("Root Info: " +w.root+', '+w.root.toLowerCase());
 	fm.loadSchema = function(schemaFile, startText, callback) {
 		var baseUrl = ''; //w.project == null ? '' : w.baseUrl; // handling difference between local and server urls
 		w.validationSchema = schemaFile;
-		console.log("Load Schema url: " + schemaFile);
 		$.ajax({
 			url: 'http://' + schemaFile,
 			dataType: 'xml',
 			success: function(data, status, xhr) {
-				console.log("Load schema success");
-				console.log("Status: " + status);
 				w.schemaXML = data;
-				console.log("data: " + JSON.stringify(data));
-				console.log("w.schemaXML: " + JSON.stringify(w.schemaXML));
 				// get root element
 				var startName = $('start ref:first', w.schemaXML).attr('name');
 				var startEl = $('define[name="'+startName+'"] element', w.schemaXML).attr('name');
-				console.log("startEL: " + startEl);
 				w.root = startEl;
 //				w.editor.settings.forced_root_block = w.root;
 //				w.editor.schema.addCustomElements(w.root);
@@ -822,7 +805,7 @@ console.log("Root Info: " +w.root+', '+w.root.toLowerCase());
 			    var cssUrl;
 				var additionalBlockElements;
 			    if (w.root == 'TEI') {
-			    	cssUrl = 'css/tei_converted.css';
+			    	cssUrl = '../css/tei_converted.css';
 					
 			    	additionalBlockElements = ['argument', 'back', 'bibl', 'biblFull', 'biblScope', 'body', 'byline', 'category', 'change', 'cit', 'classCode', 'elementSpec', 'macroSpec', 'classSpec', 'closer', 'creation', 'date', 'distributor', 'div', 'div1', 'div2', 'div3', 'div4', 'div5', 'div6', 'div7', 'docAuthor', 'edition', 'editionStmt', 'editor', 'eg', 'epigraph', 'extent', 'figure', 'front', 'funder', 'group', 'head', 'dateline', 'idno', 'item', 'keywords', 'l', 'label', 'langUsage', 'lb', 'lg', 'list', 'listBibl', 'note', 'noteStmt', 'opener', 'p', 'principal', 'publicationStmt', 'publisher', 'pubPlace', 'q', 'rendition', 'resp', 'respStmt', 'salute', 'samplingDecl', 'seriesStmt', 'signed', 'sp', 'sponsor', 'tagUsage', 'taxonomy', 'textClass', 'titlePage', 'titlePart', 'trailer', 'TEI', 'teiHeader', 'text', 'authority', 'availability', 'fileDesc', 'sourceDesc', 'revisionDesc', 'catDesc', 'encodingDesc', 'profileDesc', 'projectDesc', 'docDate', 'docEdition', 'docImprint', 'docTitle'];
 			    	
@@ -899,7 +882,6 @@ console.log("Root Info: " +w.root+', '+w.root.toLowerCase());
 				var include = jQuery('include:first', w.schemaXML); // TODO add handling for multiple includes
 				if (include.length == 1) {
 					var href = include.attr('href');
-					console.log("redefinitions: " + baseUrl+ 'schema/'+href);
 					jQuery.ajax({
 						url: baseUrl + 'schema/'+href,
 						dataType: 'xml',
@@ -1015,11 +997,8 @@ console.log("Root Info: " +w.root+', '+w.root.toLowerCase());
 	};
 	
 	function _loadTemplate(url) {
-	//	console.log("url in load template: " + Drupal.settings.islandora_critical_edition.module_base);
-		var nurl = 'http://192.168.168.52/' + Drupal.settings.islandora_critical_edition.module_base + '/CWRC-Writer/src/' + url;
-		console.log("Url in load templates: " + nurl);
 		jQuery.ajax({
-			url: nurl,
+			url: url,
 			dataType: 'xml',
 			success: function(data, status, xhr) {
 				var rdf = data.createElement('rdf:RDF');

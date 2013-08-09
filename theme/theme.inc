@@ -17,6 +17,7 @@ function islandora_critical_edition_js_alter(&$javascript) {
  * $variables['images_path']
  */
 function islandora_critical_edition_preprocess_islandora_critical_edition(&$variables) {
+  global $base_url;
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
   module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
@@ -28,7 +29,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   $image_annotation_module_path = drupal_get_path('module', 'islandora_image_annotation');
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);
   $pids = array_keys($pages);
-
+  dsm($pids);
   // Use the theme files from image annotation for annotation list
   // and image annotation pane's.
   $variables['anno_list_pane'] = theme('islandora_anno_list_pane');
@@ -36,7 +37,8 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   // Fill additional session variables.
   $variables['images_path'] = url($critical_edition_module_path . '/CWRC-Writer/src/img/', array('absolute' => TRUE));
-  drupal_add_js(array('islandora_image_annotation' => array('images_path' => $variables['images_path'] . '/imgs')), 'setting');
+  $image_anno_images = $image_annotation_module_path . '/shared_canvas/imgs/';
+  drupal_add_js(array('islandora_critical_edition' => array('image_anno_img' => $image_anno_images)), 'setting');
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'book_pid' => islandora_critical_edition_get_object_of_critical_edition(
@@ -45,7 +47,9 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'images_path' => $variables['images_path'])), 'setting');
-
+  drupal_add_js(array(
+      'islandora_critical_edition' => array(
+      'base_url' => $base_url)), 'setting');
   // Passing the page pid, instead of getting if from the
   // URL on the javascript side.
   drupal_add_js(array(
@@ -57,20 +61,28 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
       'islandora_critical_edition' => array(
         'module_base' => $critical_edition_module_path)), 'setting');
   
+  drupal_add_js($critical_edition_module_path . '/Islandora/js/islandora_cwrc_wrapper.js');
+  
   drupal_add_js($critical_edition_module_path . '/CWRC-Writer/src/js/lib/jquery/jquery-1.8.3.js');
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout-latest.min.js");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-ui-1.9.0.custom.min.js");
   
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout-latest.js");
-    //drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery-1.8.3.js");
-      
+
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout.resizeTabLayout-1.3.js");
-        
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.contextmenu.js");
+   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.contextmenu.js");
+   // TODO: Move much of the js/css here into the following
+   // functions.
+  islandora_image_annotation_include_common_js();
+  islandora_image_annotation_include_common_css();
+  
+  drupal_add_js($critical_edition_module_path . '/CWRC-Writer/src/js/dialogs/dialog_annotate.js');
+  drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/style_2.css");
+       
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.tmpl.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.watermark.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/tiny_mce_src.js");
-  drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/jquery.tinymce.js");
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/jquery.tinymce.js");
         
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/copy_event.js");
         
@@ -121,8 +133,8 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/tagger.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialog.js");
         drupal_add_js($critical_edition_module_path . "/Islandora/js/startup.js");
-        
-         drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/smoothness/jquery-ui-1.9.0.custom.css");
+        drupal_add_js($critical_edition_module_path . "/Islandora/js/islandora_init.js");
+        // drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/smoothness/jquery-ui-1.9.0.custom.css");
 //         drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/layout-default-latest.css");
 //         drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.css");
         

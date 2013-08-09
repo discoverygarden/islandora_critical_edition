@@ -95,10 +95,15 @@ body .cwrc_wrapper{
 	padding: 5px;
 }
 
+#relations .ui-layout-south {
+    position:relative !important;
+}
 .cwrc_wrapper #entitiesOptions > div {
 	padding-bottom: 5px;
 }
-
+#entitiesOptions {
+	position: relative !important;
+}
 .cwrc_wrapper .entitiesList {
 	overflow: auto;
 	padding-top: 5px !important;
@@ -130,12 +135,15 @@ body .cwrc_wrapper{
 
 .cwrc_wrapper #structureTreeActions {
 	overflow: hidden;
+	position: relative !important;
 }
 
 .cwrc_wrapper .entitiesList, .cwrc_wrapper .relationsList, .cwrc_wrapper .validationList {
 	list-style: none;
 	margin: 0;
 	padding: 0;
+	position: relative !important;
+	height: 100% !important;
 }
 
 .entitiesList li .box {
@@ -148,7 +156,7 @@ body .cwrc_wrapper{
 }
 
 .entitiesList .person .box {
-	background-image: url('/../img/user.png');
+	background-image: url('../img/user.png');
 }
 
 .entitiesList .person .box, .entitiesList .person.over {
@@ -160,7 +168,7 @@ body .cwrc_wrapper{
 }
 
 .entitiesList .place .box {
-	background-image: url('/img/world.png');
+	background-image: url('../img/world.png');
 }
 
 .entitiesList .place .box, .entitiesList .place.over {
@@ -172,7 +180,7 @@ body .cwrc_wrapper{
 }
 
 .entitiesList .date .box {
-	background-image: url('../../../img/calendar.png');
+	background-image: url('../img/calendar.png');
 }
 
 .entitiesList .date .box, .entitiesList .date.over {
@@ -910,7 +918,9 @@ body .cwrc_wrapper{
 div.mceDropDown {
 	box-shadow: 1px 1px 2px #ccc;
 }
-
+#tree {
+	position:relative !important;
+}
 /* jstree overrides */
 #vakata-dragged {
 	display: block;

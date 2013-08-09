@@ -266,15 +266,16 @@ function Tagger(config) {
 		// strip tags
 		content = content.replace(/<\/?[^>]+>/gi, '');
 		
+		//TODO: Whitespace rightTrimAmount .match reqular expression appears to be broken.
 		// trim whitespace
-		if (range.startContainer == range.endContainer) {
-			var leftTrimAmount = content.match(/^\s{0,1}/)[0].length;
-			var rightTrimAmount = content.match(/\s{0,1}jQuery/)[0].length;
-			range.setStart(range.startContainer, range.startOffset+leftTrimAmount);
-			range.setEnd(range.endContainer, range.endOffset-rightTrimAmount);
-			sel.setRng(range);
-			content = content.replace(/^\s+|\s+jQuery/g, '');
-		}
+//		if (range.startContainer == range.endContainer) {
+//			var leftTrimAmount = content.match(/^\s{0,1}/)[0].length;
+//			var rightTrimAmount = content.match(/\s{0,1}jQuery/)[0].length;
+//			range.setStart(range.startContainer, range.startOffset+leftTrimAmount);
+//			range.setEnd(range.endContainer, range.endOffset-rightTrimAmount);
+//			sel.setRng(range);
+//			content = content.replace(/^\s+|\s+jQuery/g, '');
+//		}
 		
 		var title = w.u.getTitleFromContent(content);
 		

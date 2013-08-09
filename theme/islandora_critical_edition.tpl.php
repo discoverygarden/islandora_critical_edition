@@ -10,10 +10,19 @@
 
 ?>
 <div id="cwrc_wrapper" class="cwrc_wrapper" style="width: 100%; height:600px">
-	<div id="header" class="ui-layout-north">
+    <div id="header" class="ui-layout-north">
+    <!-- TODO: We need new full page buttons. So much going on in the header right now -->
+		 <div id="page_selector">Loading....</div>
+			<div id="header-inner">
+				<div class="header-nav">
+					<a href="" id="page-prev"></a>
+					<a href="" id="page-next"></a>
+					
+				</div>
+			</div>
+			<div id ="pageChange"></div>
 		<h1>CWRCWriter</h1>
-		<div id="headerButtons">
-		</div>
+		<div id="headerButtons"></div>
 	</div>
 	<div class="ui-layout-west">
 		<div id="westTabs" class="tabs">
@@ -25,9 +34,6 @@
 			</ul>
 			<div id="westTabsContent" class="ui-layout-content">
 				<?php print $anno_list_pane; ?>
-<!-- 				<div id="image-annotations"> -->
-<!-- 					<div id="comment_annos_block"></div> -->
-<!-- 				</div> -->
 			</div>
 		</div>
 	</div>
@@ -47,7 +53,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="ui-layout-east">
+	<div id="east_div" class="ui-layout-east">
 		<!-- Image annotation -->
 		<button id="create_annotation" class="menu_button">Annotate</button>
 		<div class="image-annotation-wrapper">

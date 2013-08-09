@@ -45,6 +45,7 @@ var NoteDialog = function(config) {
 			}
 		}
 	});
+	
 	$('#note_type, #note_access').buttonset();
 
 	$('#note_textarea').tinymce({
@@ -110,6 +111,7 @@ var NoteDialog = function(config) {
 				note.dialog('option', 'position', 'center');
 			}
 			note.dialog('open');
+			$('#noteDialog').css("height", "auto");
 		},
 		hide: function() {
 			note.dialog('close');
