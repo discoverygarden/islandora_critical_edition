@@ -36,9 +36,16 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
   $results['page_count'] = count($pages);
   $results['islandora_anno_stroke_width'] = $stroke_width;
-  $entity_collection = variable_get('islandora_entities_ingest_collection', 'islandora:entity_collection');
-  $results['create_entity_callback'] = url('islandora/object/' . $entity_collection . '/manage/overview/ingest');
   $results['entities_search_callback'] = url('islandora/entities/search');
+
+  $place_entity_collection = variable_get('islandora_entities_places_collection', 'islandora:entity_collection');
+  $results['create_entity_callbacks']['places'] = url('islandora/object/' . $place_entity_collection . '/manage/overview/ingest');
+  $event_entity_collection = variable_get('islandora_entities_events_collection', 'islandora:entity_collection');
+  $results['create_entity_callbacks']['events'] = url('islandora/object/' . $event_entity_collection . '/manage/overview/ingest');
+  $organization_entity_collection = variable_get('islandora_entities_organizations_collection', 'islandora:entity_collection');
+  $results['create_entity_callbacks']['organizations'] = url('islandora/object/' . $organization_entity_collection . '/manage/overview/ingest');
+  $person_entity_collection = variable_get('islandora_entities_people_collection', 'islandora:entity_collection');
+  $results['create_entity_callbacks']['people'] = url('islandora/object/' . $person_entity_collection . '/manage/overview/ingest');
 
   drupal_json_output($results);
 }
