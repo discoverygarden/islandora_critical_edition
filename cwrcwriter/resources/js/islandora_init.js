@@ -8,10 +8,11 @@
 
         if ($(this).val() == Drupal.t('Full Window')) {
           $(this).val(Drupal.t('Exit Full Window'));
-
+          $('.islandora-crited-wrapper').css("height","100%");
         }
         else {
           $(this).val(Drupal.t('Full Window'));
+          $('.islandora-crited-wrapper').css("height","400px");
         }
         resizeColumnsDrag();
       });
@@ -236,10 +237,11 @@ function maybeResize() {
       topinfo['bodyWidth'] = 0;
       if (w != b) {
         initCanvas(topinfo['numCanvases']);
-        $('.base_img').children(":first").width(w);
+        //$('.base_img').children(":first").width(w);
+        $('.base_img').children(":first").css("width", "100%");
         $('.base_img').children(":first").css("height", "auto");
         $('.base_img').css("height", $('.base_img').children(":first").height());
-        $('#canvas_0').css("width", (w));
+       // $('#canvas_0').css("width", (w));
       }
     }
   }

@@ -39,7 +39,7 @@
         </div>
         <!-- Body -->
         <div class="colmask threecol">
-          <div class="colleft">
+          <div class="colleft" style="height: 100%;">
             <div class="col2">
               <!-- Tabs -->
               <div id="tabs">
@@ -70,7 +70,9 @@
               </div>
             </div>
           </div>
-          <div id="colright" class="colright">
+          
+          
+          <div id="colright" class="colright" style="height: 100%;">
             <div class="col1">
               <!-- Text Annotation -->
               <div class="text-annotation-wrapper">
@@ -87,7 +89,7 @@
               <div class="image-annotation-wrapper">
 
                 <!-- Persist a single player and build new interface to it -->
-                <div id="canvas-body-wrapper" style="width: 100%; height: 800px;"><div id="canvas-body">
+                <div id="canvas-body-wrapper" style="width: 100%; height: 100%; background-color:white"><div id="canvas-body">
                     <?php print $anno_img_pane; ?>
                     <!--  At least one visible image needed for GData transport -->
                     <div class="shared-canvas-logo" style="font-size:8pt">

@@ -1,3 +1,10 @@
+
+.islandora-crited-wrapper {
+    position:relative;
+    margin-bottom:4em;
+    height:400px;
+}
+
 .islandora-crited-iframe-wrapper body {
 	margin: 0;
 	padding: 0;
@@ -385,6 +392,7 @@
 
 .ui-dialog-content div {
 	margin-bottom: 10px;
+	line-height: 1.5em;
 }
 
 #schemaDialog {
