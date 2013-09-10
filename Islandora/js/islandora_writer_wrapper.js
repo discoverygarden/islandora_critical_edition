@@ -141,7 +141,6 @@ Islandora = {
             }
           });
         }
-      
       },
       validate : function (callback) {
         // TODO: implement a true validator service/html page to hit.
