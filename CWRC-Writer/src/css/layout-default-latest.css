@@ -44,9 +44,6 @@
 	padding:	0;
 	overflow:	hidden;
 }
-.content ui-layout-container {
-/*     overflow:auto !important; */
-}
 .layout-child-container {
 	border:		0; /* remove border because inner-layout-panes probably have borders */
 }

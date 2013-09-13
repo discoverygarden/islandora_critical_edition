@@ -2,13 +2,14 @@ var SearchDialog = function(config) {
 	var w = config.writer;
 	
 	var currentType = null;
+	var currentId = null;
 	
 	var mode = null;
 	var ADD = 0;
 	var EDIT = 1;
 	
 	$(document.body).append(''+
-	'<div id="searchDialog">'+
+	'<div id="searchDialog" class="annotationDialog">'+
 		// need absolute positioning so accordion height is calculated properly
 	    '<div style="position: absolute; top: 10px; left: 10px; right: 10px; height: 31px;">'+
 		    '<label for="search_query">Search</label>'+
@@ -17,7 +18,7 @@ var SearchDialog = function(config) {
 	    '<div style="position: absolute; top: 41px; left: 10px; right: 10px; bottom: 70px;">'+
 		    '<div id="lookupServices">'+
 		    	'<div id="lookup_project">'+
-			    '<h3>Results from '+w.project.title+' Project</h3>'+
+			    '<h3>Results from '+w.project+' Project</h3>'+
 			    '<div><div class="searchResultsParent"><ul class="searchResults"></ul></div></div>'+
 			    '</div>'+
 			    '<div id="lookup_viaf">'+
@@ -64,7 +65,7 @@ var SearchDialog = function(config) {
 	
 	$('#lookupServices').accordion({
 		header: 'div > h3',
-		fillSpace: true,
+		heightStyle: 'fill',
 		activate: function(event, ui) {
 			if ($('#lookupServices').accordion('option', 'active') < 2) doQuery();
 		}
@@ -191,12 +192,13 @@ var SearchDialog = function(config) {
 			if (data) data.certainty = $('#certainty input:checked').val();
 		}
 		if (mode == EDIT && data != null) {
-			w.editEntity(w.editor.currentEntity, data);
+			w.editEntity(currentId, data);
 		} else {
 			w.finalizeEntity(currentType, data);
 		}
 		search.dialog('close');
 		currentType = null;
+		currentId = null;
 	};
 	
 	var createNew = function() {
@@ -211,7 +213,8 @@ var SearchDialog = function(config) {
 			var query;
 			if (mode == EDIT) {
 				prefix = 'Edit ';
-				query = w.entities[w.editor.currentEntity].props.content;
+				currentId = config.entry.props.id;
+				query = config.entry.props.content;
 			} else {
 				query = w.editor.currentBookmark.rng.toString();
 			}
@@ -247,21 +250,21 @@ var SearchDialog = function(config) {
 			}
 			search.dialog('open');
 			
-			$('#lookupServices').accordion('resize');
+			$('#lookupServices').accordion('refresh');
 			if (mode == EDIT) {
 				$('#certainty input[value="'+config.entry.info.certainty+'"]').click();
 				if (config.entry.info.type && config.entry.info.type == 'alt_id') {
-					$('#lookupServices').accordion('activate', 2);
+					$('#lookupServices').accordion('option', 'active', 2);
 					$('#lookup_alternate input[name="'+config.entry.info.typeName+'"]').val(config.entry.info.value).prevAll('input').click();
 				} else {
-					$('#lookupServices').accordion('activate', 0);
+					$('#lookupServices').accordion('option', 'active', 0);
 				}
 			} else {
 				$('#c_definite').trigger('click');
 				if ($('#lookupServices').accordion('option', 'active') == 0) {
 					doQuery();
 				} else {
-					$('#lookupServices').accordion('activate', 0);
+					$('#lookupServices').accordion('option', 'active', 0);
 				}
 			}
 		},

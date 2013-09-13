@@ -1,42 +1,38 @@
-body .cwrc_wrapper{
+body {
 	margin: 0;
 	padding: 0;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	font-size: 10px;
 	color: #333;
+	overflow: hidden;
 }
 
-.cwrc_wrapper h1 {
+.cwrc h1 {
 	font-size: 14px;
 }
 
-.cwrc_wrapper h2 {
+.cwrc h2 {
 	font-size: 12px;
 }
 
-.cwrc_wrapper h3 {
+.cwrc h3 {
 	font-size: 11px;
 }
 
-.cwrc_wrapper h1, .cwrc_wrapper h2, .cwrc_wrapper h3 {
+.cwrc h1, h2, h3 {
 	margin: 0;
 }
 
-.cwrc_wrapper textarea {
+.cwrc textarea {
 	overflow: auto;
 	resize: none;
 }
 
-.cwrc_wrapper label {
+.cwrc label {
 	margin-right: 5px;
 }
 
-.cwrc_wrapper #wrap {
-	margin: 0;
-	padding: 0;
-}
-
-.cwrc_wrapper #header {
+#cwrc_header {
 	padding: 0 10px;
 	color: #eee;
 	background-color: #455372;
@@ -47,76 +43,71 @@ body .cwrc_wrapper{
 	background-position: left center;
 }
 
-.cwrc_wrapper #header h1 {
+#cwrc_header h1 {
 	float: left;
 	cursor: pointer;
 	margin-top: 10px;
 	margin-left: 55px;
 }
 
-.cwrc_wrapper #headerButtons > div {
+#headerButtons > div {
 	float: right;
 	cursor: pointer;
 	margin-left: 20px;
 }
 
-.cwrc_wrapper #helpLink {
+#helpLink {
 	background: url("../img/help.png") no-repeat scroll 0 7px transparent;
     padding-left: 20px;
 }
 
-.cwrc_wrapper #helpLink h2 {
+#helpLink h2 {
 	display: inline-block;
 	margin-left: 2px;
 	vertical-align: top;
 }
 
-.cwrc_wrapper #helpDialog iframe {
+#helpDialog iframe {
 	border: none;
 	width: 100%;
 	height: 100%;
 }
 
-.cwrc_wrapper .arrowLeft {
+.arrowLeft {
 	background-image: url('../img/arrow_left.gif');
 }
 
-.cwrc_wrapper .arrowRight {
+.arrowRight {
 	background-image: url('../img/arrow_right.gif');
 }
 
-.cwrc_wrapper #westTabsContent .tabWithLayout {
+#westTabsContent .tabWithLayout {
 	height: 100%;
 	padding: 0 !important;
 }
 
-.cwrc_wrapper #westTabsContent .tabButtons {
+#westTabsContent .tabButtons {
 	border-top: 1px solid #BBBBBB;
 	padding: 5px;
 }
 
-#relations .ui-layout-south {
-    position:relative !important;
-}
-.cwrc_wrapper #entitiesOptions > div {
+#entitiesOptions > div {
 	padding-bottom: 5px;
 }
-#entitiesOptions {
-	position: relative !important;
-}
-.cwrc_wrapper .entitiesList {
+
+.entitiesList {
 	overflow: auto;
 	padding-top: 5px !important;
 }
 
-.cwrc_wrapper .tabs {
+.cwrc .tabs {
 	overflow: hidden;
 	border: none !important;
 	border-right: 1px solid #ccc !important;
 	padding: 0 !important;
 }
 
-.cwrc_wrapper .tabs > ul {
+.cwrc .tabs > ul {
 	padding: 3px 2px 0 !important;
 	border-top: none !important;
 	border-left: none !important;
@@ -124,26 +115,23 @@ body .cwrc_wrapper{
 	border-radius: 0 !important;
 }
 
-.cwrc_wrapper .tabs > ul li a {
+.cwrc .tabs > ul li a {
 	padding: 4px 1em !important;
 }
 
-.cwrc_wrapper .tabs .ui-tabs-panel {
+.cwrc .tabs .ui-tabs-panel {
 	padding: 5px 0 0 0 !important;
 	overflow: auto;
 }
 
-.cwrc_wrapper #structureTreeActions {
+#structureTreeActions {
 	overflow: hidden;
-	position: relative !important;
 }
 
-.cwrc_wrapper .entitiesList, .cwrc_wrapper .relationsList, .cwrc_wrapper .validationList {
+.entitiesList, .relationsList, .validationList {
 	list-style: none;
 	margin: 0;
 	padding: 0;
-	position: relative !important;
-	height: 100% !important;
 }
 
 .entitiesList li .box {
@@ -204,7 +192,7 @@ body .cwrc_wrapper{
 }
 
 .entitiesList .org .box {
-	background-image: url('../../img/group.png');
+	background-image: url('../img/group.png');
 }
 
 .entitiesList .org .box, .entitiesList .org.over {
@@ -216,7 +204,7 @@ body .cwrc_wrapper{
 }
 
 .entitiesList .citation .box {
-	background-image: url('../../img/vcard.png');
+	background-image: url('../img/vcard.png');
 }
 
 .entitiesList .citation .box, .entitiesList .citation.over {
@@ -414,7 +402,7 @@ body .cwrc_wrapper{
 	width: 225px;
 }
 
-#lookup_alternate ins, #schemaDialog ins {
+#lookup_alternate ins, .attributeWidget ins {
 	display: inline-block;
 	vertical-align: bottom;
 	margin-left: -5px;
@@ -502,6 +490,18 @@ body .cwrc_wrapper{
 	height: 300px;
 }
 
+.annotationDialog p {
+	margin: 5px 0px;
+}
+
+.annotationDialog > div {
+	margin-bottom: 15px;
+}
+
+.annotationDialog .ui-accordion-content {
+  padding: 5px 10px !important;
+}
+
 #titleDialog div, #correctionDialog div {
 	margin-bottom: 10px;
 }
@@ -514,16 +514,16 @@ body .cwrc_wrapper{
 	margin-bottom: 0;
 }
 
-#schemaDialog label {
+.attributeWidget label {
 	display: inline;
 }
 
-#schemaDialog input, #schemaDialog select {
+.attributeWidget input, .attributeWidget select {
 	width: 150px;
 	border: 1px solid #ccc;
 }
 
-#attributeSelector {
+.attributeWidget .attributeSelector {
 	border: 1px solid #999;
 	top: 5px;
 	bottom: 0;
@@ -531,7 +531,7 @@ body .cwrc_wrapper{
 	position: absolute;
 }
 
-#attributeSelector ul {
+.attributeWidget .attributeSelector ul {
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -543,21 +543,21 @@ body .cwrc_wrapper{
 	bottom: 0;
 }
 
-#attributeSelector li {
+.attributeWidget .attributeSelector li {
 	padding: 3px;
 	background-color: #fff;
 }
 
-#attributeSelector li:hover {
+.attributeWidget .attributeSelector li:hover {
 	background-color: #ddd;
 	cursor: pointer;
 }
 
-#attributeSelector li.selected {
+.attributeWidget .attributeSelector li.selected {
 	background-color: #ccc;
 }
 
-#attsContainer {
+.attributeWidget .attsContainer {
 	position: absolute;
 	top: 5px;
 	right: 5px;
@@ -566,20 +566,20 @@ body .cwrc_wrapper{
 	overflow: auto;
 }
 
-#level1Atts, #highLevelAtts {
+.attributeWidget .level1Atts, .attributeWidget .highLevelAtts {
 	float: left;
 }
 
-#attsContainer label {
+.attributeWidget .attsContainer label {
 	width: 135px;
 }
 
-#schemaHelp {
+.attributeWidget .schemaHelp {
 	float: right;
 	width: 185px;
 }
 
-.required {
+.cwrc .required {
 	color: red;
 }
 
@@ -645,7 +645,7 @@ body .cwrc_wrapper{
 	left: 67%;
 }
 
-#tripleDialog h2, #attributeSelector h2 {
+#tripleDialog h2, .attributeSelector h2 {
 	padding: 3px;
 	background-color: #ccc;
 	height: 16px;
@@ -708,80 +708,12 @@ body .cwrc_wrapper{
 	text-align: left;
 }
 
-#headerDialog h1, #headerDialog h2, #headerDialog h3 {
-	margin: 5px 0;
-}
-
-#headerDialog label {
-	display: inline-block;
-    text-align: right;
-    width: 120px;
-}
-
-#headerDialog input {
-	width: 200px;
-	vertical-align: top;
-}
- /*
-#headerDialog ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	display: block;
-}
-
-#headerDialog li.root {
-	margin-left: 0;
-}
-
-#headerDialog li {
-	padding: 0;
-	margin-left: 16px;
-	min-height: 26px;
-	line-height: 26px;
-	background-color: #fff;
-	display: block;
-}
-
-#headerDialog li.over {
-
-}
-
-#headerDialog li > button {
-	display: none;
-}
-
-#headerDialog li.over > button {
-	display: inline-block;
-	float: right;
-}
-
-#headerDialog .ui-widget {
-	font-size: 0.8em;
-}
-
-#headerDialog label {
-	font-weight: bold;
-}
-
-#headerDialog input {
-	width: 200px;
-	vertical-align: top;
-}
-*/
-
-#headerAddDialog select {
-	width: 150px;
-}
-
-#headerAddDialog textarea {
-	width: 98%;
-	height: 100px;
-}
-
-#headerDoc {
-	float: right;
-	width: 150px;
+#headerDialog textarea {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	bottom: 5px;
+	left: 5px;
 }
 
 /* tinymce style overrides */
@@ -794,50 +726,46 @@ body .cwrc_wrapper{
 }
 
 /* used by schematags plugin */
-#menu_editor_editor_schemaTagsButton_menu, #menu_structTagsContextMenu, #menu_changeTagContextMenu {
-	height: auto !important;
+.scrollingMenuContainer {
+    border: 1px solid #D4D0C8 !important;
+    direction: ltr !important;
+    left: 0 !important;
+    position: absolute !important;
+    top: 26px !important;
+    z-index: 1000 !important;
 }
 
-#menu_editor_editor_schemaTagsButton_menu_co {
-    border: 1px solid #D4D0C8;
-    direction: ltr;
-    left: 0;
-    position: absolute;
-    top: 26px;
-    z-index: 1000;
+.scrollingMenuContainer .mceMenuItemDisabled {
+	visibility: collapse !important;
 }
 
-#menu_editor_editor_schemaTagsButton_menu_co .mceMenuItemDisabled, #menu_structTagsContextMenu_co .mceMenuItemDisabled, #menu_changeTagContextMenu_co .mceMenuItemDisabled {
-	visibility: collapse;
+.scrollingMenuContainer .mceMenuItemDisabled * {
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
-#menu_editor_editor_schemaTagsButton_menu_co .mceMenuItemDisabled *, #menu_structTagsContextMenu_co .mceMenuItemDisabled *, #menu_changeTagContextMenu_co .mceMenuItemDisabled * {
-	height: 0;
-	margin: 0;
-	padding: 0;
+.cwrc .inputParent {
+	background-color: #ffffff !important;
+	border: 1px solid #D4D0C8 !important;
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	z-index: 1000 !important;
+	width: 100% !important;
+	font-size: 11px !important;
 }
 
-#menu_editor_editor_schemaTagsButton_menu_inputParent {
-	background-color: #ffffff;
-	border: 1px solid #D4D0C8;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	width: 100%;
-	font-size: 11px;
+.cwrc .inputParent span {
+	margin: 4px 0 4px 3px !important;
+	display: inline-block !important;
 }
 
-#menu_editor_editor_schemaTagsButton_menu_inputParent span {
-	margin: 4px 0 4px 3px;
-	display: inline-block;
-}
-
-#menu_editor_editor_schemaTagsButton_menu_inputParent input {
-	margin: 4px 3px;
-	position: relative;
-	display: inline-block;
-	cursor: text;
+.cwrc .inputParent input {
+	margin: 4px 3px !important;
+	position: relative !important;
+	display: inline-block !important;
+	cursor: text !important;
 }
 
 /* used by the entity plugin */
@@ -918,9 +846,7 @@ body .cwrc_wrapper{
 div.mceDropDown {
 	box-shadow: 1px 1px 2px #ccc;
 }
-#tree {
-	position:relative !important;
-}
+
 /* jstree overrides */
 #vakata-dragged {
 	display: block;
@@ -985,6 +911,7 @@ div.mceDropDown {
     display: block;
     float: right;
     width: 20px;
+    height: 20px;
 }
 
 #vakata-contextmenu .submenu .filterParent {
@@ -1037,6 +964,40 @@ div.mceDropDown {
 #tree.jstree li {
 	width: 100%;
 	margin-left: 0;
+}
+
+#tree.jstree li.person {
+	background-color: #FFCCCC;
+}
+#tree.jstree li.place {
+	background-color: #A9D6D6;
+}
+#tree.jstree li.date {
+	background-color: #FFD5B3;
+}
+#tree.jstree li.event {
+	background-color: #9FDF9F;
+}
+#tree.jstree li.org {
+	background-color: #BDB4D5;
+}
+#tree.jstree li.citation {
+	background-color: #E6B3CF;
+}
+#tree.jstree li.note {
+	background-color: #9CAFC4;
+}
+#tree.jstree li.title {
+	background-color: #F6E78D;
+}
+#tree.jstree li.correction {
+	background-color: #FFC2B3;
+}
+#tree.jstree li.keyword {
+	background-color: #8EECBD;
+}
+#tree.jstree li.link {
+	background-color: #94AFFF;
 }
 
 #tree.jstree a > ins.ui-icon {

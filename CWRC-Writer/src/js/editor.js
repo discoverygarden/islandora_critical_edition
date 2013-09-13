@@ -3,7 +3,7 @@ function Writer(config) {
 	
 	var w = this;
 	
-	w.layout = null; // $ ui layout object
+	w.layout = null; // jquery ui layout object
 	w.editor = null; // reference to the tinyMCE instance we're creating, set in setup
 	w.entities = {}; // entities store
 	w.structs = {}; // structs store
@@ -13,21 +13,33 @@ function Writer(config) {
 	w.deletedEntities = {};
 	w.deletedStructs = {};
 
+	/**
+	 * A map of schema objects. The key represents the schema ID, the "value" should have the following properties:
+	 * @param name A name/label for the schema
+	 * @param url The URL where the schema is located
+	 * @param cssUrl The URL where the schema's CSS is located
+	 */
+	w.schemas = config.schemas || {};
+	
+	// the ID of the current validation schema, according to config.schemas
+	w.schemaId = null;
+	
 	w.schemaXML = null; // a cached copy of the loaded schema
 	w.schemaJSON = null; // a json version of the schema
 	w.schema = {elements: []}; // stores a list of all the elements of the loaded schema
 	
 	w.project = config.project; // the current project (cwrc or russell)
 	
-	w.baseUrl = window.location.protocol+'//'+window.location.host+'/';
+	w.baseUrl = window.location.protocol+'//'+window.location.host+'/'; // the url for referencing various external services
+	w.cwrcRootUrl = config.cwrcRootUrl; // the url which points to the root of the cwrcwriter location
+	if (w.cwrcRootUrl == null) {
+		alert('Error: you must specify the cwrcRootUrl in the CWRCWriter config!');
+	}
 	
 	w.currentDocId = null;
 	
 	// editor mode
 	w.mode = config.mode;
-	
-	// schema for validation (http://www.arts.ualberta.ca/~cwrc/schema/)
-	w.validationSchema = 'cwrcbasic';
 	
 	// root block element, should come from schema
 	w.root = '';
@@ -56,7 +68,7 @@ function Writer(config) {
 	w.dialogs = null; // dialogs manager
 	w.settings = null; // settings dialog
 	w.delegator = null;	
-	
+
 	w.highlightEntity = function(id, bm, doScroll) {
 		w.editor.currentEntity = null;
 		
@@ -96,6 +108,8 @@ function Writer(config) {
 				var val = $(start).offset().top;
 				$(w.editor.dom.doc.body).scrollTop(val);
 			}
+			
+			w.tree.selectNode($('#entityHighlight', w.editor.getBody())[0]);
 			
 			$('#entities > ul > li[name="'+id+'"]').addClass('selected').find('div[class="info"]').show();
 		}
@@ -139,6 +153,7 @@ function Writer(config) {
 			var id = w.tagger.addEntityTag(type);
 			w.entities[id].info = info;
 			w.entitiesList.update();
+			w.tree.update();
 			w.highlightEntity(id);
 		}
 		w.editor.currentBookmark = null;
@@ -172,7 +187,7 @@ function Writer(config) {
 				type: 'error'
 			});
 		} else {
-			var newEntity = $.extend(true, {}, w.editor.entityCopy);
+			var newEntity = jQuery.extend(true, {}, w.editor.entityCopy);
 			newEntity.props.id = tinymce.DOM.uniqueId('ent_');
 			
 			w.editor.selection.moveToBookmark(w.editor.currentBookmark);
@@ -188,6 +203,7 @@ function Writer(config) {
 			
 			w.entities[newEntity.props.id] = newEntity;
 			w.entitiesList.update();
+			w.tree.update();
 			w.highlightEntity(newEntity.props.id);
 		}
 	};
@@ -202,6 +218,7 @@ function Writer(config) {
 		parent.normalize();
 		w.highlightEntity();
 		w.entitiesList.remove(id);
+		w.tree.update();
 		w.editor.currentEntity = null;
 	};
 	
@@ -216,16 +233,20 @@ function Writer(config) {
 		var node = $('#'+id, w.editor.getBody());
 		var nodeEl = node[0];
 		
+		var rng = w.editor.dom.createRng();
 		if (selectContentsOnly) {
 			if (tinymce.isWebKit) {
-				$('[data-mce-bogus]', node).remove();
-				node.prepend('<span data-mce-bogus="1">\uFEFF</span>').append('<span data-mce-bogus="1">\uFEFF</span>');
+//				$('[data-mce-bogus]', node).remove();
+//				node.prepend('<span data-mce-bogus="1">\uFEFF</span>').append('<span data-mce-bogus="1">\uFEFF</span>');
+//				rng.setStart(nodeEl.firstChild, 0);
+//				rng.setEnd(nodeEl.lastChild, nodeEl.lastChild.length);
+				if (nodeEl.firstChild == null) {
+					node.append('\uFEFF');
+				}
+				rng.selectNodeContents(nodeEl);
+			} else {
+				rng.selectNodeContents(nodeEl);
 			}
-			var rng = w.editor.dom.createRng();
-			rng.setStart(nodeEl.firstChild, 0);
-			rng.setEnd(nodeEl.lastChild, nodeEl.lastChild.length);
-			w.editor.selection.setRng(rng);
-//			w.tree.currentlySelectedNode = id;
 		} else {
 			$('[data-mce-bogus]', node.parent()).remove();
 			
@@ -236,11 +257,10 @@ function Writer(config) {
 			}
 			node.before('<span data-mce-bogus="1">\uFEFF</span>').after('<span data-mce-bogus="1">\uFEFF</span>');
 			
-			var rng = w.editor.dom.createRng();
 			rng.setStart(nodeEl.previousSibling, 0);
 			rng.setEnd(nodeEl.nextSibling, 0);
-			w.editor.selection.setRng(rng);
 		}
+		w.editor.selection.setRng(rng);
 		
 		// scroll node into view
 		$(w.editor.getDoc()).scrollTop(node.position().top - $(w.editor.getContentAreaContainer()).height()*0.25);
@@ -295,18 +315,27 @@ function Writer(config) {
 		w.editor.onNodeChange.dispatch(w.editor, w.editor.controlManager, nodeEl, false, w.editor);
 	};
 	
-	// webkit has trouble deleting divs, so use the tree and $ as a workaround
-	function _webKitOnKeyDownDeleteHandler(ed, evt) {
+	// browsers have trouble deleting divs, so use the tree and jquery as a workaround
+	function _onKeyDownDeleteHandler(ed, evt) {
 		if (evt.which == 8 || evt.which == 46) {
 			if (w.tree.currentlySelectedNode != null) {
+				// cancel keyboard delete
+				tinymce.dom.Event.cancel(evt);
 				if (w.tree.selectionType == w.tree.NODE_SELECTED) {
-					$('#'+w.tree.currentlySelectedNode, ed.getBody()).remove();
+					w.tagger.removeStructureTag(w.tree.currentlySelectedNode, true);
 				} else {
-					$('#'+w.tree.currentlySelectedNode, ed.getBody()).contents().remove();
+					var id = w.tree.currentlySelectedNode;
+					w.tagger.removeStructureTagContents(w.tree.currentlySelectedNode);
+					w.selectStructureTag(id, true);
 				}
 			}
 		}
 	}
+	
+	function _onMouseUpHandler(ed, evt) {
+		_hideContextMenus(evt);
+		_doHighlightCheck(ed, evt);
+	};
 	
 	function _onKeyDownHandler(ed, evt) {
 		// TODO move to keyup
@@ -357,16 +386,25 @@ function Writer(config) {
 		if (ed.currentNode) {
 			// check if text is allowed in this node
 			if (ed.currentNode.getAttribute('_textallowed') == 'false') {
-				w.dialogs.show('message', {
-					title: 'No Text Allowed',
-					msg: 'Text is not allowed in the current tag: '+ed.currentNode.getAttribute('_tag')+'.',
-					type: 'error'
-				});
-				
-				// remove all text
-				$(ed.currentNode).contents().filter(function() {
-					return this.nodeType == 3;
-				}).remove();
+				if (evt.ctrlKey || evt.which == 17) {
+					// don't show message if we got here through undo/redo
+					var node = $('[_textallowed="true"]', w.editor.getBody()).first();
+					var rng = w.editor.selection.getRng(true);
+					rng.selectNodeContents(node[0]);
+					rng.collapse(true);
+					w.editor.selection.setRng(rng);
+				} else {
+					w.dialogs.show('message', {
+						title: 'No Text Allowed',
+						msg: 'Text is not allowed in the current tag: '+ed.currentNode.getAttribute('_tag')+'.',
+						type: 'error'
+					});
+					
+					// remove all text
+					$(ed.currentNode).contents().filter(function() {
+						return this.nodeType == 3;
+					}).remove();
+				}
 			}
 			
 			// replace br's inserted on shift+enter
@@ -387,15 +425,21 @@ function Writer(config) {
 		
 		// enter key
 		if (evt.which == 13) {
-			// TODO not successful for multiple contiguous enter key presses
-			// look for empty tag inserted by enter
-			var currNode = $(ed.currentNode);
-			if (currNode.length == 1 && currNode.text() == '') {
-				currNode.text('\uFEFF'); // insert zero-width non-breaking space so empty tag takes up space (if block element)
-				if (!w.u.isTagBlockLevel(currNode.attr('_tag'))) {
-					w.selectStructureTag(currNode.attr('id'), true);
-				}
+			// find the element inserted by tinymce
+			var idCounter = tinymce.DOM.counter-1;
+			var newTag = $('#struct_'+idCounter, ed.getBody());
+			if (newTag.text() == '') {
+				newTag.text('\uFEFF'); // insert zero-width non-breaking space so empty tag takes up space
 			}
+//			if (!w.u.isTagBlockLevel(newTag.attr('_tag'))) {
+//				w.selectStructureTag(newTag.attr('id'), true);
+//			}
+		}
+		
+		// if the user's typing we don't want the currentlySelectedNode to be set
+		// calling selectNode will clear currentlySelectedNode
+		if (w.tree.currentlySelectedNode != null) {
+			w.tree.selectNode($('#'+w.tree.currentlySelectedNode, w.editor.getBody())[0]);
 		}
 	};
 	
@@ -410,37 +454,39 @@ function Writer(config) {
 	function _onNodeChangeHandler(ed, cm, e) {
 //		console.log('onNodeChangeHandler');
 //		console.time('nodechange');
-		if (e.nodeType != 1) {
-			ed.currentNode = w.u.getRootTag()[0];
-		} else {
-			if (e.getAttribute('_tag') == null) {
-				if (e.getAttribute('data-mce-bogus') != null) {
-					// artifact from selectStructureTag
-					var sibling = $(e).next('[_tag]')[0];
-					if (sibling != null) {
-						e = sibling;
+		if (e != null) {
+			if (e.nodeType != 1) {
+				ed.currentNode = w.u.getRootTag()[0];
+			} else {
+				if (e.getAttribute('_tag') == null) {
+					if (e.getAttribute('data-mce-bogus') != null) {
+						// artifact from selectStructureTag
+						var sibling = $(e).next('[_tag]')[0];
+						if (sibling != null) {
+							e = sibling;
+						} else {
+							e = e.parentNode;
+						}
 					} else {
 						e = e.parentNode;
 					}
+					
+					// use setTimeout to add to the end of the onNodeChange stack
+					window.setTimeout(function(){
+//						console.log('fireNodeChange');
+						w._fireNodeChange(e);
+					}, 0);
 				} else {
-					e = e.parentNode;
+					ed.currentNode = e;
 				}
-				
-//				_onNodeChangeHandler(ed, cm, e);
-				// use setTimeout to add to the end of the onNodeChange stack
-				window.setTimeout(function(){
-					w._fireNodeChange(e);
-				}, 0);
-			} else {
-				ed.currentNode = e;
 			}
-		}
-		if (ed.currentNode) {
-			w.tree.selectNode(ed.currentNode);
-		}
-		if (w.emptyTagId) {
-			delete w.entities[w.emptyTagId];
-			w.emptyTagId = null;
+			if (ed.currentNode) {
+				w.tree.selectNode(ed.currentNode);
+			}
+			if (w.emptyTagId) {
+				delete w.entities[w.emptyTagId];
+				w.emptyTagId = null;
+			}
 		}
 //		console.timeEnd('nodechange');
 	};
@@ -473,12 +519,13 @@ function Writer(config) {
 			$.vakata.context.hide();
 		}
 		// hide editor menu
-		if ($('#menu_editor_contextmenu:visible').length > 0 && target.parents('#menu_editor_contextmenu').length == 0) {
+		if ($('#menu_editor_contextmenu:visible').length > 0 && target.parents('#menu_editor_contextmenu, #menu_structTagsContextMenu, #menu_changeTagContextMenu').length == 0) {
 			w.editor.execCommand('hideContextMenu', w.editor, evt);
 		}
 	};
 	
 	function _doHighlightCheck(ed, evt) {
+//		console.log('_doHighlightCheck');
 		var range = ed.selection.getRng(true);
 		
 		// check if inside boundary tag
@@ -517,43 +564,13 @@ function Writer(config) {
 		
 		w.highlightEntity(id, ed.selection.getBookmark());
 	};
-
-	var timeout = false;
-	//var delta = 200;
-	function maybeResize() {
-	    if(w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
-	      initCanvas(topinfo['numCanvases']);
-	    } else {
-	      timeout = false;
-	      var w = $('#canvas-body').width();
-	      var b = topinfo['origBodyWidth'];
-	      topinfo['bodyWidth'] = 0;
-	      if (w != b) {
-	        initCanvas(topinfo['numCanvases']);
-	        //$('.base_img').children(":first").width(w);
-	        $('.base_img').children(":first").css("width", "100%");
-	        $('.base_img').children(":first").css("height", "auto");
-	        $('.base_img').css("height", $('.base_img').children(":first").height());
-	       // $('#canvas_0').css("width", (w));
-	      }
-	    }
-	}
+	
+	
 	/**
 	 * Begin init functions
 	 */
 	w.init = function() {
-//		var cssFiles = ['http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/smoothness/$-ui-1.9.0.custom.css', 
-//		                'http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/css/layout-default-latest.css', 
-//		                'http://192.168.168.56/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/js/lib/snippet/$.snippet.css'];
-//		for (var i = 0; i < cssFiles.length; i++) {
-//			var css = $('<style/>');
-//			css.attr({
-//				rel: 'stylesheet',
-//				type: 'text/css',
-//				href: cssFiles[i]
-//			});
-//			$(document.head).append(css);
-//		}
+		console.log('writer initilized');
 		w.layout = $('#cwrc_wrapper').layout({
 			defaults: {
 				maskIframesOnResize: true,
@@ -566,13 +583,6 @@ function Writer(config) {
 				spacing_open: 0,
 				spacing_closed: 0
 			},
-			east: {
-				size: 'auto',
-				minSize: 300,
-				onresize_end: function() {
-					resizeCanvas();
-				}
-			},
 			south: {
 				size: 34,
 				resizable: false,
@@ -581,10 +591,12 @@ function Writer(config) {
 			},
 			west: {
 				size: 'auto',
-				minSize: 375,
+				minSize: 325,
+				resizable: true,
 				onresize: function(region, pane, state, options) {
-					//var tabsHeight = $('#westTabs > ul').outerHeight();
-					//$('#westTabsContent').height(state.layoutHeight - tabsHeight);
+					console.log("resizing");
+					var tabsHeight = $('#westTabs > ul').outerHeight();
+					$('#westTabsContent').height(state.layoutHeight - tabsHeight);
 //					$.layout.callbacks.resizeTabLayout(region, pane);
 				}
 			}
@@ -619,7 +631,8 @@ function Writer(config) {
 				}
 			}
 		});
-		$('#header h1').click(function() {
+		
+		$('#cwrc_header h1').click(function() {
 			window.location = 'http://www.cwrc.ca';
 		});
 		
@@ -643,14 +656,15 @@ function Writer(config) {
 			showEntityBrackets: true,
 			showStructBrackets: false
 		});
-		
 		if (config.delegator != null) {
 			w.delegator = new config.delegator({writer: w});
 		} else {
-			alert('Error: you must specify a delegator in the Writer config for full functionality!');
+			alert('Error: you must specify a delegator in the CWRCWriter config for full functionality!');
 		}
 		
-		$(document.body).click(_hideContextMenus);
+		$(document.body).mousedown(function(e) {
+			_hideContextMenus(e);
+		});
 		$('#westTabs').tabs({
 			active: 1,
 			activate: function(event, ui) {
@@ -670,8 +684,15 @@ function Writer(config) {
 			}
 		});
 		
-		// TODO not getting fired
-		window.addEventListener('unload', function(e) {
+		window.addEventListener('beforeunload', function(e) {
+			if (tinymce.get('editor').isDirty()) {
+				var msg = 'You have unsaved changes.';
+				(e || window.event).returnValue = msg;
+				return msg;
+			}
+		});
+		
+		$(window).unload(function(e) {
 			// clear the editor first (large docs can cause the browser to freeze)
 			w.u.getRootTag().remove();
 		});
@@ -685,8 +706,8 @@ function Writer(config) {
 			mode: 'exact',
 			elements: 'editor',
 			theme: 'advanced',
-			
-			content_css: '../css/editor.css',
+			// Updated from default pull.
+			content_css: config.cwrcRootUrl+'css/editor.css',
 			
 			width: '100%',
 			
@@ -773,6 +794,7 @@ function Writer(config) {
 					
 					var settings = w.settings.getSettings();
 					var body = $(ed.getBody());
+					console.log('tiny mce get body: ' + JSON.stringify(body));
 					if (settings.showEntityBrackets) body.addClass('showEntityBrackets');
 					if (settings.showStructBrackets) body.addClass('showStructBrackets');
 					
@@ -802,15 +824,10 @@ function Writer(config) {
 					ed.pasteAsPlainText = false;
 					
 					// highlight tracking
-					ed.onMouseUp.add(function(ed, evt) {
-						_hideContextMenus(evt);
-						_doHighlightCheck(ed, evt);
-					});
+					ed.onMouseUp.addToTop(_onMouseUpHandler);
 					
 					ed.onKeyDown.add(_onKeyDownHandler);
-					if (tinymce.isWebKit) {
-						ed.onKeyDown.addToTop(_webKitOnKeyDownDeleteHandler);
-					}
+					ed.onKeyDown.addToTop(_onKeyDownDeleteHandler);
 					ed.onKeyUp.add(_onKeyUpHandler);
 					
 					setTimeout(function() {
@@ -832,110 +849,110 @@ function Writer(config) {
 				
 				// add custom plugins and buttons
 				var plugins = ['treepaste','schematags','currenttag','entitycontextmenu','viewsource','scrolling_dropmenu'];
+				
 				for (var i = 0; i < plugins.length; i++) {
 					var name = plugins[i];
-					tinymce.PluginManager.load(name, '../../tinymce_plugins/'+name+'.js')
+					tinymce.PluginManager.load(name, w.cwrcRootUrl+'js/tinymce_plugins/'+name+'.js');
 				}
-				var img_path = Drupal.settings.islandora_critical_edition.images_path;
 				
-				ed.addButton('addperson', {title: 'Tag Person', image: img_path + 'user.png', 'class': 'entityButton person',
+				ed.addButton('addperson', {title: 'Tag Person', image: w.cwrcRootUrl+'img/user.png', 'class': 'entityButton person',
 					onclick : function() {
 						ed.execCommand('addEntity', 'person');
 					}
 				});
-				ed.addButton('addplace', {title: 'Tag Place', image: img_path + 'world.png', 'class': 'entityButton place',
+				ed.addButton('addplace', {title: 'Tag Place', image: w.cwrcRootUrl+'img/world.png', 'class': 'entityButton place',
 					onclick : function() {
 						ed.execCommand('addEntity', 'place');
 					}
 				});
-				ed.addButton('adddate', {title: 'Tag Date', image: img_path + 'calendar.png', 'class': 'entityButton date',
+				ed.addButton('adddate', {title: 'Tag Date', image: w.cwrcRootUrl+'img/calendar.png', 'class': 'entityButton date',
 					onclick : function() {
 						ed.execCommand('addEntity', 'date');
 					}
 				});
-				ed.addButton('addevent', {title: 'Tag Event', image: img_path + 'cake.png', 'class': 'entityButton event',
+				ed.addButton('addevent', {title: 'Tag Event', image: w.cwrcRootUrl+'img/cake.png', 'class': 'entityButton event',
 					onclick : function() {
 						ed.execCommand('addEntity', 'event');
 					}
 				});
-				ed.addButton('addorg', {title: 'Tag Organization', image: img_path + 'group.png', 'class': 'entityButton org',
+				ed.addButton('addorg', {title: 'Tag Organization', image: w.cwrcRootUrl+'img/group.png', 'class': 'entityButton org',
 					onclick : function() {
 						ed.execCommand('addEntity', 'org');
 					}
 				});
-				ed.addButton('addcitation', {title: 'Tag Citation', image: img_path + 'vcard.png', 'class': 'entityButton citation',
+				ed.addButton('addcitation', {title: 'Tag Citation', image: w.cwrcRootUrl+'img/vcard.png', 'class': 'entityButton citation',
 					onclick : function() {
 						ed.execCommand('addEntity', 'citation');
 					}
 				});
-				ed.addButton('addnote', {title: 'Tag Note', image: img_path + 'note.png', 'class': 'entityButton note',
+				ed.addButton('addnote', {title: 'Tag Note', image: w.cwrcRootUrl+'img/note.png', 'class': 'entityButton note',
 					onclick : function() {
 						ed.execCommand('addEntity', 'note');
 					}
 				});
-				ed.addButton('addcorrection', {title: 'Tag Correction', image: img_path + 'error.png', 'class': 'entityButton correction',
+				ed.addButton('addcorrection', {title: 'Tag Correction', image: w.cwrcRootUrl+'img/error.png', 'class': 'entityButton correction',
 					onclick : function() {
 						ed.execCommand('addEntity', 'correction');
 					}
 				});
-				ed.addButton('addkeyword', {title: 'Tag Keyword', image: img_path + 'page_key.png', 'class': 'entityButton keyword',
+				ed.addButton('addkeyword', {title: 'Tag Keyword', image: w.cwrcRootUrl+'img/page_key.png', 'class': 'entityButton keyword',
 					onclick : function() {
 						ed.execCommand('addEntity', 'keyword');
 					}
 				});
-				ed.addButton('addlink', {title: 'Tag Link', image: img_path + 'link.png', 'class': 'entityButton link',
+				ed.addButton('addlink', {title: 'Tag Link', image: w.cwrcRootUrl+'img/link.png', 'class': 'entityButton link',
 					onclick : function() {
 						ed.execCommand('addEntity', 'link');
 					}
 				});
-				ed.addButton('addtitle', {title: 'Tag Text/Title', image: img_path + 'book.png', 'class': 'entityButton textTitle',
+				ed.addButton('addtitle', {title: 'Tag Text/Title', image: w.cwrcRootUrl+'img/book.png', 'class': 'entityButton textTitle',
 					onclick : function() {
 						ed.execCommand('addEntity', 'title');
 					}
 				});
-				ed.addButton('editTag', {title: 'Edit Tag', image: img_path + 'tag_blue_edit.png', 'class': 'entityButton',
+				ed.addButton('editTag', {title: 'Edit Tag', image: w.cwrcRootUrl+'img/tag_blue_edit.png', 'class': 'entityButton',
 					onclick : function() {
 						ed.execCommand('editTag');
 					}
 				});
-				ed.addButton('removeTag', {title: 'Remove Tag', image: img_path + 'tag_blue_delete.png', 'class': 'entityButton',
+				ed.addButton('removeTag', {title: 'Remove Tag', image: w.cwrcRootUrl+'img/tag_blue_delete.png', 'class': 'entityButton',
 					onclick : function() {
 						ed.execCommand('removeTag');
 					}
 				});
-				ed.addButton('newbutton', {title: 'New', image: img_path + 'page_white_text.png', 'class': 'entityButton',
+				ed.addButton('newbutton', {title: 'New', image: w.cwrcRootUrl+'img/page_white_text.png', 'class': 'entityButton',
 					onclick: function() {
 						w.fm.newDocument();
 					}
 				});
-				ed.addButton('savebutton', {title: 'Save', image: img_path + 'save.png',
+				ed.addButton('savebutton', {title: 'Save', image: w.cwrcRootUrl+'img/save.png',
 					onclick: function() {
 						w.fm.saveDocument();
 					}
 				});
-				ed.addButton('saveasbutton', {title: 'Save As', image: img_path + 'save_as.png',
+				ed.addButton('saveasbutton', {title: 'Save As', image: w.cwrcRootUrl+'img/save_as.png',
 					onclick: function() {
 						w.dialogs.filemanager.showSaver();
 					}
 				});
-				ed.addButton('loadbutton', {title: 'Load', image: img_path + 'folder_page.png', 'class': 'entityButton',
+				ed.addButton('loadbutton', {title: 'Load', image: w.cwrcRootUrl+'img/folder_page.png', 'class': 'entityButton',
 					onclick: function() {
 						w.dialogs.filemanager.showLoader();
 					}
 				});
-				ed.addButton('editsource', {title: 'Edit Source', image: img_path + 'editsource.gif', 'class': 'wideButton',
+				ed.addButton('editsource', {title: 'Edit Source', image: w.cwrcRootUrl+'img/editsource.gif', 'class': 'wideButton',
 					onclick: function() {
 						w.fm.editSource();
 					}
 				});
-				ed.addButton('validate', {title: 'Validate', image: img_path + 'validate.png', 'class': 'entityButton',
+				ed.addButton('validate', {title: 'Validate', image: w.cwrcRootUrl+'img/validate.png', 'class': 'entityButton',
 					onclick: function() {
 						w.delegator.validate();
 					}
 				});
-				ed.addButton('addtriple', {title: 'Add Relation', image: img_path + 'chart_org.png', 'class': 'entityButton',
+				ed.addButton('addtriple', {title: 'Add Relation', image: w.cwrcRootUrl+'img/chart_org.png', 'class': 'entityButton',
 					onclick: function() {
-						$('#westTabs').tabs('select', 2);
+						$('#westTabs').tabs('option', 'active', 2);
 						w.dialogs.show('triple');
 					}
 				});

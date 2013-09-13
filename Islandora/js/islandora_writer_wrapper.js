@@ -8,38 +8,87 @@ Islandora = {
   // Initilize the writer, and get basic parameters for cwrc fedora integration.
   init_writer : function() {
     PID = Drupal.settings.islandora_critical_edition.page_pid;
-      $.ajax({
-        url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
-        async: false,
-        success: function(data, status, xhr) {
-          cwrc_params = data;
-          // Hack to work with unfinished API.
-          // In the API, '-X_X_X-' is replaced with the 
-          // documents current id, for us, a PID.
-          // This and other endpoints needs to be exposed
-          // in the API via a Delegator callback.
-          cwrc_params.BASE_PATH = Drupal.settings.basePath + 'islandora/object/-X_X_X-/datastream/CWRC/view';
-          writer = new Writer({
-            project: data,
-            delegator: Delegator
-          });
-          Islandora.Writer.init();
-          
-          // Located in 'startup.js'
-          init_ui();
-          Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
-                                        init_canvas_div);
-        },
-        error: function() {
-          alert("Please log in to host site.");
-        },
-        dataType: 'json'
-      });
+    cwrc_params = {};
+	
+	writer = null;
+	
+	var baseUrl = window.location.protocol+'//'+window.location.host;
+	var config = {
+		delegator: Delegator,
+		cwrcRootUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/',
+		schemas: {
+			tei: {
+				name: 'CWRC Basic TEI Schema',
+				url: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'schema/CWRC-TEIBasic.rng',
+				cssUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'css/tei_converted.css'
+			},
+			events: {
+				name: 'Events Schema',
+				url: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'schema/events.rng',
+				cssUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'css/orlando_converted.css'
+			},
+			biography: {
+				name: 'Biography Schema',
+				url: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'schema/biography.rng',
+				cssUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'css/orlando_converted.css'
+			},
+			writing: {
+				name: 'Writing Schema',
+				url: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'schema/writing.rng',
+				cssUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'css/orlando_converted.css'
+			}
+		}
+	};
+	$.ajax({
+		url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
+		timeout: 3000,
+		success: function(data, status, xhr) {
+			cwrc_params = data;
+			console.log(data);
+			
+			config.project = data;
+			writer = new Writer(config);
+			writer.init();
+			
+			// Initilize additional UI Elements
+			init_ui();
+			// Initilize shared canvas image annotation canvas processing.
+			Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
+					init_canvas_div);
+			// Implement wrapper to load the writer document.
+		    Islandora.Writer.Document.load(baseUrl+Drupal.settings.basePath+'islandora/object/' + cwrc_params.pages[cwrc_params.position] + '/datastream/CWRC/view',
+		      Drupal.settings.islandora_critical_edition.base_url +
+		      Drupal.settings.basePath +
+		      Drupal.settings.islandora_critical_edition.module_base + 
+		      '/CWRC-Writer/src/schema/CWRC-TEIBasic.rng');
+		    
+		    Islandora.Writer.init();
+		},
+		error: function() {
+			console.log("Error");
+		}
+	});
   },
   Writer : {
     Document : {
-      load: function(docContent, schemaURI) {
-        writer.loadDocument(docContent, schemaURI);
+      load: function(docContentUrl, schemaURI) {
+    	  console.log('doc content url: ' + docContentUrl);
+    	  writer.fm.loadDocument(Drupal.settings.islandora_critical_edition.page_pid);
+    	  
+//    	  $.ajax({
+//    			url: docContentUrl,
+//    			timeout: 3000,
+//    			success: function(data, status, xhr) {
+//    				console.log(data);
+//    				console.log(schemaURI);
+//    				
+//    				writer.fm.loadDocumentFromXml(data);
+//    				
+//    			},
+//    			error: function() {
+//    				console.log("Error in Writer.Document.load");
+//    			}
+//    		});
       },
       get: function() {
         return writer.getDocument();
@@ -78,12 +127,11 @@ Islandora = {
     },
     init : function() {
       var anno_d = annotation_dialog();
-        anno_d.dialog('close');
-        maybe_config_create_annotation();
-      writer.init();
+      anno_d.dialog('close');
+      maybe_config_create_annotation();
     },
     load_next_anno_page: function() {
-    	writer.entitiesList.update();
+      writer.entitiesList.update();
       // Pagenation on images/annotations.
       $('#annotations').children(":first").children(":first").attr('src', Drupal.settings.islandora_critical_edition.base_url + 
           '/islandora/object/' +
@@ -193,6 +241,7 @@ Islandora = {
             async: true,
             success: function(data, status, xhr) {
               islandora_canvas_params = data;
+              console.log(data);
               // Callback 'init_canvas_div' in startup.js.
               callback(data);
               

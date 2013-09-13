@@ -2,7 +2,7 @@
 
 /* General elements */
 
-body .cwrc_wrapper,
+body,
 .ui-widget
 {
   font-family: 'Trebuchet MS', Tahoma, Arial, sans-serif;
@@ -28,32 +28,32 @@ A:hover
 
 /* Header */
 
-.cwrc_wrapper #header
+#cwrc_header
 {
   padding: 0px 0px 0px 0px;
   background-color: #000;
 }
 
-#header #page_selector
+#cwrc_header #page_selector
 {
-  margin: 8px 0px 0px 50px;
+  margin: 8px 0px 0px 15px;
 }
 
-#header .header-nav
+#cwrc_header .header-nav
 {
   float: left;
   height: 35px;
   width: 60px;
-  margin: 0px 0px 0px 45px;
+  margin: 0px 0px 0px 20px;
 }
 
-#header .header-nav a
+#cwrc_header .header-nav a
 {
   float: left;
   width: 30px;
   height: 35px;
 
-  background-image: url('../img/nav-arrows.png'); /* 38px x 85px */ 
+  background-image: url('../imgs/nav-arrows.png'); /* 38px x 85px */ 
   background-position: 0px 0px;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -63,40 +63,40 @@ A:hover
 
 }
 
-#header .header-nav a.disabled,
-#header .header-nav a.disabled:hover
+#cwrc_header .header-nav a.disabled,
+#cwrc_header .header-nav a.disabled:hover
 {
   opacity: 0.6 !important; /* Chrome 4+, FF2+, Saf3.1+, Opera 9+, IE9, iOS 3.2+, Android 2.1+ */
   filter: alpha(opacity=60) !important; /* IE6-IE8 */
 }
 
-#header .header-nav a:hover
+#cwrc_header .header-nav a:hover
 {
   opacity: 1 !important; /* Chrome 4+, FF2+, Saf3.1+, Opera 9+, IE9, iOS 3.2+, Android 2.1+ */
   filter: alpha(opacity=100) !important; /* IE6-IE8 */
 }
 
-#header .header-nav a#page-prev
+#cwrc_header .header-nav a#page-prev
 {
   background-position: -9px -1px;
 }
 
-#header .header-nav a#page-next
+#cwrc_header .header-nav a#page-next
 {
   background-position: -42px -1px;
 }
 
-#header #header-inner
+#cwrc_header #header-inner
 {
   
 }
 
-#header #header-inner h1
+#cwrc_header #header-inner h1
 {
   padding: 8px 20px 0px;
 }
 
-#header h2
+#cwrc_header h2
 {
   padding: 8px 15px 0px 0px;
 }
@@ -109,8 +109,9 @@ A:hover
 #footer
 {
   border-top: 1px solid #000000;
+  background: url('../imgs/emic-logo') 20px 7px no-repeat transparent;
 }
-/*background: url('../imgs/emic-logo') 20px 7px no-repeat transparent;*/
+
 #footer p
 {
   margin: 0;
@@ -424,16 +425,6 @@ A:hover
   display: none;
 }
 
-#lookupServices > div
-{
-  margin-bottom: 0px;
-}
-
-#lookupServices .ui-accordion-content
-{
-  padding: 5px 10px;
-}
-
 #lookup_alternate input[type='radio']
 {
   float: left;
@@ -547,7 +538,7 @@ ul.relationsList li:hover
 {
   float: left;
   width: 360px;
-/*   padding: 5px 10px 10px 10px; */
+  padding: 5px 10px 10px 10px;
 }
 
 .ui-dialog .ui-dialog-titlebar
@@ -592,8 +583,4 @@ ul.relationsList li:hover
   border: 1px solid #aaa;
   color: #212121;
   font-weight: normal;
-}
-
-body .cwrc_wrapper {
-	overflow:show !important;
 }

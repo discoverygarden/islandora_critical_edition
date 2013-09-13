@@ -15,6 +15,9 @@
 			
 			t.isDirty = false;
 			
+			t.schemaDialog = null;
+			t.dialogOpenTimestamp = null; // tracks when the dialog was opened
+			
 			t.tag = null;
 			
 			t.editor.addCommand('createSchemaTagsControl', function(config) {
@@ -23,6 +26,13 @@
 				var node;
 				
 				menu.beforeShowMenu.add(function(m) {
+					var parentContainer = $(m.element.getParent());
+					if (parentContainer.parent('.cwrc').length == 0) {
+						parentContainer.wrap('<div class="cwrc" />');
+					}
+					
+					t.editor.writer.tree.disableHotkeys();
+					
 					var filterKey;
 					// get the node from currentBookmark if available, otherwise use currentNode
 					if (t.editor.currentBookmark != null) {
@@ -33,6 +43,10 @@
 					} else {
 						node = t.editor.currentNode;
 					}
+					if (node.nodeType == 9) {
+						node = $('body > [_tag]', node)[0]; // we're at the document level so select the root instead
+					}
+					
 					filterKey = node.getAttribute('_tag');
 					
 					if (mode == 'change') {
@@ -62,6 +76,10 @@
 					}
 				});
 				
+				menu.onHideMenu.add(function(m) {
+					t.editor.writer.tree.enableHotkeys();
+				});
+				
 				t.buildMenu(menu, node, config);
 				
 				return menu;
@@ -85,16 +103,20 @@
 					return;
 				}
 				
-				var sel = t.editor.selection;
-				var content = sel.getContent();
-				var range = sel.getRng(true);
-				if (range.startContainer == range.endContainer) {
-					var leftTrimAmount = content.match(/^\s{0,1}/)[0].length;
-					var rightTrimAmount = content.match(/\s{0,1}$/)[0].length;
-					range.setStart(range.startContainer, range.startOffset+leftTrimAmount);
-					range.setEnd(range.endContainer, range.endOffset-rightTrimAmount);
-					sel.setRng(range);
-				}				
+				// reset bookmark after possible modification by isSelectionValid
+				t.editor.currentBookmark = t.editor.selection.getBookmark(1);
+				
+				// isSelectionValid should perform this function
+//				var sel = t.editor.selection;
+//				var content = sel.getContent();
+//				var range = sel.getRng(true);
+//				if (range.startContainer == range.endContainer) {
+//					var leftTrimAmount = content.match(/^\s{0,1}/)[0].length;
+//					var rightTrimAmount = content.match(/\s{0,1}$/)[0].length;
+//					range.setStart(range.startContainer, range.startOffset+leftTrimAmount);
+//					range.setEnd(range.endContainer, range.endOffset-rightTrimAmount);
+//					sel.setRng(range);
+//				}				
 				
 				t.mode = t.ADD;
 				t.showDialog(key, pos);
@@ -120,27 +142,36 @@
 			});
 			
 			$(document.body).append(''+
-				'<div id="schemaDialog">'+
-					'<div id="attributeSelector"><h2>Attributes</h2><ul></ul></div>'+
-					'<div id="attsContainer">'+
-						'<div id="level1Atts"></div>'+
-						'<div id="highLevelAtts"></div>'+
-						'<div id="schemaHelp"></div>'+
+				'<div id="schemaDialog" class="attributeWidget">'+
+					'<div class="attributeSelector"><h2>Attributes</h2><ul></ul></div>'+
+					'<div class="attsContainer">'+
+						'<div class="level1Atts"></div>'+
+						'<div class="highLevelAtts"></div>'+
+						'<div class="schemaHelp"></div>'+
 					'</div>'+
 				'</div>'
 			);
 			
-			$('#schemaDialog').dialog({
+			t.schemaDialog = $('#schemaDialog').dialog({
 				modal: true,
 				resizable: true,
 				dialogClass: 'splitButtons',
 				closeOnEscape: false,
 				open: function(event, ui) {
-					$('#schemaDialog').parent().find('.ui-dialog-titlebar-close').hide();
+					t.schemaDialog.parent().find('.ui-dialog-titlebar-close').hide();
 				},
 				height: 460,
 				width: 550,
 				autoOpen: false,
+				open: function(event, ui) {
+					t.dialogOpenTimestamp = event.timeStamp;
+				},
+				beforeClose: function(event, ui) {
+					if (event.timeStamp - t.dialogOpenTimestamp < 150) {
+						// if the dialog was opened then closed immediately it was unintentional
+						return false;
+					}
+				},
 				buttons: [{
 					text: 'Cancel',
 					click: function() {
@@ -201,6 +232,9 @@
 			var t = this;
 			var w = t.editor.writer;
 			
+			t.editor.getBody().blur(); // lose keyboard focus in editor
+			w.tree.disableHotkeys();
+			
 			var structsEntry = null;
 			if (t.mode == t.EDIT) {
 				structsEntry = w.structs[$(t.tag).attr('id')];
@@ -210,11 +244,13 @@
 			
 			t.isDirty = false;
 			
-			$('#attributeSelector ul, #level1Atts, #highLevelAtts, #schemaHelp').empty();
+			var parent = $('#schemaDialog');
+			
+			$('.attributeSelector ul, .level1Atts, .highLevelAtts, .schemaHelp', parent).empty();
 			
 			var helpText = this.editor.execCommand('getDocumentationForTag', key);
 			if (helpText != '') {
-				$('#schemaHelp').html('<h3>'+key+' Documentation</h3><p>'+helpText+'</p>');
+				$('.schemaHelp', parent).html('<h3>'+key+' Documentation</h3><p>'+helpText+'</p>');
 			}
 			
 			var atts = t.editor.writer.u.getChildrenForTag({tag: key, type: 'attribute', returnType: 'array'});
@@ -279,11 +315,11 @@
 				}
 			}
 			
-			$('#attributeSelector ul').html(attributeSelector);
-			$('#level1Atts').html(level1Atts);
-			$('#highLevelAtts').html(highLevelAtts);
+			$('.attributeSelector ul', parent).html(attributeSelector);
+			$('.level1Atts', parent).html(level1Atts);
+			$('.highLevelAtts', parent).html(highLevelAtts);
 			
-			$('#attributeSelector li').click(function() {
+			$('.attributeSelector li', parent).click(function() {
 				if ($(this).hasClass('required')) return;
 				
 				var name = $(this).attr('id').split('select_')[1].replace(/:/g, '\\:');
@@ -296,18 +332,13 @@
 				}
 			});
 			
-			$('#schemaDialog ins').tooltip({
+			$('ins', parent).tooltip({
 				tooltipClass: 'cwrc-tooltip'
 			});
 			
-			$('#schemaDialog input, #schemaDialog select, #schemaDialog option').change(function(event) {
+			$('input, select, option', parent).change(function(event) {
 				t.isDirty = true;
-			});
-			$('#schemaDialog select, #schemaDialog option').click(function(event) {
-				t.isDirty = true;
-			});
-			
-			$('#schemaDialog input, #schemaDialog select, #schemaDialog option').keyup(function(event) {
+			}).keyup(function(event) {
 				if (event.keyCode == '13') {
 					event.preventDefault();
 					if (t.isDirty) t.result();
@@ -315,29 +346,38 @@
 				}
 			});
 			
-			$('#schemaDialog').dialog('option', 'title', key);
-			if (pos) {
-				$('#schemaDialog').dialog('option', 'position', [pos.x, pos.y]);
-			} else {
-				$('#schemaDialog').dialog('option', 'position', 'center');
-			}
-			$('#schemaDialog').dialog('open');
+			$('select, option', parent).click(function(event) {
+				t.isDirty = true;
+			});
 			
-			// focus on the ok button if there are no inputs
+			t.schemaDialog.dialog('option', 'title', key);
+			if (pos) {
+				t.schemaDialog.dialog('option', 'position', [pos.x, pos.y]);
+			} else {
+				t.schemaDialog.dialog('option', 'position', 'center');
+			}
+			t.schemaDialog.dialog('open');
+			
 			$('#schemaOkButton').focus();
-			$('#schemaDialog input, #schemaDialog select').first().focus();
+			$('input, select', parent).first().focus();
 		},
 		
 		result: function() {
 			var t = this;
+			var parent = $('#schemaDialog');
+			
+			// collect values then close dialog
 			var attributes = {};
-			$('#attsContainer > div > div:visible').children('input[type!="hidden"], select').each(function(index, el) {
-				attributes[$(this).attr('name')] = $(this).val();
+			$('.attsContainer > div > div:visible', parent).children('input[type!="hidden"], select').each(function(index, el) {
+				var val = $(this).val();
+				if (val != '') { // ignore blank values
+					attributes[$(this).attr('name')] = val;
+				}
 			});
 			
 			// validation
 			var invalid = [];
-			$('#attsContainer span.required').parent().children('label').each(function(index, el) {
+			$('.attsContainer span.required', parent).parent().children('label').each(function(index, el) {
 				if (attributes[$(this).text()] == '') {
 					invalid.push($(this).text());
 				}
@@ -345,7 +385,7 @@
 			if (invalid.length > 0) {
 				for (var i = 0; i < invalid.length; i++) {
 					var name = invalid[i];
-					$('#attsContainer *[name="'+name+'"]').css({borderColor: 'red'}).keyup(function(event) {
+					$('.attsContainer *[name="'+name+'"]', parent).css({borderColor: 'red'}).keyup(function(event) {
 						$(this).css({borderColor: '#ccc'});
 					});
 				}
@@ -354,25 +394,41 @@
 			
 			attributes._tag = t.currentKey;
 			
-			switch (t.mode) {
-				case t.ADD:
-					t.editor.execCommand('addStructureTag', {bookmark: t.editor.currentBookmark, attributes: attributes, action: t.action});
-					break;
-				case t.EDIT:
-					t.editor.execCommand('editStructureTag', t.tag, attributes);
-					t.tag = null;
+			t.schemaDialog.dialog('close');
+			// check if beforeClose cancelled or not
+			if (t.schemaDialog.is(':hidden')) {
+				try {
+					$('ins', parent).tooltip('destroy');
+				} catch (e) {
+					if (console) console.log('error destroying tooltip');
+				}
+				
+				t.editor.writer.tree.enableHotkeys();
+				
+				switch (t.mode) {
+					case t.ADD:
+						t.editor.execCommand('addStructureTag', {bookmark: t.editor.currentBookmark, attributes: attributes, action: t.action});
+						break;
+					case t.EDIT:
+						t.editor.execCommand('editStructureTag', t.tag, attributes);
+						t.tag = null;
+				}
 			}
-			
-			$('#schemaDialog ins').tooltip('destroy');
-			$('#schemaDialog').dialog('close');
 		},
 		
 		cancel: function() {
 			var t = this;
-			t.editor.selection.moveToBookmark(t.editor.currentBookmark);
-			t.editor.currentBookmark = null;
-			$('#schemaDialog ins').tooltip('destroy');
-			$('#schemaDialog').dialog('close');
+			t.schemaDialog.dialog('close');
+			// check if beforeClose cancelled or not
+			if (t.schemaDialog.is(':hidden')) {
+				t.editor.selection.moveToBookmark(t.editor.currentBookmark);
+				t.editor.currentBookmark = null;
+				try {
+					$('#schemaDialog ins').tooltip('destroy');
+				} catch (e) {
+					if (console) console.log('error destroying tooltip');
+				}
+			}
 		},
 		
 		createControl: function(n, cm) {
@@ -383,7 +439,8 @@
 				t.menuButton = cm.createMenuButton('schemaTagsButton', {
 					title: 'Tags',
 					image: url+'tag_text.png',
-					'class': 'wideButton'
+					'class': 'wideButton',
+					menuType: 'filterMenu'
 				}, tinymce.ui.ScrollingMenuButton);
 				t.menuButton.beforeShowMenu.add(function(c) {
 					t.editor.currentBookmark = t.editor.selection.getBookmark(1);

@@ -5,80 +5,80 @@ var EntitiesModel = function() {
 		person: {
 			title: 'Person',
 			mapping: {
-				cwrcbasic: '<person cert="jQuery{info.certainty}">[[[editorText]]]</person>',
+				tei: '<person cert="${info.certainty}">[[[editorText]]]</person>',
 				events: '<NAME>[[[editorText]]]</NAME>'
 			}
 		},
 		date: {
 			title: 'Date',
 			mapping: {
-				cwrcbasic: ''+
+				tei: ''+
 				'<date '+
 				'{{if info.date}}'+
-					'when="jQuery{info.date}"'+
+					'when="${info.date}"'+
 				'{{else info.startDate}}'+
-					'from="jQuery{info.startDate}" to="jQuery{info.endDate}"'+
+					'from="${info.startDate}" to="${info.endDate}"'+
 				'{{/if}}'+
 				'>[[[editorText]]]</date>',
 				events: ''+
 				'{{if info.date}}'+
-					'<DATE VALUE="jQuery{info.date}">[[[editorText]]]</DATE>'+
+					'<DATE VALUE="${info.date}">[[[editorText]]]</DATE>'+
 				'{{else info.startDate}}'+
-					'<DATERANGE FROM="jQuery{info.startDate}" TO="jQuery{info.endDate}">[[[editorText]]]</DATERANGE>'+
+					'<DATERANGE FROM="${info.startDate}" TO="${info.endDate}">[[[editorText]]]</DATERANGE>'+
 				'{{/if}}'
 			}
 		},
 		place: {
 			title: 'Place',
 			mapping: {
-				cwrcbasic: '<place cert="jQuery{info.certainty}">[[[editorText]]]</place>',
+				tei: '<place cert="${info.certainty}">[[[editorText]]]</place>',
 				events: '<PLACE>[[[editorText]]]</PLACE>'
 			}
 		},
 		event: {
 			title: 'Event',
 			mapping: {
-				cwrcbasic: '<event cert="jQuery{info.certainty}">[[[editorText]]]</event>'
+				tei: '<event cert="${info.certainty}">[[[editorText]]]</event>'
 			}
 		},
 		org: {
 			title: 'Organization',
 			mapping: {
-				cwrcbasic: '<org cert="jQuery{info.certainty}">[[[editorText]]]</org>',
+				tei: '<org cert="${info.certainty}">[[[editorText]]]</org>',
 				events: '<ORGNAME>[[[editorText]]]</ORGNAME>'
 			}
 		},
 		citation: {
 			title: 'Citation',
 			mapping: {
-				cwrcbasic: '<cit><quote>[[[editorText]]]</quote><ref>jQuery{info.citation}</ref></cit>'
+				tei: '<cit><quote>[[[editorText]]]</quote><ref>${info.citation}</ref></cit>'
 			}
 		},
 		note: {
 			title: 'Note',
 			mapping: {
-				cwrcbasic: '<note type="jQuery{info.type}" ana="jQuery{info.content}">[[[editorText]]]</note>'
+				tei: '<note type="${info.type}" ana="${info.content}">[[[editorText]]]</note>'
 			}
 		},
 		correction: {
 			title: 'Correction',
 			mapping: {
-				cwrcbasic: '<sic><corr cert="jQuery{info.certainty}" type="jQuery{info.type}" ana="jQuery{info.content}">[[[editorText]]]</corr></sic>',
-				events: '<SIC CORR="jQuery{info.content}">[[[editorText]]]</SIC>'
+				tei: '<sic><corr cert="${info.certainty}" type="${info.type}" ana="${info.content}">[[[editorText]]]</corr></sic>',
+				events: '<SIC CORR="${info.content}">[[[editorText]]]</SIC>'
 			}
 		},
 		keyword: {
 			title: 'Keyword',
 			mapping: {
-				cwrcbasic: ''+
+				tei: ''+
 				'<keywords scheme="http://classificationweb.net">'+
 					'<term '+
 					'{{if info.id}}'+
-						'sameAs="jQuery{info.id}"'+
+						'sameAs="${info.id}"'+
 					'{{else info.keyword}}'+
-						'sameAs="jQuery{info.keyword}"'+
+						'sameAs="${info.keyword}"'+
 					'{{/if}}'+
-					' type="jQuery{info.type}">[[[editorText]]]</term>'+
+					' type="${info.type}">[[[editorText]]]</term>'+
 				'</keywords>',
 				events: '<KEYWORDCLASS>[[[editorText]]]</KEYWORDCLASS>'
 			}
@@ -86,21 +86,21 @@ var EntitiesModel = function() {
 		link: {
 			title: 'Link',
 			mapping: {
-				cwrcbasic: '<ref target="jQuery{info.url}">[[[editorText]]]</ref>',
-				events: '<XREF URL="jQuery{info.url}">[[[editorText]]]</XREF>'
+				tei: '<ref target="${info.url}">[[[editorText]]]</ref>',
+				events: '<XREF URL="${info.url}">[[[editorText]]]</XREF>'
 			}
 		},
 		title: {
 			title: 'Text/Title',
 			mapping: {
-				cwrcbasic: '<title level="jQuery{info.level}">[[[editorText]]]</title>',
-				events: '<TITLE TITLETYPE="jQuery{info.level}">[[[editorText]]]</TITLE>'
+				tei: '<title level="${info.level}">[[[editorText]]]</title>',
+				events: '<TITLE TITLETYPE="${info.level}">[[[editorText]]]</TITLE>'
 			}
 		}
 	};
 	
 	function doMapping(entity, map) {		
-		var result = jQuery.tmpl(map, entity);
+		var result = $.tmpl(map, entity);
 		if (result[0]) return result[0].outerHTML;
 		else return '';
 	}
@@ -112,7 +112,7 @@ var EntitiesModel = function() {
 	 * @returns {Boolean}
 	 */
 	pm.isEntity = function(type) {
-		return entities[type] == null;
+		return entities[type] != null;
 	};
 	pm.getTitle = function(type) {
 		var e = entities[type];
@@ -135,6 +135,12 @@ var EntitiesModel = function() {
 	pm.getMappingTags = function(entity, schema) {
 		var e = entities[entity.props.type];
 		if (e) {
+			if (schema.indexOf('tei') != -1) {
+				schema = 'tei';
+			} else {
+				schema = 'events';
+			}
+			
 			if (e.mapping && e.mapping[schema]) {
 				var result = doMapping(entity, e.mapping[schema]);
 				return result.split('[[[editorText]]]');

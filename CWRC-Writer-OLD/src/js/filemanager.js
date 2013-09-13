@@ -1,0 +1,1031 @@
+/**
+ * Contains the load and save dialogs, as well as file related functions.
+ */
+function FileManager(config) {
+	
+	var w = config.writer;
+	
+	jQuery(document.body).append(''+
+		'<div id="entitiesConverter"></div>'+
+		'<div id="editSourceDialog">'+
+			'<textarea style="width: 100%; height: 98%;"></textarea>'+
+		'</div>'
+		//'<iframe id="editDocLoader" style="display: none;"></iframe>'
+	);
+	
+	var edit = jQuery('#editSourceDialog');
+	edit.dialog({
+		title: 'Edit Source',
+		modal: true,
+		resizable: true,
+		closeOnEscape: true,
+		height: 480,
+		width: 640,
+		autoOpen: false,
+		buttons: {
+			'Ok': function() {
+				var newDocString = jQuery('textarea', edit).val();
+				var xmlDoc = w.u.stringToXML(newDocString);
+				fm.loadDocumentFromXml(xmlDoc);
+				edit.dialog('close');
+			},
+			'Cancel': function() {
+				edit.dialog('close');
+			}
+		}
+	});
+	
+	var fm = {};
+	
+	/**
+	 * @memberOf fm
+	 */
+	fm.newDocument = function() {
+		if (w.editor.isDirty()) {
+			w.dialogs.filemanager.showUnsaved();
+		} else {
+			window.location = 'index.htm';
+		}
+	};
+	
+	fm.saveDocument = function() {
+		if (w.currentDocId == null) {
+			w.dialogs.filemanager.showSaver();
+		} else {
+			function doSave() {
+				var docText = fm.getDocumentContent(true);
+				jQuery.ajax({
+					url : w.baseUrl+'islandora/cwrcwriter/save_data/'+w.currentDocId,
+					type: 'POST',
+					dataType: 'text',
+					data: {"text":docText},
+					success: function(data, status, xhr) {
+						w.editor.isNotDirty = 1; // force clean state
+						w.dialogs.show('message', {
+							title: 'Document Saved',
+							msg: w.currentDocId+' was saved successfully.'
+						});
+					},
+					error: function() {
+						w.dialogs.show('message', {
+							title: 'Error',
+							msg: 'An error occurred and '+w.currentDocId+' was not saved.',
+							type: 'error'
+						});
+					}
+				});
+			}
+			
+			function validationHandler(valid) {
+				if (valid) {
+					doSave();
+				} else {
+					var doc = w.currentDocId;
+					if (doc == null) doc = 'The current document';
+					w.dialogs.confirm({
+						title: 'Document Invalid',
+						msg: doc+' is not valid. <b>Save anyways?</b>',
+						callback: function(yes) {
+							if (yes) {
+								doSave();
+							}
+						}
+					});
+				}
+			}
+			
+			w.delegator.validate(validationHandler);
+		}
+	};
+	
+	// gets any metadata info for the node and adds as attributes
+	// returns an array of 2 strings: opening and closing tags
+	function _nodeToStringArray(node) {
+		var array = [];
+		var id = node.attr('id');
+		var tag = node.attr('_tag') || node.attr('_type');
+		
+		var structEntry = w.structs[id];
+		var entityEntry = w.entities[id];
+		if (structEntry) {
+			var openingTag = '<'+tag;
+			for (var key in structEntry) {
+				if (key.indexOf('_') != 0) {
+					var attName = key;
+					if (attName == 'id') attName = w.idName;
+					openingTag += ' '+attName+'="'+structEntry[key]+'"';
+				}
+			}
+			openingTag += '>';
+			array.push(openingTag);
+			array.push('</'+tag+'>');
+		} else if (entityEntry) {
+			array = w.em.getMappingTags(entityEntry, w.validationSchema);
+		} else {
+			// not a valid tag so return empty strings
+			array = ['', ''];
+		}
+		
+		return array;
+	}
+	
+	// converts the opening and closing entity tag pairs to a matched set of opening and closing tags
+	function convertEntitiesToTags() {
+		for (var id in w.entities) {
+			var markers = w.editor.dom.select('[name="' + id + '"]');
+			var start = markers[0];
+			var end = markers[1];
+
+			var nodes = [ start ];
+			var currentNode = start;
+			while (currentNode != end && currentNode != null) {
+				currentNode = currentNode.nextSibling;
+				nodes.push(currentNode);
+			}
+			
+			jQuery(nodes).wrapAll('<entity id="'+id+'" _type="'+w.entities[id].props.type+'" />');			
+			jQuery(markers).remove();
+		}
+	}
+	
+	/**
+	 * Converts the editor node and its contents into an XML string suitable for export.
+	 * @param node A jQuery node.
+	 * @returns {String}
+	 */
+	fm.buildXMLString = function(node) {
+		var xmlString = '';
+		
+		function doBuild(currentNode) {
+			var tags = _nodeToStringArray(currentNode);
+			xmlString += tags[0];
+			currentNode.contents().each(function(index, el) {
+				if (el.nodeType == 1) {
+					doBuild(jQuery(el));
+				} else if (el.nodeType == 3) {
+					xmlString += el.data;
+				}
+			});
+			xmlString += tags[1];
+		}
+		
+		doBuild(node);
+		return xmlString;
+	};
+	
+	/**
+	 * Gets the content of the document, converted from internal format to the schema format
+	 * @param includeRDF True to include RDF in the header
+	 * @returns {String}
+	 */
+	fm.getDocumentContent = function(includeRDF) {
+		// remove highlights
+		w.highlightEntity();
+		
+		var xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n';
+		
+		var body = jQuery(w.editor.getDoc());
+		var clone = body.clone(false, true); // make a copy, don't clone body events, but clone child events
+		
+		_entitiesToUnicode(body);
+		
+		// rdf
+		var rdfString = '';
+		if (includeRDF) {
+			rdfString = '\n<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#">';
+			
+			// xml mode
+			var uri = w.baseUrl+'editor/documents/'+w.currentDocId;
+			rdfString += '\n<rdf:Description rdf:about="'+uri+'">\n\t<w:mode>'+w.mode+'</w:mode>\n</rdf:Description>';
+			
+			var offsets = _getNodeOffsetsFromRoot(body);
+			var relationships = _determineOffsetRelationships(offsets);
+			// entity and struct listings
+			for (var i = 0; i < offsets.length; i++) {
+				var o = offsets[i];
+				rdfString += '\n<rdf:Description rdf:ID="'+o.id+'">';
+				var key;
+				for (key in o) {
+					rdfString += '\n\t<w:'+key+' type="offset">'+o[key]+'</w:'+key+'>';
+				}
+				if (o.entity) {
+					var entry = w.entities[o.id];
+					rdfString += '\n\t<w:type type="props">'+entry.props.type+'</w:type>';
+					rdfString += '\n\t<w:content type="props">'+entry.props.content+'</w:content>';
+					for (key in entry.info) {
+						rdfString += '\n\t<w:'+key+' type="info">'+entry.info[key]+'</w:'+key+'>';
+					}
+					
+					var r = relationships[o.id];
+					for (var j = 0; j < r.contains.length; j++) {
+						rdfString += '\n\t<w:contains>'+r.contains[j]+'</w:contains>';
+					}
+					for (var j = 0; j < r.overlaps.length; j++) {
+						rdfString += '\n\t<w:overlaps>'+r.overlaps[j]+'</w:overlaps>';
+					}
+				}
+				rdfString += '\n</rdf:Description>';
+			}
+			
+			// triples
+			for (var i = 0; i < w.triples.length; i++) {
+				var t = w.triples[i];
+				rdfString += '\n<rdf:Description rdf:about="'+t.subject.uri+'" w:external="'+t.subject.external+'">'+
+				'\n\t<w:'+t.predicate.name+' w:text="'+t.predicate.text+'" w:external="'+t.predicate.external+'">'+
+				'\n\t\t<rdf:Description rdf:about="'+t.object.uri+'" w:external="'+t.object.external+'" />'+
+				'\n\t</w:'+t.predicate.name+'>'+
+				'\n</rdf:Description>';
+			}
+			
+			rdfString += '\n</rdf:RDF>\n';
+		}
+		
+		convertEntitiesToTags();
+		
+		var root = body.children('[_tag='+w.root+']');
+		// make sure TEI has the right namespace for validation purposes
+		if (w.root == 'TEI') {
+			root.attr('xmlns','http://www.tei-c.org/ns/1.0');
+		}
+		var tags = _nodeToStringArray(root);
+		xmlString += tags[0];
+		
+		xmlString += rdfString;
+		
+		root.contents().each(function(index, el) {
+			if (el.nodeType == 1) {
+				xmlString += fm.buildXMLString(jQuery(el));
+			} else if (el.nodeType == 3) {
+				xmlString += el.data;
+			}
+		});
+		
+		xmlString += tags[1];
+		
+		body.replaceWith(clone);
+		return xmlString;
+	};
+	
+	function _entitiesToUnicode(parentNode) {
+		var contents = jQuery(parentNode).contents();
+		contents.each(function(index, el) {
+			if (el.nodeType == Node.TEXT_NODE) {
+				if (el.nodeValue.match(/&.+?;/gim)) {
+					jQuery('#entitiesConverter')[0].innerHTML = el.nodeValue;
+					el.nodeValue = jQuery('#entitiesConverter')[0].innerText || jQuery('#entitiesConverter')[0].firstChild.nodeValue;
+				}
+			} else if (el.nodeType == Node.ELEMENT_NODE) {
+				_entitiesToUnicode(el);
+			}
+		});
+	};
+	
+	function _getNodeOffsetsFromRoot(root) {
+		var currentOffset = 0;
+		var offsets = [];
+		function getOffsets(parent) {
+			parent.contents().each(function(index, element) {
+				var el = jQuery(this);
+				if (this.nodeType == Node.TEXT_NODE && this.data != ' ') {
+					currentOffset += this.length;
+				} else if (el.attr('_tag')) {
+					var id = el.attr('id');
+					offsets.push({
+						id: id,
+						offset: currentOffset,
+						length: el.text().length
+					});
+					getOffsets(el);
+				} else if (el.attr('_entity') && el.hasClass('start')) {
+					var id = el.attr('name');
+					offsets.push({
+						id: id,
+						offset: currentOffset,
+						length: w.entities[id].props.content.length,
+						entity: true
+					});
+				}
+			});
+		}
+		
+		getOffsets(root);
+		return offsets;
+	};
+	
+	function _determineOffsetRelationships(offsets) {
+		var relationships = {};
+		var entityOffsets = [];
+		for (var i = 0; i < offsets.length; i++) {
+			var o = offsets[i];
+			if (o.entity) {
+				entityOffsets.push(o);
+				relationships[o.id] = {
+					contains: [],
+					overlaps: []
+				};
+			}
+		}
+		
+		var ol = entityOffsets.length;
+		for (var i = 0; i < ol; i++) {
+			var o1 = entityOffsets[i];
+			var span1 = o1.offset + o1.length;
+			var r = relationships[o1.id];
+			for (var j = 0; j < ol; j++) {
+				var o2 = entityOffsets[j];
+				var span2 = o2.offset + o2.length;
+				if (o1.offset < o2.offset && span1 > span2) {
+					r.contains.push(o2.id);
+				} else if (o1.offset < o2.offset && span1 > o2.offset && span1 < span2) {
+					r.overlaps.push(o2.id);
+				} else if (o1.offset > o2.offset && span1 > span2 && span2 > o1.offset) {
+					r.overlaps.push(o2.id);
+				} else if (o1.offset < o2.offset && span1 < span2 && span1 > o2.offset) {
+					r.overlaps.push(o2.id);
+				}
+			}
+		}
+		
+		return relationships;
+	};
+	
+	fm.loadDocumentFromUrl = function(docUrl) {
+		w.currentDocId = docUrl;
+		
+		w.entities = {};
+		w.structs = {};
+		w.triples = [];
+		
+		jQuery.ajax({
+			url: docUrl,
+			type: 'GET',
+			success: _loadDocumentHandler,
+			error: function(xhr, status, error) {
+				w.currentDocId = null;
+				w.dialogs.show('message', {
+					title: 'Error',
+					msg: 'An error ('+status+') occurred and '+docUrl+' was not loaded.',
+					type: 'error'
+				});
+			},
+			dataType: 'xml'
+		});
+	};
+	
+	fm.loadDocumentFromXml = function(docXml) {
+		_loadDocumentHandler(docXml);
+	};
+	
+	fm.loadDocument = function(docName) {
+		w.currentDocId = docName;
+		
+		w.entities = {};
+		w.structs = {};
+		w.triples = [];
+		
+		jQuery.ajax({
+			url: w.baseUrl+'editor/documents/'+docName,
+			type: 'GET',
+			success: _loadDocumentHandler,
+			error: function(xhr, status, error) {
+				w.currentDocId = null;
+				w.dialogs.show('message', {
+					title: 'Error',
+					msg: 'An error ('+status+') occurred and '+docName+' was not loaded.',
+					type: 'error'
+				});
+			},
+			dataType: 'xml'
+		});
+	};
+	
+
+	fm.loadEMICDocument = function() {
+		w.currentDocId = PID;
+		w.entities = {};
+		w.structs = {};
+		w.triples = [];
+		jQuery.ajax({
+			url: cwrc_params.BASE_PATH.replace("-X_X_X-",PID),
+			async: false,
+			dataType : 'xml',
+			success: _loadDocumentHandler,
+			error: function() {
+				w.editor.setContent('<p> Page <strong>' + PID + '</strong> contains errors </p>');
+			}
+		});
+	};
+	
+	/**
+	 * Takes a document node and returns a string representation of its
+	 * contents, compatible with the editor. Additionally creates w.structs
+	 * entries.
+	 * 
+	 * @param node
+	 *            An (X)HTML element
+	 * @returns {String}
+	 */
+	fm.buildEditorString = function(node) {
+		var editorString = '';
+		
+		function doBuild(currentNode, forceInline) {
+			var tag = currentNode.nodeName;
+			var jQNode = jQuery(currentNode);
+			
+			// TODO ensure that block level elements aren't inside inline level elements, the inline parent will be removed by the browser
+			// temp fix: force inline level for children if parent is inline
+			var tagName;
+			if (forceInline) {
+				tagName = 'span';
+			} else {
+				tagName = w.u.getTagForEditor(tag);
+			}
+			
+			editorString += '<'+tagName+' _tag="'+tag+'"';
+			
+			// create structs entries while we build the string
+			var id = jQNode.attr(w.idName);
+			if (id == null) {
+				id = tinymce.DOM.uniqueId('struct_');
+				editorString += ' id="'+id+'"';
+			}
+			var idNum = parseInt(id.split('_')[1]);
+			if (idNum > tinymce.DOM.counter) tinymce.DOM.counter = idNum;
+			
+			var canContainText = w.u.canTagContainText(tag);
+			editorString += ' _textallowed="'+canContainText+'"';
+			
+			w.structs[id] = {
+				id: id,
+				_tag: tag,
+				_textallowed: canContainText
+			};
+			jQuery(currentNode.attributes).each(function(index, att) {
+				var attName = att.name;
+				if (attName == w.idName) attName = 'id';
+				w.structs[id][attName] = att.value;
+				if (attName == 'id' || attName.match(/^_/) != null) {
+					editorString += ' '+attName+'="'+att.value+'"';
+				}
+			});
+			editorString += '>';
+			
+			var isInline = forceInline || !w.u.isTagBlockLevel(tag);
+			
+			jQNode.contents().each(function(index, el) {
+				if (el.nodeType == 1) {
+					doBuild(el, isInline);
+				} else if (el.nodeType == 3) {
+					editorString += el.data;
+				}
+			});
+			
+			editorString += '</'+tagName+'>';
+		}
+		
+		doBuild(node, false);
+		return editorString;
+	};
+	
+	function _loadDocumentHandler(doc) {
+		if (doc.firstChild.nodeName == 'xml-model') {
+			var xmlModelData = doc.firstChild.data;
+			var schemaUrl = xmlModelData.match(/href="([^"]*)"/)[1];
+			var urlParts = schemaUrl.match(/^(.*):\/\/([a-z\-.]+)(?=:[0-9]+)?\/(.*)/);
+			var fileName = urlParts[3];
+			fm.loadSchema(fileName, false, processDocument);
+		} else {
+			var rootName;
+			if (jQuery('[_tag='+w.root+']', doc.body).attr('_tag') == 'EVENTS') {
+				rootName = 'events';
+				w.idName = 'ID';
+			} else {
+				rootName = 'tei';
+				w.idName = 'xml:id';
+			}
+			if (rootName != w.root.toLowerCase()) {
+				// roots don't match so load the appropriate schema
+				if (rootName == 'events') {
+					fm.loadSchema('../schema/events.rng', false, processDocument);
+				} else {
+					// Had to hack this into the API. This is just another endpoint that
+					// was statically convifigured. Must be exposed to the Delegator class.
+					fm.loadSchema(Drupal.settings.islandora_critical_edition.base_url + '/' + 
+							Drupal.settings.islandora_critical_edition.module_base + 
+							'/CWRC-Writer/src/schema/CWRC-TEIBasic.rng', false, processDocument);
+				}
+			} else {
+				processDocument();
+			}
+		}
+		
+		function processDocument() {
+			var offsets = [];
+			var rdfs = jQuery(doc).find('rdf\\:RDF, RDF');
+			
+			var docMode;
+			var mode = parseInt(rdfs.find('w\\:mode, mode').first().text());
+			if (mode == w.XML) {
+				docMode = w.XML;
+			} else {
+				docMode = w.XMLRDF;
+			}
+			
+			if (w.mode != docMode) {
+				var editorModeStr = w.mode == w.XML ? 'XML only' : 'XML & RDF';
+				var docModeStr = docMode == w.XML ? 'XML only' : 'XML & RDF';
+				w.dialogs.show('message', {
+					title: 'Editor Mode changed',
+					msg: 'The Editor Mode ('+editorModeStr+') has been changed to match the Document Mode ('+docModeStr+').',
+					type: 'info'
+				});
+				
+				w.mode = docMode;
+			}
+			if (docMode == w.XMLRDF) {
+				rdfs.children().each(function(i1, el1) {
+					var rdf = jQuery(this);
+
+					if (rdf.attr('rdf:ID')) {
+						var id = rdf.find('w\\:id, id').text();
+						
+						var entity = rdf.find('w\\:entity, entity').text();
+						// entity
+						if (entity != '') {
+							var idNum = parseInt(id.split('_')[1]);
+							if (idNum > tinymce.DOM.counter) tinymce.DOM.counter = idNum;
+							
+							offsets.push({
+								id: id,
+								parent: rdf.find('w\\:parent, parent').text(),
+								offset: parseInt(rdf.find('w\\:offset, offset').text()),
+								length: parseInt(rdf.find('w\\:length, length').text())
+							});
+							w.entities[id] = {
+								props: {
+									id: id
+								},
+								info: {}
+							};
+							rdf.children('[type="props"]').each(function(i2, el2) {
+								var key = jQuery(this)[0].nodeName.split(':')[1].toLowerCase();
+								var prop = jQuery(this).text();
+								if (key == 'content') {
+									var title = w.u.getTitleFromContent(prop);
+									w.entities[id]['props']['title'] = title;
+								}
+								w.entities[id]['props'][key] = prop;
+							});
+							rdf.children('[type="info"]').each(function(i2, el2) {
+								var key = jQuery(this)[0].nodeName.split(':')[1].toLowerCase();
+								w.entities[id]['info'][key] = jQuery(this).text();
+							});
+						} else {
+							// struct
+						}
+						
+					// triple
+					} else if (rdf.attr('rdf:about')){
+						var subject = jQuery(this);
+						var subjectUri = subject.attr('rdf:about');
+						var predicate = rdf.children().first();
+						var object = rdf.find('rdf\\:Description, Description');
+						var objectUri = object.attr('rdf:about');
+						
+						var triple = {
+							subject: {
+								uri: subjectUri,
+								text: subject.attr('w:external') == 'false' ? w.entities[subjectUri].props.title : subjectUri,
+								external: subject.attr('w:external, external')
+							},
+							predicate: {
+								text: predicate.attr('w:text'),
+								name: predicate[0].nodeName.split(':')[1].toLowerCase(),
+								external: predicate.attr('w:external')
+							},
+							object: {
+								uri: objectUri,
+								text: object.attr('w:external') == 'false' ? w.entities[objectUri].props.title : objectUri,
+								external: object.attr('w:external')
+							}
+						};
+						
+						w.triples.push(triple);
+					}
+				});
+				jQuery(doc).find('rdf\\:RDF, RDF').remove();
+			} else {
+				function processEntities(parent, offsets) {
+					var currentOffset = 0;
+					parent.contents().each(function(index, element) {
+						if (this.nodeType == Node.TEXT_NODE) {
+							currentOffset += this.length;
+						} else if (w.em.isEntity(this.nodeName.toLowerCase())) {
+							var ent = jQuery(this);
+							var id = ent.attr(w.idName);
+							if (id == null) {
+								id = tinymce.DOM.uniqueId('ent_');
+							}
+							offsets.push({
+								id: id,
+								parent: jQuery(parent).attr(w.idName),
+								offset: currentOffset,
+								length: ent.text().length
+							});
+							
+							var content = ent.text();
+							w.entities[id] = {
+								props: {
+									id: id,
+									type: this.nodeName.toLowerCase(),
+									content: content,
+									title: w.u.getTitleFromContent(content)
+								},
+								info: {}
+							};
+							jQuery(this.attributes).each(function(index, att) {
+								w.entities[id].info[att.name] = att.value;
+							});
+							
+							ent.contents().unwrap();
+						} else {
+							processEntities(jQuery(this), offsets);
+						}
+					});
+				}
+				processEntities(jQuery(doc.firstChild), offsets);
+			}
+			// FIXME temp fix until document format is correct
+			var root = jQuery(w.root+', '+w.root.toLowerCase(), doc)[0];
+			
+			var editorString = fm.buildEditorString(root);
+			w.editor.setContent(editorString);
+			
+			// editor needs focus in order for entities to be properly inserted
+			w.editor.focus();
+			
+			var id, o, parent, contents, lengthCount, match, startOffset, endOffset, startNode, endNode;
+			for (var i = 0; i < offsets.length; i++) {
+				startNode = null;
+				endNode = null;
+				startOffset = 0;
+				endOffset = 0;
+				
+				o = offsets[i];
+				id = o.id;
+				if (o.parent != '') {
+					parent = w.editor.jQuery('#'+o.parent);
+					
+					// get all text nodes
+					contents = parent.contents().filter(function() {
+						return this.nodeType == Node.TEXT_NODE;
+					});
+					
+					startOffset = o.offset;
+					lengthCount = 0;
+					match = false;
+					startNode = contents.filter(function() {
+						if (!match) {
+							lengthCount += this.length;
+							if (lengthCount > o.offset) {
+								match = true;
+								return true;
+							} else {
+								startOffset -= this.length;
+							}
+						}
+						return false;
+					})[0];
+					
+					endOffset = o.offset+o.length;
+					lengthCount = 0;
+					match = false;
+					endNode = contents.filter(function() {
+						if (!match) {
+							lengthCount += this.length;
+							if (lengthCount >= o.offset+o.length) {
+								match = true;
+								return true;
+							} else {
+								endOffset -= this.length;
+							}
+						}
+						return false;
+					})[0];
+				} else {
+					parent = jQuery(w.editor.getDoc().body);
+					var currentOffset = 0;
+					function getNodes(parent) {
+						parent.contents().each(function(index, element) {
+							if (this.nodeType == Node.TEXT_NODE && this.data != ' ') {
+								currentOffset += this.length;
+								if (currentOffset > o.offset && startNode == null) {
+									startNode = this;
+									startOffset = o.offset - (currentOffset - this.length);
+								}
+								
+								if (currentOffset >= o.offset + o.length && endNode == null) {
+									endNode = this;
+									endOffset = startOffset + o.length;
+								}
+							} else {//if (jQuery(this).is(w.root) || jQuery(this).attr('_tag')) {
+								getNodes(jQuery(this));
+							}
+							if (startNode != null && endNode != null) {
+								return false;
+							}
+						});
+					}
+					
+					getNodes(parent);
+				}
+				
+				if (startNode != null && endNode != null) {
+					var range = w.editor.selection.getRng(true);
+					try {
+						range.setStart(startNode, startOffset);
+						range.setEnd(endNode, endOffset);
+						w.tagger.insertBoundaryTags(id, w.entities[id].props.type, range);
+					} catch (e) {
+						
+					}
+				}
+			}
+			
+			w.entitiesList.update();
+			w.tree.update(true);
+			w.relations.update();
+			
+			// try putting the cursor in the body
+			window.setTimeout(function() {
+				var bodyTag = jQuery('[_tag='+w.header+']', w.editor.getBody()).next()[0];
+				if (bodyTag != null) {
+					w.editor.selection.select(bodyTag);
+					w.editor.selection.collapse(true);
+					w._fireNodeChange(bodyTag);
+				}
+			}, 50);
+		} // end processDocument
+	};
+	
+	fm.editSource = function() {
+		w.dialogs.confirm({
+			title: 'Edit Source',
+			msg: 'Editing the source directly is only recommended for advanced users who know what they\'re doing.<br/><br/>Are you sure you wish to continue?',
+			callback: function(yes) {
+				if (yes) {
+					var docText = fm.getDocumentContent(true);
+					jQuery('textarea', edit).val(docText);
+					edit.dialog('open');
+				}
+			}
+		});
+	};
+	
+	/**
+	 * Load a new schema.
+	 * @param {String} schemaFile The schema file to load
+	 * @param {Boolean} startText Whether to include the default starting text
+	 * @param {Function} callback Callback for when the load is complete
+	 */
+	fm.loadSchema = function(schemaFile, startText, callback) {
+		var baseUrl = ''; //w.project == null ? '' : w.baseUrl; // handling difference between local and server urls
+		w.validationSchema = schemaFile;
+		$.ajax({
+			url: schemaFile,
+			dataType: 'xml',
+			success: function(data, status, xhr) {
+				w.schemaXML = data;
+				// get root element
+				var startName = $('start ref:first', w.schemaXML).attr('name');
+				var startEl = $('define[name="'+startName+'"] element', w.schemaXML).attr('name');
+				w.root = startEl;
+//				w.editor.settings.forced_root_block = w.root;
+//				w.editor.schema.addCustomElements(w.root);
+//			    w.editor.schema.addCustomElements(w.root.toLowerCase());
+				
+			    var cssUrl;
+				var additionalBlockElements;
+			    if (w.root == 'TEI') {
+			    	cssUrl = '../css/tei_converted.css';
+					
+			    	additionalBlockElements = ['argument', 'back', 'bibl', 'biblFull', 'biblScope', 'body', 'byline', 'category', 'change', 'cit', 'classCode', 'elementSpec', 'macroSpec', 'classSpec', 'closer', 'creation', 'date', 'distributor', 'div', 'div1', 'div2', 'div3', 'div4', 'div5', 'div6', 'div7', 'docAuthor', 'edition', 'editionStmt', 'editor', 'eg', 'epigraph', 'extent', 'figure', 'front', 'funder', 'group', 'head', 'dateline', 'idno', 'item', 'keywords', 'l', 'label', 'langUsage', 'lb', 'lg', 'list', 'listBibl', 'note', 'noteStmt', 'opener', 'p', 'principal', 'publicationStmt', 'publisher', 'pubPlace', 'q', 'rendition', 'resp', 'respStmt', 'salute', 'samplingDecl', 'seriesStmt', 'signed', 'sp', 'sponsor', 'tagUsage', 'taxonomy', 'textClass', 'titlePage', 'titlePart', 'trailer', 'TEI', 'teiHeader', 'text', 'authority', 'availability', 'fileDesc', 'sourceDesc', 'revisionDesc', 'catDesc', 'encodingDesc', 'profileDesc', 'projectDesc', 'docDate', 'docEdition', 'docImprint', 'docTitle'];
+			    	
+			    	w.header = 'teiHeader';
+			    	// FIXME temp fix for doc structure
+			    	w.idName = 'xml:id';
+			    } else {
+			    	cssUrl = 'css/orlando_converted.css';
+					
+			    	additionalBlockElements = ['DIV0', 'DIV1', 'EVENTS', 'ORLANDOHEADER', 'DOCAUTHOR', 'DOCEDITOR', 'DOCEXTENT', 'PUBLICATIONSTMT', 'TITLESTMT', 'PUBPLACE', 'L', 'P', 'HEADING', 'CHRONEVENT', 'CHRONSTRUCT'];
+					
+					w.header = 'ORLANDOHEADER';
+					w.idName = 'ID';
+			    }
+			    var blockElements = w.editor.schema.getBlockElements();
+			    for (var i = 0; i < additionalBlockElements.length; i++) {
+		    		blockElements[additionalBlockElements[i]] = {};
+		    	}
+				
+				function processSchema() {
+					// remove old schema elements
+				    jQuery('#schemaTags', w.editor.dom.doc).remove();
+				    jQuery('#schemaRules', w.editor.dom.doc).remove();
+				    
+				    fm.loadSchemaCSS(cssUrl);
+				    
+				    // create css to display schema tags
+					jQuery('head', w.editor.getDoc()).append('<style id="schemaTags" type="text/css" />');
+					
+					var schemaTags = '';
+					var elements = [];
+					jQuery('element', w.schemaXML).each(function(index, el) {
+						var tag = jQuery(el).attr('name');
+						if (tag != null && elements.indexOf(tag) == -1) {
+							elements.push(tag);
+							var tagName = w.u.getTagForEditor(tag);
+							schemaTags += '.showStructBrackets '+tagName+'[_tag='+tag+']:before { color: #aaa; font-weight: normal; font-style: normal; font-family: monospace; content: "<'+tag+'>"; }';
+							schemaTags += '.showStructBrackets '+tagName+'[_tag='+tag+']:after { color: #aaa; font-weight: normal; font-style: normal; font-family: monospace; content: "</'+tag+'>"; }';
+						}
+					});
+					elements.sort();
+					
+					// hide the header
+					var tagName = w.u.getTagForEditor(w.header);
+					schemaTags += tagName+'[_tag='+w.header+'] { display: none !important; }';
+					
+					jQuery('#schemaTags', w.editor.getDoc()).text(schemaTags);
+				    
+					w.schema.elements = elements;
+					
+					if (callback == null) {
+						var text = '';
+						if (startText) text = 'Paste or type your text here.';
+						var tag = w.u.getTagForEditor(w.root);
+						w.editor.setContent('<'+tag+' _tag="'+w.root+'">'+text+'</'+tag+'>');
+					}
+					
+					w.entitiesList.update();
+					w.tree.update(true);
+					w.relations.update();
+					
+					w.schemaJSON = w.u.xmlToJSON(jQuery('grammar', w.schemaXML)[0]);
+					
+					// update the schema for schematags.js
+					var stb = w.editor.controlManager.controls.editor_schemaTagsButton;
+					if (stb.menu) {
+						stb.parentControl.buildMenu(stb.menu, null, {disabled: false, mode: 'add'});
+					}
+					
+					if (callback) callback();
+				}
+			    
+				// handle includes
+				var include = jQuery('include:first', w.schemaXML); // TODO add handling for multiple includes
+				if (include.length == 1) {
+					var href = include.attr('href');
+					jQuery.ajax({
+						url: baseUrl + 'schema/'+href,
+						dataType: 'xml',
+						success: function(data, status, xhr) {
+							// handle redefinitions
+							include.children().each(function(index, el) {
+								if (el.nodeName == 'start') {
+									jQuery('start', data).replaceWith(el);
+								} else if (el.nodeName == 'define') {
+									var name = jQuery(el).attr('name');
+									var match = jQuery('define[name="'+name+'"]', data);
+									if (match.length == 1) {
+										match.replaceWith(el);
+									} else {
+										jQuery('grammar', data).append(el);
+									}
+								}
+							});
+							
+							include.replaceWith(jQuery('grammar', data).children());
+							
+							processSchema();
+						}
+					});
+				} else {
+					processSchema();
+				}
+			},
+			error: function(xhr, status, error) {
+				console.log("error: " + error + ", status: " + status);
+				w.dialogs.show('message', {title: 'Error', msg: 'Error loading schema: '+status, type: 'error'});
+			}
+		});
+	};
+	
+	fm.loadSchemaCSS = function(url) {
+		w.editor.dom.loadCSS(url);
+		if (url.match('converted') != null) {
+			// already converted so exit
+			return;
+		}
+		var name = url.split('/');
+		name = name[name.length-1];
+		var numCss = w.editor.getDoc().styleSheets.length;
+		var cssInt = null;
+		function parseCss() {
+			var stylesheet = null;
+			var stylesheets = w.editor.getDoc().styleSheets;
+			for (var i = 0; i < stylesheets.length; i++) {
+				var s = stylesheets[i];
+				if (s.href && s.href.indexOf(name) != -1) {
+					stylesheet = s;
+					break;
+				}
+			}
+			if (stylesheet) {
+				try {
+					jQuery('#schemaRules', w.editor.dom.doc).remove();
+					
+					var rules = stylesheet.cssRules;
+					var newRules = '';
+					// adapt the rules to our format, should only modify element names in selectors
+					for (var i = 0; i < rules.length; i++) {
+						// chrome won't get proper selector, see: https://code.google.com/p/chromium/issues/detail?id=67782
+						var selector = rules[i].selectorText;
+						var newSelector = selector.replace(/(^|,|\s)(\w+)/g, function(str, p1, p2, offset, s) {
+							var tagName = w.u.getTagForEditor(p2);
+							return p1+tagName+'[_tag="'+p2+'"]';
+						});
+						var css = rules[i].cssText;
+						var newCss = css.replace(selector, newSelector);
+						newRules += newCss+'\n';
+					}
+					jQuery('head', w.editor.dom.doc).append('<style id="schemaRules" type="text/css" />');
+					jQuery('#schemaRules', w.editor.dom.doc).text(newRules);
+					stylesheet.disabled = true;
+				} catch (e) {
+					setTimeout(parseCss, 25);
+				}
+			} else {
+				setTimeout(parseCss, 25);
+			}
+		};
+		if (numCss > 0) {
+			parseCss();
+		} else {
+			cssInt = setInterval(function() {
+				var len = w.editor.getDoc().styleSheets.length;
+				if (len > numCss) {
+					clearInterval(cssInt);
+					parseCss();
+				}
+			}, 25);
+		}
+	};
+	
+	fm.loadInitialDocument = function(start) {
+		if (start.match('load')) {
+			w.dialogs.filemanager.showLoader();
+		} else if (start.match('sample_letter')) {
+			_loadTemplate('xml/sample_letter.xml');
+		} else if (start.match('sample_poem')) {
+			_loadTemplate('xml/sample_poem.xml');
+		} else if (start.match('sample_biography')) {
+			_loadTemplate('xml/sample_biography.xml');
+		} else if (start.match('sample_writing')) {
+			_loadTemplate('xml/sample_writing.xml');
+		} else if (start != '') {
+			_loadTemplate('xml/template_'+start.substr(1)+'.xml');
+		} else {
+			w.fm.loadEMICDocument();
+		}
+	};
+	
+	function _loadTemplate(url) {
+		jQuery.ajax({
+			url: url,
+			dataType: 'xml',
+			success: function(data, status, xhr) {
+				var rdf = data.createElement('rdf:RDF');
+				var root;
+				if (data.childNodes) {
+					root = data.childNodes[data.childNodes.length-1];
+				} else {
+					root = data.firstChild;
+				}
+				jQuery(root).prepend(rdf);
+				_loadDocumentHandler(data);
+			},
+			error: function(xhr, status, error) {
+				if (console) console.log(status);
+			}
+		});
+	};
+	
+	return fm;
+};
+
+//cross browser xml node finder
+//http://www.steveworkman.com/html5-2/javascript/2011/improving-javascript-xml-node-finding-performance-by-2000/
+jQuery.fn.filterNode = function(name) {
+	return this.find('*').filter(function() {
+		return this.nodeName === name;
+	});
+};

@@ -33,7 +33,7 @@ function Utilities(config) {
 	};
 	
 	u.xmlToJSON = function(xml) {
-		if (jQuery.type(xml) == 'string') {
+		if ($.type(xml) == 'string') {
 			xml = u.stringToXML(xml);
 		}
 		var xotree = new XML.ObjTree();
@@ -147,21 +147,19 @@ function Utilities(config) {
 			return doFind(node, direction, 0);
 		}
 		
-		// fix for when start and/or end containers are element nodes (should always be text nodes for entities)
-		if (!isStructTag) {
-			if (range.startContainer.nodeType == Node.ELEMENT_NODE) {
-				var end = range.endContainer;
-				if (end.nodeType != Node.TEXT_NODE || range.endOffset == 0) {
-					end = findTextNode(range.endContainer, 'back');
-					if (end == null) return w.NO_COMMON_PARENT;
-					range.setEnd(end, end.length);
-				}
-				range.setStart(end, 0);
+		// fix for when start and/or end containers are element nodes
+		if (range.startContainer.nodeType == Node.ELEMENT_NODE) {
+			var end = range.endContainer;
+			if (end.nodeType != Node.TEXT_NODE || range.endOffset == 0) {
+				end = findTextNode(range.endContainer, 'back');
+				if (end == null) return w.NO_COMMON_PARENT;
+				range.setEnd(end, end.length);
 			}
-			if (range.endContainer.nodeType == Node.ELEMENT_NODE) {
-				// don't need to check nodeType here since we've already ensured startContainer is text
-				range.setEnd(range.startContainer, range.startContainer.length);
-			}
+			range.setStart(end, 0);
+		}
+		if (range.endContainer.nodeType == Node.ELEMENT_NODE) {
+			// don't need to check nodeType here since we've already ensured startContainer is text
+			range.setEnd(range.startContainer, range.startContainer.length);
 		}
 		
 		/**
@@ -175,7 +173,7 @@ function Utilities(config) {
 			if (match != null) {
 				leadingSpaces = match[0].length;
 			}
-			match = content.match(/\s+jQuery/);
+			match = content.match(/\s+$/);
 			if (match != null) {
 				trailingSpaces = match[0].length;
 			}
@@ -220,7 +218,7 @@ function Utilities(config) {
 		
 		if (!structAction) {
 			// check for and fix selections inside of entity boundary tags
-			var node = jQuery(range.startContainer);
+			var node = $(range.startContainer);
 			var entParent = node.parent('[_entity]');
 			if (entParent.length > 0) {
 				if (entParent.hasClass('start')) {
@@ -230,7 +228,7 @@ function Utilities(config) {
 					}
 				}
 			}
-			node = jQuery(range.endContainer);
+			node = $(range.endContainer);
 			entParent = node.parent('[_entity]');
 			if (entParent.length > 0) {
 				if (entParent.hasClass('end')) {
@@ -261,7 +259,7 @@ function Utilities(config) {
 			var ents = {};
 			while (currentNode != range.endContainer) {
 				currentNode = currentNode.nextSibling;
-				c = jQuery(currentNode);
+				c = $(currentNode);
 				if (c.attr('entity') != null) {
 					if (c.hasClass('start')) {
 						ents[c.attr('name')] = true;
@@ -294,12 +292,12 @@ function Utilities(config) {
 	};
 	
 	u.getRootTag = function() {
-		return jQuery('[_tag='+w.root+']', w.editor.getBody());
+		return $('[_tag='+w.root+']', w.editor.getBody());
 	};
 	
 	u.getDocumentationForTag = function(tag) {
-		var element = jQuery('element[name="'+tag+'"]', w.schemaXML);
-		var doc = jQuery('a\\:documentation, documentation', element).first().text();
+		var element = $('element[name="'+tag+'"]', w.schemaXML);
+		var doc = $('a\\:documentation, documentation', element).first().text();
 		return doc;
 	};
 	
@@ -316,7 +314,7 @@ function Utilities(config) {
 		while (continueQuery && context != null) {
 			continueQuery = matchingFunc.call(this, context);
 			if (continueQuery == undefined) continueQuery = true;
-			context = context['jQueryparent'];
+			context = context['$parent'];
 		}
 	}
 
@@ -329,7 +327,7 @@ function Utilities(config) {
 				if (continueQuery == undefined) continueQuery = true;
 				for (var key in c) {
 					// filter out attributes
-					if (key != 'jQueryparent' && key.search('@') != 0) {
+					if (key != '$parent' && key.search('@') != 0) {
 						var prop = c[key];
 						if (isArray(prop)) {
 							for (var i = 0; i < prop.length; i++) {
@@ -386,24 +384,24 @@ function Utilities(config) {
 	function _getChildren(currEl, defHits, level, type, children) {
 		// first get the direct types
 		currEl.find(type).each(function(index, el) {
-			var child = jQuery(el);
+			var child = $(el);
 			if (child.parents('element').length > 0 && level > 0) {
 				return; // don't get elements/attributes from other elements
 			}
 			var childObj = {
 				name: child.attr('name'),
 				level: level+0,
-				documentation: jQuery('a\\:documentation, documentation', child).first().text()
+				documentation: $('a\\:documentation, documentation', child).first().text()
 			};
 			if (type == 'attribute') {
 				childObj.required = child.parent('optional').length == 0;
 				// TODO confirm defaultValue is being retrieved, seems like it's only in attributes
-				childObj.defaultValue = jQuery('a\\:defaultValue, defaultValue', child).first().text();
-				var choice = jQuery('choice', child).first();
+				childObj.defaultValue = $('a\\:defaultValue, defaultValue', child).first().text();
+				var choice = $('choice', child).first();
 				if (choice.length == 1) {
 					var choices = [];
-					jQuery('value', choice).each(function(index, el) {
-						choices.push(jQuery(el).text());
+					$('value', choice).each(function(index, el) {
+						choices.push($(el).text());
 					});
 					childObj.choices = choices;
 				}
@@ -412,13 +410,13 @@ function Utilities(config) {
 		});
 		// now process the references
 		currEl.find('ref').each(function(index, el) {
-			var name = jQuery(el).attr('name');
-			if (jQuery(el).parents('element').length > 0 && level > 0) {
+			var name = $(el).attr('name');
+			if ($(el).parents('element').length > 0 && level > 0) {
 				return; // don't get attributes from other elements
 			}
 			if (!defHits[name]) {
 				defHits[name] = true;
-				var def = jQuery('define[name="'+name+'"]', writer.schemaXML);
+				var def = $('define[name="'+name+'"]', writer.schemaXML);
 				_getChildren(def, defHits, level+1, type, children);
 			}
 		});
@@ -444,7 +442,7 @@ function Utilities(config) {
 			var child = hits[i];
 			if (level > 0) {
 				var match = false;
-				_queryUp(child['jQueryparent']['jQueryparent'], function(item) {
+				_queryUp(child['$parent']['$parent'], function(item) {
 					if (item.element) {
 						match = true;
 						return false;
@@ -477,7 +475,7 @@ function Utilities(config) {
 					childObj.required = !refParentProps.optional;
 				} else {
 					childObj.required = true;
-					_queryUp(child['jQueryparent'], function(item) {
+					_queryUp(child['$parent'], function(item) {
 						if (item.optional) {
 							childObj.required = false;
 							return false;
@@ -615,11 +613,11 @@ function Utilities(config) {
 	};
 	
 	function _getParentElementsFromDef(defName, defHits, level, parents) {
-		jQuery('define:has(ref[name="'+defName+'"])', writer.schemaXML).each(function(index, el) {
-			var name = jQuery(el).attr('name');
+		$('define:has(ref[name="'+defName+'"])', writer.schemaXML).each(function(index, el) {
+			var name = $(el).attr('name');
 			if (!defHits[name]) {
 				defHits[name] = true;
-				var element = jQuery(el).find('element').first();
+				var element = $(el).find('element').first();
 				if (element.length == 1) {
 					parents.push({name: element.attr('name'), level: level+0});
 				} else {
@@ -644,7 +642,7 @@ function Utilities(config) {
 			}
 		}
 		if (parents.length == 0) {
-			var element = jQuery('element[name="'+tag+'"]', writer.schemaXML);
+			var element = $('element[name="'+tag+'"]', writer.schemaXML);
 			var defName = element.parents('define').attr('name');
 			var defHits = {};
 			var level = 0;
@@ -698,13 +696,13 @@ function Utilities(config) {
 		
 		// now process the references
 		currEl.find('ref').each(function(index, el) {
-			var name = jQuery(el).attr('name');
-			if (jQuery(el).parents('element').length > 0 && level > 0) {
+			var name = $(el).attr('name');
+			if ($(el).parents('element').length > 0 && level > 0) {
 				return; // don't get attributes from other elements
 			}
 			if (!defHits[name]) {
 				defHits[name] = true;
-				var def = jQuery('define[name="'+name+'"]', writer.schemaXML);
+				var def = $('define[name="'+name+'"]', writer.schemaXML);
 				return checkForText(def, defHits, level+1, canContainText);
 			}
 		});
@@ -723,7 +721,7 @@ function Utilities(config) {
 			if (localData) return localData == 'true';
 		}
 		
-		var element = jQuery('element[name="'+tag+'"]', writer.schemaXML);
+		var element = $('element[name="'+tag+'"]', writer.schemaXML);
 		var defHits = {};
 		var level = 0;
 		var canContainText = {isTrue: false}; // needs to be an object so change is visible outside of checkForText

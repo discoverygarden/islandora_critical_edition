@@ -2,7 +2,7 @@
 
   $('document').ready(function() {
 
-    // Functionality is wrapped up in 'islandora_cwrc_wrapper.js.
+    // Functionality is wrapped up in 'islandora_writer_wrapper.js.
     Islandora.init_writer();
   });
 
@@ -194,9 +194,11 @@
     $.each(islandora_canvas_params.pages, function(key, value) {
       $('#canvas_page_choose').append('<option  value="' + key + '">Page ' + (key + 1) + '</option>');
     });
+    console.log("use dropdown" + islandora_canvas_params.use_dropdown);
     if (islandora_canvas_params.use_dropdown == 1) {
         $('#islandora_classification').empty();
         var sel = $('<select  id="anno_classification">').appendTo('#islandora_classification');
+        console.log("catagories: " + JSON.stringify(islandora_canvas_params.categories));
         $(islandora_canvas_params.categories).each(function() {
           value = this.toString();
           sel.append($("<option>").attr('value', value).text(value));
@@ -236,21 +238,23 @@
     // Setup a basic Canvas with explicit width to scale to from browser width
    initCanvas(nCanvas)
     // Manifest initialization.
+    console.log(islandora_canvas_params.manifest_url);
     fetchTriples(islandora_canvas_params.manifest_url,
         rdfbase,
         cb_process_manifest);
-
+    
     $('#color-picker-wrapper').click(function() {
       $('#anno_color_activated').attr('value', 'active');
     });
     $('.color-picker').miniColors();
-    
+    var baseUrl = window.location.protocol+'//'+window.location.host;
+    console.log(baseUrl+Drupal.settings.basePath+'islandora/object/' + cwrc_params.pages[cwrc_params.position] + '/datastream/CWRC/view');
     // Implement wrapper to load the writer document.
-    Islandora.Writer.Document.load(Drupal.settings.basePath + 'islandora/object/' + cwrc_params.pages[cwrc_params.position] + '/datastream/CWRC/view',
-      Drupal.settings.islandora_critical_edition.base_url +
-      Drupal.settings.basePath +
-      Drupal.settings.islandora_critical_edition.module_base + 
-      '/CWRC-Writer/src/schema/CWRC-TEIBasic.rng');
+//    Islandora.Writer.Document.load(baseUrl+Drupal.settings.basePath+'islandora/object/' + cwrc_params.pages[cwrc_params.position] + '/datastream/CWRC/view',
+//      Drupal.settings.islandora_critical_edition.base_url +
+//      Drupal.settings.basePath +
+//      Drupal.settings.islandora_critical_edition.module_base + 
+//      '/CWRC-Writer/src/schema/CWRC-TEIBasic.rng');
   }
 
   // @XXX openColumn and setReturnParams may not be necessary dependent on theme

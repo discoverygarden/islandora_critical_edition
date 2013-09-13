@@ -47,7 +47,7 @@ function Tagger(config) {
 	 * @param {element} tag
 	 */
 	tagger.getCorrespondingEntityTag = function(tag) {
-		tag = jQuery(tag);
+		tag = $(tag);
 		var corrTag;
 		if (tag.hasClass('start')) {
 			corrTag = tagger.findEntityBoundary('end', tag[0].nextSibling);
@@ -171,13 +171,13 @@ function Tagger(config) {
 	 */
 	tagger.findDuplicateTags = function() {
 		for (var id in w.entities) {
-			var match = jQuery('span[class~="start"][name="'+id+'"]', w.editor.getBody());
+			var match = $('span[class~="start"][name="'+id+'"]', w.editor.getBody());
 			if (match.length > 1) {
 				match.each(function(index, el) {
 					if (index > 0) {
 						var newId = tinymce.DOM.uniqueId('ent_');
-						var newTagStart = jQuery(el);
-						var newTagEnd = jQuery(tagger.getCorrespondingEntityTag(newTagStart));
+						var newTagStart = $(el);
+						var newTagEnd = $(tagger.getCorrespondingEntityTag(newTagStart));
 						newTagStart.attr('name', newId);
 						newTagEnd.attr('name', newId);
 
@@ -189,7 +189,7 @@ function Tagger(config) {
 			}
 		}
 		for (var id in w.structs) {
-			var match = jQuery('*[id='+id+']', w.editor.getBody());
+			var match = $('*[id='+id+']', w.editor.getBody());
 			if (match.length == 2) {
 				var newStruct = match.last();
 				var newId = tinymce.DOM.uniqueId('struct_');
@@ -207,10 +207,10 @@ function Tagger(config) {
 		var tag = {entity: null, struct: null};
 		if (id != null) {
 			if (w.entities[id]) tag.entity = w.entities[id];
-			else if (w.structs[id]) tag.struct = jQuery('#'+id, w.editor.getBody());
+			else if (w.structs[id]) tag.struct = $('#'+id, w.editor.getBody());
 		} else {
 			if (w.editor.currentEntity != null) tag.entity = w.entities[w.editor.currentEntity];
-			else if (w.editor.currentStruct != null) tag.struct = jQuery('#'+w.editor.currentStruct, w.editor.getBody());
+			else if (w.editor.currentStruct != null) tag.struct = $('#'+w.editor.currentStruct, w.editor.getBody());
 		}
 		return tag;
 	};
@@ -219,7 +219,7 @@ function Tagger(config) {
 	tagger.editTag = function(id, pos) {
 		var tag = tagger.getCurrentTag(id);
 		if (tag.struct) {
-			if (jQuery(tag.struct, w.editor.getBody()).attr('_tag')) {
+			if ($(tag.struct, w.editor.getBody()).attr('_tag')) {
 				w.editor.execCommand('editSchemaTag', tag.struct, pos);
 			} else {
 				w.editor.execCommand('editCustomTag', tag.struct, pos);
@@ -234,7 +234,7 @@ function Tagger(config) {
 	tagger.changeTag = function(params) {
 		var tag = tagger.getCurrentTag(params.id);
 		if (tag.struct) {
-			if (jQuery(tag.struct, w.editor.getBody()).attr('_tag')) {
+			if ($(tag.struct, w.editor.getBody()).attr('_tag')) {
 				w.editor.execCommand('changeSchemaTag', {tag: tag.struct, pos: params.pos, key: params.key});
 			}
 		} else if (tag.entity) {
@@ -258,7 +258,22 @@ function Tagger(config) {
 		}
 	};
 	
+	
+	/**
+	 * Add our own undo level, then erase the next one that gets added by tinymce
+	 */
+	function _doCustomTaggerUndo() {
+		w.editor.undoManager.add();
+		w.editor.undoManager.onAdd.addToTop(function() {
+			console.log('onAdd');
+			this.data.splice(this.data.length-1, 1); // remove last undo level
+			this.onAdd.listeners.splice(0, 1); // remove this listener
+		}, w.editor.undoManager);
+	}
+	
 	tagger.addEntityTag = function(type) {
+		_doCustomTaggerUndo();
+		
 		var sel = w.editor.selection;
 		var content = sel.getContent();
 		var range = sel.getRng(true);
@@ -266,16 +281,15 @@ function Tagger(config) {
 		// strip tags
 		content = content.replace(/<\/?[^>]+>/gi, '');
 		
-		//TODO: Whitespace rightTrimAmount .match reqular expression appears to be broken.
 		// trim whitespace
-//		if (range.startContainer == range.endContainer) {
-//			var leftTrimAmount = content.match(/^\s{0,1}/)[0].length;
-//			var rightTrimAmount = content.match(/\s{0,1}jQuery/)[0].length;
-//			range.setStart(range.startContainer, range.startOffset+leftTrimAmount);
-//			range.setEnd(range.endContainer, range.endOffset-rightTrimAmount);
-//			sel.setRng(range);
-//			content = content.replace(/^\s+|\s+jQuery/g, '');
-//		}
+		if (range.startContainer == range.endContainer) {
+			var leftTrimAmount = content.match(/^\s{0,1}/)[0].length;
+			var rightTrimAmount = content.match(/\s{0,1}$/)[0].length;
+			range.setStart(range.startContainer, range.startOffset+leftTrimAmount);
+			range.setEnd(range.endContainer, range.endOffset-rightTrimAmount);
+			sel.setRng(range);
+			content = content.replace(/^\s+|\s+$/g, '');
+		}
 		
 		var title = w.u.getTitleFromContent(content);
 		
@@ -298,10 +312,21 @@ function Tagger(config) {
 			w.emptyTagId = id;
 		}
 		
+		w.tree.update();
+		
 		return id;
 	};
 	
+	/**
+	 * Adds a structure tag to the document, based on the params.
+	 * @param params An object with the following properties:
+	 * @param params.bookmark A tinymce bookmark object, with an optional custom tagId property
+	 * @param params.attributes Various properties related to the tag
+	 * @param params.action Where to insert the tag, relative to the bookmark (before, after, around, inside); can also be null
+	 */
 	tagger.addStructureTag = function(params) {
+		_doCustomTaggerUndo();
+		
 		var bookmark = params.bookmark;
 		var attributes = params.attributes;
 		var action = params.action;
@@ -315,7 +340,7 @@ function Tagger(config) {
 		var node;
 		if (bookmark.tagId) {
 			// this is used when adding tags through the structure tree
-			node = jQuery('#'+bookmark.tagId, w.editor.getBody())[0];
+			node = $('#'+bookmark.tagId, w.editor.getBody())[0];
 		} else {
 			// this is meant for user text selections
 			node = bookmark.rng.commonAncestorContainer;
@@ -337,13 +362,13 @@ function Tagger(config) {
 		var selection = '\uFEFF';
 		var content = open_tag + selection + close_tag;
 		if (action == 'before') {
-			jQuery(node).before(content);
+			$(node).before(content);
 		} else if (action == 'after') {
-			jQuery(node).after(content);
+			$(node).after(content);
 		} else if (action == 'around') {
-			jQuery(node).wrap(content);
+			$(node).wrap(content);
 		} else if (action == 'inside') {
-			jQuery(node).wrapInner(content);
+			$(node).wrapInner(content);
 		} else {
 			w.editor.selection.moveToBookmark(bookmark);
 			selection = w.editor.selection.getContent();
@@ -351,21 +376,29 @@ function Tagger(config) {
 			content = open_tag + selection + close_tag;
 
 			var range = w.editor.selection.getRng(true);
-			var tempNode = jQuery('<span data-mce-bogus="1">', w.editor.getDoc());
+			var tempNode = $('<span data-mce-bogus="1">', w.editor.getDoc());
 			range.surroundContents(tempNode[0]);
 			tempNode.replaceWith(content);
 		}
-		if (selection == '\uFEFF') {
-			w.selectStructureTag(id, true);
-		}
 		
 		w.tree.update();
+		
+		if (selection == '\uFEFF') {
+			w.selectStructureTag(id, true);
+		} else if (action == undefined) {
+			// place the cursor at the end of the tag's contents
+			var rng = w.editor.selection.getRng(true);
+			rng.selectNodeContents($('#'+id, w.editor.getBody())[0]);
+			rng.collapse(false);
+			w.editor.selection.setRng(rng);
+		}
 	};
 	
 	tagger.editStructureTag = function(tag, attributes) {
+		// TODO add support for span/div changing, add undo support
 		var id = tag.attr('id');
 		attributes.id = id;
-		jQuery.each(jQuery(tag[0].attributes), function(index, att) {
+		$.each($(tag[0].attributes), function(index, att) {
 			if (att.name != 'id') {
 				tag.removeAttr(att.name);
 			}
@@ -380,6 +413,8 @@ function Tagger(config) {
 	};
 	
 	tagger.removeStructureTag = function(id, removeContents) {
+		_doCustomTaggerUndo();
+		
 		id = id || w.editor.currentStruct;
 		
 		if (removeContents == undefined) {
@@ -388,7 +423,7 @@ function Tagger(config) {
 			}
 		}
 		
-		var node = jQuery('#'+id, w.editor.getBody());
+		var node = $('#'+id, w.editor.getBody());
 		if (removeContents) {
 			node.remove();
 		} else {
@@ -402,9 +437,18 @@ function Tagger(config) {
 			parent.normalize();
 		}
 		
-		delete w.structs[id];
+		w.tagger.findNewAndDeletedTags();
 		w.tree.update();
 		w.editor.currentStruct = null;
+	};
+	
+	tagger.removeStructureTagContents = function(id) {
+		_doCustomTaggerUndo();
+		
+		var node = $('#'+id, w.editor.getBody());
+		node.contents().remove();
+		w.tagger.findNewAndDeletedTags();
+		w.tree.update();
 	};
 	
 	return tagger;
