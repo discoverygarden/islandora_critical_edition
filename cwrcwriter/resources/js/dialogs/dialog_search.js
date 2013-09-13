@@ -9,7 +9,7 @@ var SearchDialog = function(config) {
   $(document.body).append(''+
     '<div id="searchDialog">'+
     // need absolute positioning so accordion height is calculated properly
-    '<div style="position: absolute; top: 10px; left: 10px; right: 10px; height: 31px;">'+
+    '<div style="position: absolute; left: 10px; right: 10px; height: 31px;">'+
     '<label for="search_query">Search</label>'+
     '<input type="text" name="query" id="search_query" />'+
     '</div>'+
@@ -37,7 +37,7 @@ var SearchDialog = function(config) {
     '</div>'+
     '</div>'+
     '</div>'+
-    '<div id="certainty" style="position: absolute; bottom: 0; left: 10px; right: 10px; height: 65px;">'+
+    '<div id="certainty" style="position: absolute; bottom: 0; left: 10px; right: 10px;">'+
     '<p>This identification is:</p>'+
     '<input type="radio" id="c_definite" name="certainty" value="definite" /><label for="c_definite">Definite</label>'+
     '<input type="radio" id="c_reasonable" name="certainty" value="reasonable" /><label for="c_reasonable">Reasonably Certain</label>'+

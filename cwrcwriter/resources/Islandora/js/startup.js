@@ -201,8 +201,29 @@ $('document').ready(function() {
       source: islandora_canvas_params.categories
     });
   }
+  
+  
+  // Recent fix to add resizeable feature to colleft.
+//  $( ".colleft" ).resizable({
+//    resize: function( event, ui ) {
+//      drag_handle_resize();
+//    }
+//  });
+  drag_handle_resize();
+  //$( ".colleft" ).resizable( "option", "maxHeight", $( ".colleft" ).parent().height );
+  //$( ".colleft" ).resizable( "option", "minHeight", $( ".colleft" ).parent().height );
+  
+  resizeColumnsDrag();
+  
 });
 
+function drag_handle_resize() {
+  var pos = $( ".colleft" ).position();
+  var nPos = pos.left + $( ".colleft" ).width();
+  console.log("pos: " + nPos);
+  $("#colleft").css({height:$("#colleft").parent().height()});
+  $("#colright").css({left:nPos});
+}
 function init_canvas_div() {
 
   pagePid = cwrc_params.pages[cwrc_params.position];
