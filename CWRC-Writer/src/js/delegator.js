@@ -16,7 +16,7 @@ function Delegator(config) {
 		if (lookupService == 'project') {
 			$.ajax({
 				url: cwrc_params['entities_search_callback']+ '/' + query,
-				dataType: 'text json',
+				dataType: 'json',
 				success: function(data, status, xhr) {
 					if ($.isPlainObject(data)) data = [data];
 					if (data != null) {
@@ -114,16 +114,15 @@ function Delegator(config) {
 	del.loadDocument = function(callback) {
 		console.log('hit delegator load document');
 	    var baseUrl = window.location.protocol+'//'+window.location.host;
-	    console.log(baseUrl+Drupal.settings.basePath+'islandora/object/' + w.currentDocId + '/datastream/CWRC/view');
+	    
 		$.ajax({
-			url: baseUrl+Drupal.settings.basePath+'islandora/object/' + w.currentDocId + '/datastream/CWRC/view',
+			url: baseUrl+Drupal.settings.basePath+'islandora/object/' + PID + '/datastream/CWRC/view',
 			type: 'GET',
 			dataType: 'xml',
 			success: function(doc, status, xhr) {
 				window.location.hash = '#'+w.currentDocId;
-				console.log('delegate load doc data: ');
-				console.log(doc);
-				callback.call(w, doc);
+				w.fm.loadDocumentFromXml(doc);
+				//callback.call(w, doc);
 			},
 			error: function(xhr, status, error) {
 				w.dialogs.show('message', {
@@ -142,11 +141,7 @@ function Delegator(config) {
 	 */
 	del.saveDocument = function(callback) {
 		console.log('hit delegator save document');
-		console.log(islandora_canvas_params);
-		console.log(window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID)
 		var docText = w.fm.getDocumentContent(false);
-		console.log(w.entitiesList);
-		console.log('doc text' + docText);
 		$.ajax({
 			url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
 			type: 'POST',

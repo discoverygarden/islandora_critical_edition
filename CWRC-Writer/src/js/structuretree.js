@@ -1,7 +1,6 @@
 function StructureTree(config) {
 	
 	var w = config.writer;
-	console.log('Structure');
 	var tree = {
 		currentlySelectedNode: null, // id of the currently selected node
 		currentlySelectedEntity: null, // id of the currently selected entity (as opposed to node, ie. struct tag)
@@ -20,23 +19,17 @@ function StructureTree(config) {
 	 * @memberOf tree
 	 */
 	tree.update = function() {
-		console.log('in structure tree');
 		var treeRef = $.jstree._reference('#tree');
-		console.log('got tree ref');
 		// store open nodes to re-open after updating
 		var openNodes = [];
 		$('#tree #cwrc_tree_root').find('li.jstree-open').each(function () {
 			var id = $(this).attr('name');
 			openNodes.push(id);
 		});
-		console.log('openNodes: ' + JSON.stringify(openNodes));
 		treeRef.delete_node('#cwrc_tree_root');
-		console.log('before get body');
 		var rootNode = $('[_tag="'+w.root+'"]', w.editor.getBody());
-		console.log('Root Node: ' + JSON.stringify(rootNode));
 		var rootData = _processNode(rootNode, 0);
 		if (rootData != null) {
-			console.log('Root Data != null');
 			rootData.attr.id = 'cwrc_tree_root';
 			_doUpdate(rootNode.children(), rootData, 0);
 			

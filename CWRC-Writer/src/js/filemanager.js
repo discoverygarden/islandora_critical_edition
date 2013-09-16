@@ -160,9 +160,7 @@ function FileManager(config) {
 		var xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n';
 		
 		var body = $(w.editor.getBody());
-		console.log('body: ' + JSON.stringify(body));
 		var clone = body.clone(false, true); // make a copy, don't clone body events, but clone child events
-		console.log('clone: ' + JSON.stringify(clone));
 		_entitiesToUnicode(body);
 		
 		// rdf
@@ -247,8 +245,6 @@ function FileManager(config) {
 		xmlString += rdfString + bodyString;
 		
 		xmlString += tags[1];
-		console.log('xml string before body clone replace: ' + JSON.stringify(body));
-		console.log('before body clone replace: ' + JSON.stringify(body));
 		body.replaceWith(clone);
 		return xmlString;
 	};
@@ -344,7 +340,6 @@ function FileManager(config) {
 	
 	fm.loadDocument = function(docName) {
 		w.currentDocId = docName;
-		console.log("docName: " + docName + ", docID: " + w.currentDocId);
 		w.delegator.loadDocument(fm.processDocument);
 	};
 	
@@ -360,7 +355,6 @@ function FileManager(config) {
 			type: 'GET',
 			dataType: 'xml',
 			success: function(doc, status, xhr) {
-				console.log('Doc from xml: ' + JSON.stringify(doc));
 				window.location.hash = '';
 				fm.loadDocumentFromXml(doc);
 			},
@@ -461,12 +455,11 @@ function FileManager(config) {
 	 * @param doc An XML DOM
 	 */
 	fm.processDocument = function(doc) {
-		console.log("Entered processDocument");
-		console.log(doc);
 		var rootName = doc.firstChild.nodeName;
 		// TODO need a better way of tying this to the schemas config
 		// grab the schema from xml-model
 		if (rootName == 'xml-model') {
+			console.log('root name xml-model: ' + rootName);
 			var xmlModelData = doc.firstChild.data;
 			var schemaUrl = xmlModelData.match(/href="([^"]*)"/)[1];
 			var urlParts = schemaUrl.match(/^(.*):\/\/([a-z\-.]+)(?=:[0-9]+)?\/(.*)/);
@@ -487,10 +480,12 @@ function FileManager(config) {
 					url: schemaUrl
 				};
 			}
+			console.log('loading schemaid a: ' + schemaId);
 			fm.loadSchema(schemaId, false, doProcessing);
 		// determine the schema based on the root element
 		} else {
 			rootName = rootName.toLowerCase();
+			console.log('root name non xml-model: ' + rootName);
 			if (rootName != w.root.toLowerCase()) {
 				// roots don't match so load the appropriate schema
 				var schemaId = 'tei';
@@ -501,6 +496,7 @@ function FileManager(config) {
 				} else if (rootName == 'writing') {
 					schemaId = 'writing';
 				}
+				console.log('loading schemaid b: ' + schemaId);
 				fm.loadSchema(schemaId, false, doProcessing);
 			} else {
 				doProcessing();
@@ -519,7 +515,7 @@ function FileManager(config) {
 			
 			var docMode;
 			var rdfs = $(doc).find('rdf\\:RDF, RDF');
-			console.log('rdf data: ' + JSON.stringify(rdfs));
+			console.log('rdfs: ' + JSON.stringify(rdfs));
 			if (rdfs.length) {
 				var mode = parseInt(rdfs.find('w\\:mode, mode').first().text());
 				if (mode == w.XML) {
@@ -801,16 +797,13 @@ function FileManager(config) {
 	fm.loadSchema = function(schemaId, startText, callback) {
 		var baseUrl = ''; //w.project == null ? '' : w.baseUrl; // handling difference between local and server urls
 		w.schemaId = schemaId; 
-		console.log('schema url: ' + w.schemas[w.schemaId].url);
 		$.ajax({
 			url: w.schemas[w.schemaId].url,
 			dataType: 'xml',
 			success: function(data, status, xhr) {
 				w.schemaXML = data;
-				console.log("schema data: " + data);
 				// get root element
 				var startName = $('start ref:first', w.schemaXML).attr('name');
-				console.log("startname: " + startName);
 				var startEl = $('define[name="'+startName+'"] element', w.schemaXML).attr('name');
 				w.root = startEl;
 //				w.editor.settings.forced_root_block = w.root;

@@ -41,19 +41,20 @@
           selector = "#page_choose option[value='" + cwrc_params.position + "']";
           
           setReturnParams();
+          console.log("POS Before: " + cwrc_params.position);
           cwrc_params.position = $('#page_choose :selected').attr('value');
+          console.log("POS Before: " + cwrc_params.position);
           openColumn();
           PID = cwrc_params.pages[ cwrc_params.position];
           
           
          // Islandora.Writer.load_next_anno_page();
           // Pagenation hack, this should not be called out of the file manager.
-          writer.fm.loadEMICDocument();
+          //writer.fm.loadEMICDocument();
           Islandora.Writer.load_next_anno_page();
          // init_canvas_div(islandora_canvas_params);
           setHeader();
           
-          console.log("Trying to load page");
           $('#page-prev').css('opacity', '1').removeClass('disabled');
           $('#page-next').css('opacity', '1').removeClass('disabled');
 
@@ -88,7 +89,6 @@
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
-            console.log("About to load next anno");
             Islandora.Writer.load_next_anno_page();
             // Pagenation hack, this should not be called out of the file manager.
             writer.fm.loadEMICDocument();
@@ -122,11 +122,9 @@
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
-            console.log("About to load next anno");
             Islandora.Writer.load_next_anno_page();
             // Pagenation hack, this should not be called out of the file manager.
             writer.fm.loadEMICDocument();
-            console.log("init canvas div");
             //init_canvas_div(islandora_canvas_params);
             
             setHeader();
@@ -194,11 +192,9 @@
     $.each(islandora_canvas_params.pages, function(key, value) {
       $('#canvas_page_choose').append('<option  value="' + key + '">Page ' + (key + 1) + '</option>');
     });
-    console.log("use dropdown" + islandora_canvas_params.use_dropdown);
     if (islandora_canvas_params.use_dropdown == 1) {
         $('#islandora_classification').empty();
         var sel = $('<select  id="anno_classification">').appendTo('#islandora_classification');
-        console.log("catagories: " + JSON.stringify(islandora_canvas_params.categories));
         $(islandora_canvas_params.categories).each(function() {
           value = this.toString();
           sel.append($("<option>").attr('value', value).text(value));
@@ -238,7 +234,6 @@
     // Setup a basic Canvas with explicit width to scale to from browser width
    initCanvas(nCanvas)
     // Manifest initialization.
-    console.log(islandora_canvas_params.manifest_url);
     fetchTriples(islandora_canvas_params.manifest_url,
         rdfbase,
         cb_process_manifest);
@@ -247,8 +242,6 @@
       $('#anno_color_activated').attr('value', 'active');
     });
     $('.color-picker').miniColors();
-    var baseUrl = window.location.protocol+'//'+window.location.host;
-    console.log(baseUrl+Drupal.settings.basePath+'islandora/object/' + cwrc_params.pages[cwrc_params.position] + '/datastream/CWRC/view');
     // Implement wrapper to load the writer document.
 //    Islandora.Writer.Document.load(baseUrl+Drupal.settings.basePath+'islandora/object/' + cwrc_params.pages[cwrc_params.position] + '/datastream/CWRC/view',
 //      Drupal.settings.islandora_critical_edition.base_url +

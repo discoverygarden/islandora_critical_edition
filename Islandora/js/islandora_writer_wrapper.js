@@ -42,9 +42,10 @@ Islandora = {
 	$.ajax({
 		url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
 		timeout: 3000,
+		async:false,
+		dataType: 'json',
 		success: function(data, status, xhr) {
 			cwrc_params = data;
-			console.log(data);
 			
 			config.project = data;
 			writer = new Writer(config);
@@ -56,12 +57,12 @@ Islandora = {
 			Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
 					init_canvas_div);
 			// Implement wrapper to load the writer document.
-		    Islandora.Writer.Document.load(baseUrl+Drupal.settings.basePath+'islandora/object/' + cwrc_params.pages[cwrc_params.position] + '/datastream/CWRC/view',
-		      Drupal.settings.islandora_critical_edition.base_url +
-		      Drupal.settings.basePath +
-		      Drupal.settings.islandora_critical_edition.module_base + 
-		      '/CWRC-Writer/src/schema/CWRC-TEIBasic.rng');
-		    
+//		    Islandora.Writer.Document.load(baseUrl+Drupal.settings.basePath+'islandora/object/' + cwrc_params.pages[cwrc_params.position] + '/datastream/CWRC/view',
+//		      Drupal.settings.islandora_critical_edition.base_url +
+//		      Drupal.settings.basePath +
+//		      Drupal.settings.islandora_critical_edition.module_base + 
+//		      '/CWRC-Writer/src/schema/CWRC-TEIBasic.rng');
+			Islandora.Writer.Document.load();
 		    Islandora.Writer.init();
 		},
 		error: function() {
@@ -71,24 +72,12 @@ Islandora = {
   },
   Writer : {
     Document : {
-      load: function(docContentUrl, schemaURI) {
-    	  console.log('doc content url: ' + docContentUrl);
+      load: function() {
+    	  console.log('page pid: ' + Drupal.settings.islandora_critical_edition.page_pid);
+    	  // Calling load doc, which assigns a doc id (the page pid) and
+    	  // calls the delegate function loadDocument().
     	  writer.fm.loadDocument(Drupal.settings.islandora_critical_edition.page_pid);
     	  
-//    	  $.ajax({
-//    			url: docContentUrl,
-//    			timeout: 3000,
-//    			success: function(data, status, xhr) {
-//    				console.log(data);
-//    				console.log(schemaURI);
-//    				
-//    				writer.fm.loadDocumentFromXml(data);
-//    				
-//    			},
-//    			error: function() {
-//    				console.log("Error in Writer.Document.load");
-//    			}
-//    		});
       },
       get: function() {
         return writer.getDocument();
@@ -131,7 +120,11 @@ Islandora = {
       maybe_config_create_annotation();
     },
     load_next_anno_page: function() {
-      writer.entitiesList.update();
+    	// Load the next page document.
+    	Islandora.Writer.Document.load();
+    	// Update entities list.
+        writer.entitiesList.update();
+        console.log("page being loaded: " + islandora_canvas_params.pages);
       // Pagenation on images/annotations.
       $('#annotations').children(":first").children(":first").attr('src', Drupal.settings.islandora_critical_edition.base_url + 
           '/islandora/object/' +
@@ -241,10 +234,8 @@ Islandora = {
             async: true,
             success: function(data, status, xhr) {
               islandora_canvas_params = data;
-              console.log(data);
               // Callback 'init_canvas_div' in startup.js.
               callback(data);
-              
             },
             error: function() {
               alert("Please log in to host site.");
