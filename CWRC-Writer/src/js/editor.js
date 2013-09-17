@@ -585,6 +585,7 @@ function Writer(config) {
 				maskIframesOnResize: true,
 				onresize: function() {
 					// TODO: Move this out of the editor.
+					console.log('resize canvas');
 					resizeCanvas();
 				},
 			},

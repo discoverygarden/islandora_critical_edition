@@ -990,6 +990,7 @@ function FileManager(config) {
 			var name = start.substr(1);
 			_loadTemplate('xml/'+name+'.xml', name);
 		} else if (start != '') {
+			console.log(start.substr(1));
 			w.fm.loadDocument(start.substr(1));
 		}
 	};
@@ -998,7 +999,7 @@ function FileManager(config) {
 		w.currentDocId = null;
 		
 		$.ajax({
-			url: url,
+			url: window.location.protocol+'//'+window.location.host+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+url,
 			dataType: 'xml',
 			success: function(data, status, xhr) {
 				if (hashName) {

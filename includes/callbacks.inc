@@ -23,7 +23,6 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $critical_edition_object = islandora_object_load($critical_edition);
   $title = $critical_edition_object->label;
   $page_results = islandora_paged_content_get_pages($critical_edition_object);
-  dsm($page_results);
   $pages = array();
   foreach ($page_results as $result) {
     $pages[$result['page']] = $result['pid'];
