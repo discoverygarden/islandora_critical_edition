@@ -121,8 +121,10 @@ function Delegator(config) {
 			dataType: 'xml',
 			success: function(doc, status, xhr) {
 				window.location.hash = '#'+w.currentDocId;
-				w.fm.loadDocumentFromXml(doc);
-				//callback.call(w, doc);
+				//w.fm.loadDocumentFromXml(doc);
+				callback.call(w, doc);
+				writer.layout.enableResizable("east");
+			    writer.layout.options.east.resizable = true;
 			},
 			error: function(xhr, status, error) {
 				w.dialogs.show('message', {

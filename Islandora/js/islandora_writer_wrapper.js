@@ -46,22 +46,14 @@ Islandora = {
 		dataType: 'json',
 		success: function(data, status, xhr) {
 			cwrc_params = data;
-			
 			config.project = data;
 			writer = new Writer(config);
 			writer.init();
-			
 			// Initilize additional UI Elements
 			init_ui();
 			// Initilize shared canvas image annotation canvas processing.
 			Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
 					init_canvas_div);
-			// Implement wrapper to load the writer document.
-//		    Islandora.Writer.Document.load(baseUrl+Drupal.settings.basePath+'islandora/object/' + cwrc_params.pages[cwrc_params.position] + '/datastream/CWRC/view',
-//		      Drupal.settings.islandora_critical_edition.base_url +
-//		      Drupal.settings.basePath +
-//		      Drupal.settings.islandora_critical_edition.module_base + 
-//		      '/CWRC-Writer/src/schema/CWRC-TEIBasic.rng');
 			Islandora.Writer.Document.load();
 		    Islandora.Writer.init();
 		},

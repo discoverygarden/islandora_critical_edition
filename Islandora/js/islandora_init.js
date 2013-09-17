@@ -155,19 +155,29 @@ var delta = 200;
 function resizeCanvas() {
   // Updated fix to prevent needless server calls
   var w = $('#canvas-body').width();
-  topinfo['bodyWidth'] = w;
-  
-  //closeAndEndAnnotating();
-  
-  var w = $('#canvas-body').width();
   var b = topinfo['origBodyWidth'];
   topinfo['bodyWidth'] = 0;
+  if (w != b) {
     initCanvas(topinfo['numCanvases']);
     //$('.base_img').children(":first").width(w);
     $('.base_img').children(":first").css("width", "100%");
     $('.base_img').children(":first").css("height", "auto");
     $('.base_img').css("height", $('.base_img').children(":first").height());
     $('#canvas_0').css("width", (w));
+  }
+//  topinfo['bodyWidth'] = w;
+//  
+//  //closeAndEndAnnotating();
+//  
+//  var w = $('#canvas-body').width();
+//  var b = topinfo['origBodyWidth'];
+//  topinfo['bodyWidth'] = 0;
+//    initCanvas(topinfo['numCanvases']);
+//    //$('.base_img').children(":first").width(w);
+//    $('.base_img').children(":first").css("width", "100%");
+//    $('.base_img').children(":first").css("height", "auto");
+//    $('.base_img').css("height", $('.base_img').children(":first").height());
+//    $('#canvas_0').css("width", (w));
 }
 
 function maybeResize() {

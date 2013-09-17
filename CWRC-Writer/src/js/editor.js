@@ -575,17 +575,28 @@ function Writer(config) {
 			defaults: {
 				maskIframesOnResize: true,
 				resizable: true,
-				slidable: false
+				slidable: false,
+				maskIframesOnResize: true,
+			},
+			east: {
+				maskIframesOnResize: true,
+				resizable: true,
+				slidable: false,
+				maskIframesOnResize: true,
+				onresize: function() {
+					// TODO: Move this out of the editor.
+					resizeCanvas();
+				},
 			},
 			north: {
 				size: 35,
-				resizable: false,
+				resizable: true,
 				spacing_open: 0,
 				spacing_closed: 0
 			},
 			south: {
 				size: 34,
-				resizable: false,
+				resizable: true,
 				spacing_open: 0,
 				spacing_closed: 0
 			},
@@ -593,12 +604,6 @@ function Writer(config) {
 				size: 'auto',
 				minSize: 325,
 				resizable: true,
-				onresize: function(region, pane, state, options) {
-					console.log("resizing");
-					var tabsHeight = $('#westTabs > ul').outerHeight();
-					$('#westTabsContent').height(state.layoutHeight - tabsHeight);
-//					$.layout.callbacks.resizeTabLayout(region, pane);
-				}
 			}
 		});
 		w.layout.panes.center.layout({
@@ -615,6 +620,7 @@ function Writer(config) {
 			},
 			south: {
 				size: 250,
+				resizable: true,
 				initClosed: true,
 				activate: function(event, ui) {
 					$.layout.callbacks.resizeTabLayout(event, ui);

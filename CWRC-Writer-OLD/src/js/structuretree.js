@@ -44,6 +44,7 @@ function StructureTree(config) {
 		
 		jQuery.each(openNodes, function (i, val) {
 			treeRef.open_node(jQuery('li[name='+val+']', jQuerytree), false, true); 
+			console.log('opening tree node num: ' + i);
 		});
 	};
 	
