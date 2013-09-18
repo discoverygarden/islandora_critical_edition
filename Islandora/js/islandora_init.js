@@ -157,14 +157,15 @@ function resizeCanvas() {
   var w = $('#canvas-body').width();
   var b = topinfo['origBodyWidth'];
   topinfo['bodyWidth'] = 0;
-  if (w != b) {
     initCanvas(topinfo['numCanvases']);
     //$('.base_img').children(":first").width(w);
     $('.base_img').children(":first").css("width", "100%");
     $('.base_img').children(":first").css("height", "auto");
     $('.base_img').css("height", $('.base_img').children(":first").height());
     $('#canvas_0').css("width", (w));
-  }
+    console.log(topinfo['numCanvases']);
+    closeAndEndAnnotating();
+    maybeResize();
 //  topinfo['bodyWidth'] = w;
 //  
 //  //closeAndEndAnnotating();
@@ -182,20 +183,19 @@ function resizeCanvas() {
 
 function maybeResize() {
 	console.log("mabyResize");
-    if(w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
-      initCanvas(topinfo['numCanvases']);
-    } else {
-      timeout = false;
+	//initCanvas(topinfo['numCanvases']);
+//    if(w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
+//      initCanvas(topinfo['numCanvases']);
+//    } else {
+//      timeout = false;
       var w = $('#canvas-body').width();
       var b = topinfo['origBodyWidth'];
       topinfo['bodyWidth'] = 0;
-      if (w != b) {
         initCanvas(topinfo['numCanvases']);
         //$('.base_img').children(":first").width(w);
         $('.base_img').children(":first").css("width", "100%");
         $('.base_img').children(":first").css("height", "auto");
         $('.base_img').css("height", $('.base_img').children(":first").height());
         $('#canvas_0').css("width", (w));
-      }
-    }
+//    }
   }

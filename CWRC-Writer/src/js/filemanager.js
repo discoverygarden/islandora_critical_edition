@@ -530,11 +530,11 @@ function FileManager(config) {
 			if (w.mode != docMode) {
 				var editorModeStr = w.mode == w.XML ? 'XML only' : 'XML & RDF';
 				var docModeStr = docMode == w.XML ? 'XML only' : 'XML & RDF';
-				w.dialogs.show('message', {
-					title: 'Editor Mode changed',
-					msg: 'The Editor Mode ('+editorModeStr+') has been changed to match the Document Mode ('+docModeStr+').',
-					type: 'info'
-				});
+//				w.dialogs.show('message', {
+//					title: 'Editor Mode changed',
+//					msg: 'The Editor Mode ('+editorModeStr+') has been changed to match the Document Mode ('+docModeStr+').',
+//					type: 'info'
+//				});
 				
 				w.mode = docMode;
 			}
