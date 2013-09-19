@@ -148,54 +148,38 @@ function initCanvas(nCanvas) {
   }
 };
 
-
-
 var timeout = false;
 var delta = 200;
 function resizeCanvas() {
   // Updated fix to prevent needless server calls
   var w = $('#canvas-body').width();
-  var b = topinfo['origBodyWidth'];
-  topinfo['bodyWidth'] = 0;
-    initCanvas(topinfo['numCanvases']);
-    //$('.base_img').children(":first").width(w);
-    $('.base_img').children(":first").css("width", "100%");
-    $('.base_img').children(":first").css("height", "auto");
-    $('.base_img').css("height", $('.base_img').children(":first").height());
-    $('#canvas_0').css("width", (w));
-    console.log(topinfo['numCanvases']);
+  topinfo['bodyWidth'] = w;
+  if(timeout === false) {
+    timeout = true;
     closeAndEndAnnotating();
-    maybeResize();
-//  topinfo['bodyWidth'] = w;
-//  
-//  //closeAndEndAnnotating();
-//  
-//  var w = $('#canvas-body').width();
-//  var b = topinfo['origBodyWidth'];
-//  topinfo['bodyWidth'] = 0;
-//    initCanvas(topinfo['numCanvases']);
-//    //$('.base_img').children(":first").width(w);
-//    $('.base_img').children(":first").css("width", "100%");
-//    $('.base_img').children(":first").css("height", "auto");
-//    $('.base_img').css("height", $('.base_img').children(":first").height());
-//    $('#canvas_0').css("width", (w));
+    window.setTimeout(maybeResize, delta);
+  }
 }
 
 function maybeResize() {
-	console.log("mabyResize");
-	//initCanvas(topinfo['numCanvases']);
-//    if(w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
-//      initCanvas(topinfo['numCanvases']);
-//    } else {
-//      timeout = false;
+    if(w == topinfo['bodyWidth'] && Math.abs(topinfo['origBodyWidth']-w) > 20) {
+      initCanvas(topinfo['numCanvases']);
+    } else {
+      timeout = false;
       var w = $('#canvas-body').width();
       var b = topinfo['origBodyWidth'];
       topinfo['bodyWidth'] = 0;
+      if (w != b) {
         initCanvas(topinfo['numCanvases']);
-        //$('.base_img').children(":first").width(w);
-        $('.base_img').children(":first").css("width", "100%");
+        $('.base_img').children(":first").width(w);
         $('.base_img').children(":first").css("height", "auto");
         $('.base_img').css("height", $('.base_img').children(":first").height());
         $('#canvas_0').css("width", (w));
-//    }
+      }
+    }
   }
+//Refresh Canvas if browser is resized
+$(window).resize(function() {
+    // call resize function
+    resizeCanvas();
+  });
