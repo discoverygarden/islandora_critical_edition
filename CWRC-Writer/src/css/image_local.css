@@ -22,6 +22,10 @@
     padding-left: 20px;
 }
 
+li.jstree-closed > ul {
+    display: none !important;
+}
+
 #header .header-nav a
 {
   float: left;

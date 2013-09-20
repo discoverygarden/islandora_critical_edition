@@ -84,17 +84,19 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.watermark.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/tiny_mce_src.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/jquery.tinymce.js");
-        
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/copy_event.js");
         
-        
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jstree/jquery.hotkeys.js");
+        
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jstree/jquery.jstree.js");
+       
+        
 
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.min.js");
+        
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/moment/moment.min.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/objtree/ObjTree.js");
-        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/structuretree.js");
+        
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/utilities.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/filemanager.js");
         
@@ -122,7 +124,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_title.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_triple.js");
         drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_filemanager.js");
-        
+        drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/structuretree.js");
         
 //        // 
         drupal_add_css($critical_edition_module_path . "/CWRC-Writer-OLD/src/css/layout-default-latest.css");
