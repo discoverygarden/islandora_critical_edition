@@ -21,7 +21,9 @@
 				</div>
 			</div>
 			<div id ="pageChange"></div>
-		<h1>CWRCWriter</h1>
+		<div id="header_label_wrapper">
+			<h1>CWRCWriter</h1>
+		</div>
 		<div id="headerButtons"></div>
 	</div>
 	<div class="ui-layout-west">

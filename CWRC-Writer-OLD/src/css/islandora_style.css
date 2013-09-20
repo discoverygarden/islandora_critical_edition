@@ -24,14 +24,24 @@ A:hover
   text-decoration: underline;
 }
 
-
-
 /* Header */
 
-.cwrc_wrapper #header
+#cwrc_wrapper .ui-layout-north
 {
   padding: 0px 0px 0px 0px;
-  background-color: #000;
+  background-color: #455372;
+  background-image: url("../img/cwrc_logo_small.png") !important;
+  background-position: left center;
+  background-repeat: no-repeat;
+  border-bottom: 1px solid #CCCCCC;
+  color: #EEEEEE;
+  overflow: hidden;
+  padding: 0 10px;
+}
+
+#header_label_wrapper h1
+{
+  margin: 0.3em 0 0em !important;
 }
 
 #header #page_selector
@@ -44,7 +54,7 @@ A:hover
   float: left;
   height: 35px;
   width: 60px;
-  margin: 0px 0px 0px 45px;
+  margin: 0px 0px 0px 0px;
 }
 
 #header .header-nav a
@@ -98,7 +108,7 @@ A:hover
 
 #header h2
 {
-  padding: 8px 15px 0px 0px;
+  margin-top: 0px !important;
 }
 
 

@@ -165,7 +165,6 @@
             }
           });
         });
-
   }
   var init_canvas_div = function(islandora_canvas_params) {
     if (islandora_canvas_params.no_edit == true) {

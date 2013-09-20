@@ -591,9 +591,9 @@ function Writer(config) {
 			},
 			north: {
 				size: 35,
+				minSize: 35,
+				maxSize: 60,
 				resizable: true,
-				spacing_open: 0,
-				spacing_closed: 0
 			},
 			south: {
 				size: 34,

@@ -29,7 +29,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   $image_annotation_module_path = drupal_get_path('module', 'islandora_image_annotation');
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);
   $pids = array_keys($pages);
-  dsm($pids);
   // Use the theme files from image annotation for annotation list
   // and image annotation pane's.
   $variables['anno_list_pane'] = theme('islandora_anno_list_pane');
