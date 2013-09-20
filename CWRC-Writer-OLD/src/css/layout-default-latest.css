@@ -149,18 +149,7 @@
 		padding-bottom:	0.35ex; /* to 'vertically center' text inside text-span */
 	}
 
-.ui-layout-toggler-north-open, .ui-layout-toggler-south-closed {
-    background: url("../img/arrow_up.gif") no-repeat scroll center bottom transparent;
-}
-.ui-layout-toggler-north-closed, .ui-layout-toggler-south-open {
-    background: url("../img/arrow_down.gif") no-repeat scroll center top transparent;
-}
-.ui-layout-toggler-east-closed, .ui-layout-toggler-west-open {
-    background: url("../img/arrow_left.gif") no-repeat scroll right center transparent;
-}
-.ui-layout-toggler-east-open, .ui-layout-toggler-west-closed {
-    background: url("../img/arrow_right.gif") no-repeat scroll left center transparent;
-}
+
 
 /*
  *	PANE-MASKS

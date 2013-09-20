@@ -36,17 +36,6 @@ body .cwrc_wrapper{
 	padding: 0;
 }
 
-.cwrc_wrapper #header {
-	padding: 0 10px;
-	color: #eee;
-	background-color: #455372;
-	border-bottom: 1px solid #ccc;
-	overflow: hidden;
-	background-image: url(../img/cwrc_logo_small.png);
-	background-repeat: no-repeat;
-	background-position: left center;
-}
-
 .cwrc_wrapper #header h1 {
 	float: left;
 	cursor: pointer;
@@ -60,11 +49,6 @@ body .cwrc_wrapper{
 	margin-left: 20px;
 }
 
-.cwrc_wrapper #helpLink {
-	background: url("../img/help.png") no-repeat scroll 0 7px transparent;
-    padding-left: 20px;
-}
-
 .cwrc_wrapper #helpLink h2 {
 	display: inline-block;
 	margin-left: 2px;
@@ -75,14 +59,6 @@ body .cwrc_wrapper{
 	border: none;
 	width: 100%;
 	height: 100%;
-}
-
-.cwrc_wrapper .arrowLeft {
-	background-image: url('../img/arrow_left.gif');
-}
-
-.cwrc_wrapper .arrowRight {
-	background-image: url('../img/arrow_right.gif');
 }
 
 .cwrc_wrapper #westTabsContent .tabWithLayout {

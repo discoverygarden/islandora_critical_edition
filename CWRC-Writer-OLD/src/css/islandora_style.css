@@ -26,18 +26,6 @@ A:hover
 
 /* Header */
 
-#cwrc_wrapper .ui-layout-north
-{
-  padding: 0px 0px 0px 0px;
-  background-color: #455372;
-  background-image: url("../img/cwrc_logo_small.png") !important;
-  background-position: left center;
-  background-repeat: no-repeat;
-  border-bottom: 1px solid #CCCCCC;
-  color: #EEEEEE;
-  overflow: hidden;
-  padding: 0 10px;
-}
 
 #header_label_wrapper h1
 {
@@ -55,22 +43,6 @@ A:hover
   height: 35px;
   width: 60px;
   margin: 0px 0px 0px 0px;
-}
-
-#header .header-nav a
-{
-  float: left;
-  width: 30px;
-  height: 35px;
-
-  background-image: url('../img/nav-arrows.png'); /* 38px x 85px */ 
-  background-position: 0px 0px;
-  background-repeat: no-repeat;
-  background-color: transparent;
-  
-  opacity: 0.85 !important; /* Chrome 4+, FF2+, Saf3.1+, Opera 9+, IE9, iOS 3.2+, Android 2.1+ */
-  filter: alpha(opacity=85) !important; /* IE6-IE8 */
-
 }
 
 #header .header-nav a.disabled,

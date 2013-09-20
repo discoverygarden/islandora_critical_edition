@@ -70,12 +70,6 @@
     float: left;
     width: 5px;
 }
-.arrowLeft {
-    background-image: url("../img/arrow_left.gif");
-}
-.arrowRight {
-    background-image: url("../img/arrow_right.gif");
-}
 #sortBy {
     padding: 3px 10px;
 }

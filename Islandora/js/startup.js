@@ -177,6 +177,7 @@
     $.each(islandora_canvas_params.pages, function(key, value) {
       $('#canvas_page_choose').append('<option  value="' + key + '">Page ' + (key + 1) + '</option>');
     });
+    console.log("use dropdown: " + islandora_canvas_params.use_dropdown);
     if (islandora_canvas_params.use_dropdown == 1) {
         $('#islandora_classification').empty();
         var sel = $('<select  id="anno_classification">').appendTo('#islandora_classification');

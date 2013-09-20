@@ -32,17 +32,6 @@ body {
 	margin-right: 5px;
 }
 
-#cwrc_header {
-	padding: 0 10px;
-	color: #eee;
-	background-color: #455372;
-	border-bottom: 1px solid #ccc;
-	overflow: hidden;
-	background-image: url(../img/cwrc_logo_small.png);
-	background-repeat: no-repeat;
-	background-position: left center;
-}
-
 #cwrc_header h1 {
 	float: left;
 	cursor: pointer;
