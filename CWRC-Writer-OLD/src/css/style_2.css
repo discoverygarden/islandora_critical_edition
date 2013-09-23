@@ -95,7 +95,7 @@
 }
 .entitiesList, .relationsList {
     list-style: none outside none;
-    margin: 0;
+/*     margin: 0; */
     padding: 0;
 }
 .entitiesList li .box {

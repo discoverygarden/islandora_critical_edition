@@ -165,6 +165,17 @@
             }
           });
         });
+        var cnt = 0;
+        $('#relations').children().each(function() {
+        	if(cnt == 0) {
+        		$(this).css('height: 500px; !important');
+        	}
+          $(this).css('position','relative');
+          cnt++;
+        });
+
+
+        
   }
   var init_canvas_div = function(islandora_canvas_params) {
     if (islandora_canvas_params.no_edit == true) {

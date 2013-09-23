@@ -22,6 +22,7 @@
     padding-left: 20px;
 }
 
+/*This was getting overridden by drupal theme.*/
 li.jstree-closed > ul {
     display: none !important;
 }

@@ -55,6 +55,9 @@ body .cwrc_wrapper{
 	vertical-align: top;
 }
 
+#relation_alter {
+  height: 100% !important;
+}
 .cwrc_wrapper #helpDialog iframe {
 	border: none;
 	width: 100%;
@@ -73,6 +76,7 @@ body .cwrc_wrapper{
 
 #relations .ui-layout-south {
     position:relative !important;
+    
 }
 .cwrc_wrapper #entitiesOptions > div {
 	padding-bottom: 5px;
