@@ -231,10 +231,10 @@
     // Setup a basic Canvas with explicit width to scale to from browser width
    initCanvas(nCanvas);
     // Manifest initialization.
-    fetchTriples(islandora_canvas_params.manifest_url,
+   fetchTriples(islandora_canvas_params.manifest_url,
         rdfbase,
         cb_process_manifest);
-    
+
     $('#color-picker-wrapper').click(function() {
       $('#anno_color_activated').attr('value', 'active');
     });

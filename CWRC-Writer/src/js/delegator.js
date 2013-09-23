@@ -142,8 +142,13 @@ function Delegator(config) {
 	 * @param callback Called with one boolean parameter: true for successful save, false otherwise
 	 */
 	del.saveDocument = function(callback) {
+		w.mode == w.XMLRDF;
 		console.log('hit delegator save document');
-		var docText = w.fm.getDocumentContent(false);
+		var docText = w.fm.getDocumentContent(true);
+		console.log('doctext: ');
+		console.log(docText);
+		console.log('writer triples');
+		console.log(w.triples);
 		$.ajax({
 			url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
 			type: 'POST',

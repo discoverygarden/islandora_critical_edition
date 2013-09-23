@@ -515,7 +515,8 @@ function FileManager(config) {
 			
 			var docMode;
 			var rdfs = $(doc).find('rdf\\:RDF, RDF');
-			console.log('rdfs: ' + JSON.stringify(rdfs));
+			console.log('rdfs:');
+			console.log(rdfs);
 			if (rdfs.length) {
 				var mode = parseInt(rdfs.find('w\\:mode, mode').first().text());
 				if (mode == w.XML) {
@@ -530,11 +531,13 @@ function FileManager(config) {
 			if (w.mode != docMode) {
 				var editorModeStr = w.mode == w.XML ? 'XML only' : 'XML & RDF';
 				var docModeStr = docMode == w.XML ? 'XML only' : 'XML & RDF';
-//				w.dialogs.show('message', {
-//					title: 'Editor Mode changed',
-//					msg: 'The Editor Mode ('+editorModeStr+') has been changed to match the Document Mode ('+docModeStr+').',
-//					type: 'info'
-//				});
+				
+				w.dialogs.show('message', {
+					title: 'Editor Mode changed',
+					msg: 'The Editor Mode ('+editorModeStr+') has been changed to match the Document Mode ('+docModeStr+').',
+					type: 'info'
+				});
+				
 				
 				w.mode = docMode;
 			}
