@@ -61,12 +61,8 @@ function Delegator(config) {
 	};
 	
 	del.validate = function(callback) {
-		console.log('hit delegator validate document');
 		var docText = w.fm.getDocumentContent(false);
 		var schemaUrl = w.schemas[w.schemaId].url;
-//		
-//		var valid = 'pass';
-//		callback.call(w, valid);
 		
 		$.ajax({
 			url: 'http://apps.testing.cwrc.ca/services/validator/validate.html',
@@ -112,7 +108,6 @@ function Delegator(config) {
 	 * @param docName
 	 */
 	del.loadDocument = function(callback) {
-		console.log('hit delegator load document');
 	    var baseUrl = window.location.protocol+'//'+window.location.host;
 	    
 		$.ajax({
@@ -121,10 +116,7 @@ function Delegator(config) {
 			dataType: 'xml',
 			success: function(doc, status, xhr) {
 				window.location.hash = '#'+w.currentDocId;
-				//w.fm.loadDocumentFromXml(doc);
 				callback.call(w, doc);
-				writer.layout.enableResizable("east");
-			    writer.layout.options.east.resizable = true;
 			},
 			error: function(xhr, status, error) {
 				w.dialogs.show('message', {
@@ -143,12 +135,7 @@ function Delegator(config) {
 	 */
 	del.saveDocument = function(callback) {
 		w.mode == w.XMLRDF;
-		console.log('hit delegator save document');
 		var docText = w.fm.getDocumentContent(true);
-		console.log('doctext: ');
-		console.log(docText);
-		console.log('writer triples');
-		console.log(w.triples);
 		$.ajax({
 			url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
 			type: 'POST',

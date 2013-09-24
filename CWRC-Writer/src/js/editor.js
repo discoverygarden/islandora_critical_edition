@@ -452,8 +452,6 @@ function Writer(config) {
 	};
 	
 	function _onNodeChangeHandler(ed, cm, e) {
-//		console.log('onNodeChangeHandler');
-//		console.time('nodechange');
 		if (e != null) {
 			if (e.nodeType != 1) {
 				ed.currentNode = w.u.getRootTag()[0];
@@ -473,7 +471,6 @@ function Writer(config) {
 					
 					// use setTimeout to add to the end of the onNodeChange stack
 					window.setTimeout(function(){
-//						console.log('fireNodeChange');
 						w._fireNodeChange(e);
 					}, 0);
 				} else {
@@ -525,7 +522,6 @@ function Writer(config) {
 	};
 	
 	function _doHighlightCheck(ed, evt) {
-//		console.log('_doHighlightCheck');
 		var range = ed.selection.getRng(true);
 		
 		// check if inside boundary tag
@@ -570,7 +566,6 @@ function Writer(config) {
 	 * Begin init functions
 	 */
 	w.init = function() {
-		console.log('writer initilized');
 		w.layout = $('#cwrc_wrapper').layout({
 			defaults: {
 				maskIframesOnResize: true,
@@ -584,8 +579,9 @@ function Writer(config) {
 				slidable: false,
 				maskIframesOnResize: true,
 				onresize: function() {
-					// TODO: Move this out of the editor.
-					console.log('resize canvas');
+					// TODO: Move this out of the editor somehow.
+					// Accessing 'writer.layout.east.onresize does no
+					// work.
 					resizeCanvas();
 				},
 			},
@@ -616,9 +612,7 @@ function Writer(config) {
 			center: {
 				onresize: function(region, pane, state, options) {
 					var uiHeight = $('#'+w.editor.id+'_tbl tr.mceFirst').outerHeight() + 2;
-					console.log("uiheight: " + uiHeight);
 					$('#'+w.editor.id+'_ifr').height(state.layoutHeight - uiHeight);
-					console.log("alter height: " + (state.layoutHeight - uiHeight));
 				}
 			},
 			south: {
@@ -792,7 +786,6 @@ function Writer(config) {
 						if (type) {
 							if (type === 1) {
 								var tag = node.getAttribute('_tag') || node.nodeName;
-//								console.log(tag);
 //								return !!(ed.schema.getBlockElements()[tag]);
 								return true;
 							}
@@ -803,7 +796,6 @@ function Writer(config) {
 					
 					var settings = w.settings.getSettings();
 					var body = $(ed.getBody());
-					console.log('tiny mce get body: ' + JSON.stringify(body));
 					if (settings.showEntityBrackets) body.addClass('showEntityBrackets');
 					if (settings.showStructBrackets) body.addClass('showStructBrackets');
 					

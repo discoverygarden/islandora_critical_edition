@@ -459,7 +459,6 @@ function FileManager(config) {
 		// TODO need a better way of tying this to the schemas config
 		// grab the schema from xml-model
 		if (rootName == 'xml-model') {
-			console.log('root name xml-model: ' + rootName);
 			var xmlModelData = doc.firstChild.data;
 			var schemaUrl = xmlModelData.match(/href="([^"]*)"/)[1];
 			var urlParts = schemaUrl.match(/^(.*):\/\/([a-z\-.]+)(?=:[0-9]+)?\/(.*)/);
@@ -480,12 +479,10 @@ function FileManager(config) {
 					url: schemaUrl
 				};
 			}
-			console.log('loading schemaid a: ' + schemaId);
 			fm.loadSchema(schemaId, false, doProcessing);
 		// determine the schema based on the root element
 		} else {
 			rootName = rootName.toLowerCase();
-			console.log('root name non xml-model: ' + rootName);
 			if (rootName != w.root.toLowerCase()) {
 				// roots don't match so load the appropriate schema
 				var schemaId = 'tei';
@@ -496,7 +493,6 @@ function FileManager(config) {
 				} else if (rootName == 'writing') {
 					schemaId = 'writing';
 				}
-				console.log('loading schemaid b: ' + schemaId);
 				fm.loadSchema(schemaId, false, doProcessing);
 			} else {
 				doProcessing();
@@ -515,8 +511,6 @@ function FileManager(config) {
 			
 			var docMode;
 			var rdfs = $(doc).find('rdf\\:RDF, RDF');
-			console.log('rdfs:');
-			console.log(rdfs);
 			if (rdfs.length) {
 				var mode = parseInt(rdfs.find('w\\:mode, mode').first().text());
 				if (mode == w.XML) {
@@ -993,7 +987,6 @@ function FileManager(config) {
 			var name = start.substr(1);
 			_loadTemplate('xml/'+name+'.xml', name);
 		} else if (start != '') {
-			console.log(start.substr(1));
 			w.fm.loadDocument(start.substr(1));
 		}
 	};

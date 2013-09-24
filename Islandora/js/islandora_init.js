@@ -2,28 +2,31 @@
   Drupal.behaviors.CwrcFullWindow = {
     attach: function (context, settings){
       $('#full-window-button').click(function() {
-
-        $('.cwrc_wrapper').toggleClass('islandora-crited-fullwindow');
-
+        $('.islandora-crited-wrapper').toggleClass('islandora-crited-fullwindow');
         if ($(this).val() == Drupal.t('Full Window')) {
-          $(this).val(Drupal.t('Exit Full Window'));
-          $('.islandora-crited-wrapper').css("height","100%");
+            $(this).val(Drupal.t('Exit Full Window'));
         }
         else {
-          $(this).val(Drupal.t('Full Window'));
-          $('.islandora-crited-wrapper').css("height","400px");
+            $(this).val(Drupal.t('Full Window'));
         }
-       // resizeColumnsDrag();
+        $('#cwrc_wrapper').layout().resizeAll();
       });
       $("#bookview_button").click(function(){
           location.href = Drupal.settings.basePath + 'islandora/object/' + Drupal.settings.islandora_critical_edition.book_pid;
       });
     }
   };
-  
-  
+  // Listen for the 'esc' key.
+  $(document).keyup(function(e) {
+    if (e.keyCode == 27) { 
+      if($('#full-window-button').val() == Drupal.t('Exit Full Window')) {
+        $('.islandora-crited-wrapper').toggleClass('islandora-crited-fullwindow');
+        $('#cwrc_wrapper').layout().resizeAll();
+        $('#full-window-button').val(Drupal.t('Full Window'));
+      }
+    }
+  });
 })(jQuery);
-
 //adapted from sc_init
 
 var toid = null;

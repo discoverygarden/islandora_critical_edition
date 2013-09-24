@@ -31,6 +31,7 @@ var EntitiesList = function(config) {
 	});
 	$('#sortBy').buttonset();
 	$('#metaKeys').button().click(function() {
+		console.log("meta clicked");
 		showMetaKeys = !showMetaKeys;
 		w.entitiesList.update();
 		w.highlightEntity(w.editor.currentEntity);

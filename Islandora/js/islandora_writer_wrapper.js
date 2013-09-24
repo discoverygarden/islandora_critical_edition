@@ -65,11 +65,9 @@ Islandora = {
   Writer : {
     Document : {
       load: function() {
-    	  console.log('page pid: ' + Drupal.settings.islandora_critical_edition.page_pid);
-    	  // Calling load doc, which assigns a doc id (the page pid) and
-    	  // calls the delegate function loadDocument().
-    	  writer.fm.loadDocument(Drupal.settings.islandora_critical_edition.page_pid);
-    	  
+        // Calling load doc, which assigns a doc id (the page pid) and
+        // calls the delegate function loadDocument().
+        writer.fm.loadDocument(Drupal.settings.islandora_critical_edition.page_pid);
       },
       get: function() {
         return writer.getDocument();
@@ -116,7 +114,6 @@ Islandora = {
     	Islandora.Writer.Document.load();
     	// Update entities list.
         writer.entitiesList.update();
-        console.log("page being loaded: " + islandora_canvas_params.pages);
       // Pagenation on images/annotations.
       $('#annotations').children(":first").children(":first").attr('src', Drupal.settings.islandora_critical_edition.base_url + 
           '/islandora/object/' +
