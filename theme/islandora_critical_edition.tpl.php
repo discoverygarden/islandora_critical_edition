@@ -43,7 +43,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="main" class="ui-layout-center">
+	<div id="cwrc_main" class="ui-layout-center">
 		<div class="ui-layout-center">
 			<form method="post" action="">
 				<textarea id="editor" name="editor" class="tinymce"></textarea>

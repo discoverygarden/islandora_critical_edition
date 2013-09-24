@@ -173,8 +173,6 @@
           $(this).css('position','relative');
           cnt++;
         });
-
-
         
   }
   var init_canvas_div = function(islandora_canvas_params) {
@@ -189,6 +187,7 @@
       $('#canvas_page_choose').append('<option  value="' + key + '">Page ' + (key + 1) + '</option>');
     });
     console.log("use dropdown: " + islandora_canvas_params.use_dropdown);
+    islandora_canvas_params.use_dropdown = 0;
     if (islandora_canvas_params.use_dropdown == 1) {
         $('#islandora_classification').empty();
         var sel = $('<select  id="anno_classification">').appendTo('#islandora_classification');

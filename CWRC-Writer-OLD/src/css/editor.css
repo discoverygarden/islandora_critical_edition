@@ -4,6 +4,10 @@ body .ui-widget{
 	color: #333;
 }
 
+#tree {
+  height: 100% !important;
+}
+
 .showEntityBrackets .entity {
 	display: inline-block;
 	height: 11px;

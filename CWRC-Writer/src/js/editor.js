@@ -616,7 +616,9 @@ function Writer(config) {
 			center: {
 				onresize: function(region, pane, state, options) {
 					var uiHeight = $('#'+w.editor.id+'_tbl tr.mceFirst').outerHeight() + 2;
+					console.log("uiheight: " + uiHeight);
 					$('#'+w.editor.id+'_ifr').height(state.layoutHeight - uiHeight);
+					console.log("alter height: " + (state.layoutHeight - uiHeight));
 				}
 			},
 			south: {
