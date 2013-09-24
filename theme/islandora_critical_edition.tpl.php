@@ -9,7 +9,11 @@
  */
 
 ?>
+<input id="full-window-button" type="button" value="<?php print t('Full Window'); ?>" />
+<input id="bookview_button" type="button" value="<?php print t('Return to Book View'); ?>" />
 <div id="cwrc_wrapper" class="cwrc_wrapper" style="width: 100%; height:600px">
+    
+    
     <div id="header" class="ui-layout-north">
     <!-- TODO: We need new full page buttons. So much going on in the header right now -->
 		 <div id="page_selector">Loading....</div>

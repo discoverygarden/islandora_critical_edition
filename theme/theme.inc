@@ -33,7 +33,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   // and image annotation pane's.
   $variables['anno_list_pane'] = theme('islandora_anno_list_pane');
   $variables['anno_img_pane'] = theme('islandora_anno_image_pane');
-
+  drupal_add_css($critical_edition_module_path . "/Islandora/css/critical_edition.css");
   // Fill additional session variables.
   $variables['images_path'] = url($critical_edition_module_path . '/CWRC-Writer/src/img/', array('absolute' => TRUE));
   $image_anno_images = $image_annotation_module_path . '/shared_canvas/imgs/';
@@ -73,6 +73,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
    drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.contextmenu.js");
    // TODO: Move much of the js/css here into the following
    // functions.
+   //drupal_add_css($critical_edition_module_path . "/Islandora/css/critical_edition.css");
   islandora_image_annotation_include_common_js();
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/smoothness/jquery-ui-1.10.3.custom.min.css");
   islandora_image_annotation_include_common_css();

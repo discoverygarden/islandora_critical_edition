@@ -3,7 +3,7 @@
     attach: function (context, settings){
       $('#full-window-button').click(function() {
 
-        $('.islandora-crited-wrapper').toggleClass('islandora-crited-fullwindow');
+        $('.cwrc_wrapper').toggleClass('islandora-crited-fullwindow');
 
         if ($(this).val() == Drupal.t('Full Window')) {
           $(this).val(Drupal.t('Exit Full Window'));
@@ -13,7 +13,7 @@
           $(this).val(Drupal.t('Full Window'));
           $('.islandora-crited-wrapper').css("height","400px");
         }
-        resizeColumnsDrag();
+       // resizeColumnsDrag();
       });
       $("#bookview_button").click(function(){
           location.href = Drupal.settings.basePath + 'islandora/object/' + Drupal.settings.islandora_critical_edition.book_pid;
