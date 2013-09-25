@@ -175,6 +175,7 @@
         });
         
   }
+
   var init_canvas_div = function(islandora_canvas_params) {
     if (islandora_canvas_params.no_edit == true) {
       $('#create_annotation').hide();
@@ -186,8 +187,6 @@
     $.each(islandora_canvas_params.pages, function(key, value) {
       $('#canvas_page_choose').append('<option  value="' + key + '">Page ' + (key + 1) + '</option>');
     });
-    // TODO: this is not being persisted drupal side.
-    islandora_canvas_params.use_dropdown = 0;
     if (islandora_canvas_params.use_dropdown == 1) {
         $('#islandora_classification').empty();
         var sel = $('<select  id="anno_classification">').appendTo('#islandora_classification');

@@ -113,19 +113,19 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_triple.js");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_filemanager.js");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/structuretree.js");
-  
+
   drupal_add_css($critical_edition_module_path . "/Islandora/css/layout-default-latest.css");
-  
+
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/image_local.css");
-  
+
   drupal_add_css($critical_edition_module_path . "/Islandora/css/islandora_style.css");
   drupal_add_css($critical_edition_module_path . "/Islandora/css/style.css");
-  
+
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/editor.js");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/tagger.js");
-  
+
   drupal_add_js($critical_edition_module_path . "/Islandora/js/dialog.js");
-  
+
   drupal_add_js($critical_edition_module_path . "/Islandora/js/startup.js");
   drupal_add_js($critical_edition_module_path . "/Islandora/js/islandora_init.js");
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.css");
