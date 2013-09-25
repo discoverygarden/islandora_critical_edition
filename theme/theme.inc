@@ -45,7 +45,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
         'images_path' => $variables['images_path'])), 'setting');
   drupal_add_js(array(
       'islandora_critical_edition' => array(
-      'base_url' => $base_url)), 'setting');
+        'base_url' => $base_url)), 'setting');
   // Passing the page pid, instead of getting if from the
   // URL on the javascript side.
   drupal_add_js(array(

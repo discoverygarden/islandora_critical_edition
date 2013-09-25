@@ -65,7 +65,7 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
   $cwrc = str_replace('<br>', '<br />', $data);
   // @codingStandardsIgnoreEnd
   $cwrc = str_replace('&', '&amp;', $cwrc);
-  
+
   $fedora_object["CWRC"]->content = $cwrc;
 
   echo $cwrc;

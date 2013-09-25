@@ -58,8 +58,6 @@ function islandora_critical_edition_menu() {
   return $items;
 }
 
-
-
 /**
  * Checks if the user has access to the CWRC editor for the given object.
  *
