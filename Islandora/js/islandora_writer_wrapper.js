@@ -195,7 +195,6 @@ Islandora = {
           error: function() {
             // TODO: come up with a better handler.
             callback(true);
-            console.log("invalid callback");
 //             jQuery.ajax({
 //              url : 'xml/validation.xml',
 //              success : function(data, status, xhr) {
@@ -207,7 +206,6 @@ Islandora = {
 //                }
 //              }
 //            }); 
-            //console.log("callback: " + callback);
 //            w.dialogs.show('message', {
 //              title: 'Error',
 //              msg: 'An error occurred while trying to validate the document.',
