@@ -4,9 +4,6 @@
  * This file contains themeing functions for islandora_critical_edition.
  */
 
-function islandora_critical_edition_js_alter(&$javascript) {
-  //$javascript['misc/jquery.js']['data'] = drupal_get_path('module', 'islandora_critical_edition') . '/CWRC-Writer/src/js/lib/jquery/jquery-1.9.1.js';
-}
 /**
  * Implements hook_preprocess_islandora_critical_edition().
  *
