@@ -121,7 +121,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/editor.js");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/tagger.js");
 
-  drupal_add_js($critical_edition_module_path . "/Islandora/js/dialog.js");
+  drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialog.js");
 
   drupal_add_js($critical_edition_module_path . "/Islandora/js/startup.js");
   drupal_add_js($critical_edition_module_path . "/Islandora/js/islandora_init.js");

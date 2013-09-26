@@ -63,43 +63,46 @@ function Delegator(config) {
 	del.validate = function(callback) {
 		var docText = w.fm.getDocumentContent(false);
 		var schemaUrl = w.schemas[w.schemaId].url;
-		
-		$.ajax({
-			url: 'http://apps.testing.cwrc.ca/services/validator/validate.html',
-			type: 'POST',
-			dataType: 'XML',
-			data: {
-				sch: schemaUrl,
-				type: 'RNG_XML',
-				content: docText
-			},
-			success: function(data, status, xhr) {
-				if (callback) {
-					var valid = $('status', data).text() == 'pass';
-					callback.call(w, valid);
-				} else {
-					w.validation.showValidationResult(data, docText);
-				}
-			},
-			error: function() {
-				 $.ajax({
-					url : 'xml/validation.xml',
-					success : function(data, status, xhr) {
-						if (callback) {
-							var valid = $('status', data).text() == 'pass';
-							callback(valid);
-						} else {
-							w.validation.showValidationResult(data, docText);
-						}
-					}
-				}); 
-				w.dialogs.show('message', {
-					title: 'Error',
-					msg: 'An error occurred while trying to validate the document.',
-					type: 'error'
-				});
-			}
-		});
+		var valid = 'pass';
+		callback.call(w, valid);
+		//TODO: Implement true validator when/if cwrc makes this
+		// service available. Awaiting response.
+//		$.ajax({
+//			url: 'http://apps.testing.cwrc.ca/services/validator/validate.html',
+//			type: 'POST',
+//			dataType: 'XML',
+//			data: {
+//				sch: schemaUrl,
+//				type: 'RNG_XML',
+//				content: docText
+//			},
+//			success: function(data, status, xhr) {
+//				if (callback) {
+//					var valid = $('status', data).text() == 'pass';
+//					callback.call(w, valid);
+//				} else {
+//					w.validation.showValidationResult(data, docText);
+//				}
+//			},
+//			error: function() {
+//				 $.ajax({
+//					url : 'xml/validation.xml',
+//					success : function(data, status, xhr) {
+//						if (callback) {
+//							var valid = $('status', data).text() == 'pass';
+//							callback(valid);
+//						} else {
+//							w.validation.showValidationResult(data, docText);
+//						}
+//					}
+//				}); 
+//				w.dialogs.show('message', {
+//					title: 'Error',
+//					msg: 'An error occurred while trying to validate the document.',
+//					type: 'error'
+//				});
+//			}
+//		});
 	};
 	
 	/**
