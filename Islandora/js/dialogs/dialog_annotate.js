@@ -8,7 +8,7 @@
 function annotation_dialog() {
   var img_base_path = Drupal.settings.islandora_critical_edition.image_anno_img;
   $(document.body).append(''+
- '<div id="create_annotation_box">'+
+ '<div id="create_annotation_box" style="height:100%;">'+
     '<div style="display:inline; margin-top: 3px; padding-left: 5px;">'+
       '<img id="annoShape_rect" class="annoShape" src="' + Drupal.settings.basePath + img_base_path + 'draw_rect.png" style="padding-left: 2px; padding-top: 1px;"/>'+
       '<img id="annoShape_circ" class="annoShape" src="' + Drupal.settings.basePath + img_base_path + 'draw_circ.png" style="padding-left: 1px;"/>'+

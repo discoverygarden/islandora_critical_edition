@@ -65,7 +65,9 @@
 
         $('#page-prev').click(function(e) {
           e.preventDefault();
-          if (!writer.editor.isNotDirty) {
+          console.log("writer: ");
+          console.log(writer.editor);
+          if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave.");
             if (!answer) {
 
@@ -92,6 +94,8 @@
         });
         $('#page-next').click(function(e) {
           e.preventDefault();
+          console.log("writer: ");
+          console.log(writer.editor);
           if (!writer.editor.isNotDirty) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave");
             if (!answer) {

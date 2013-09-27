@@ -312,9 +312,9 @@
     float: right;
     margin-top: 5px;
 }
-.ui-dialog-content div {
-    margin-bottom: 10px;
-}
+/* .ui-dialog-content div { */
+/*     margin-bottom: 10px; */
+/* } */
 #schemaDialog {
     padding: 0.5em 0.5em 0;
 }
