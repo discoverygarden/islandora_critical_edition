@@ -543,7 +543,38 @@ ul.relationsList li:hover
           border-radius: 5px 5px 0px 0px; /* Opera 10.5, IE9, Saf5, Chrome, FF4+, iOS 4, Android 2.1+ */
 }
 
+
 /* Dialog Overrides */
+/* Add relationship fixes*/
+#tripleColumnsParent div
+{
+  line-height: 1.5em !important;
+  margin-top: 0.8em !important;
+}
+#subjectColumn h2 
+{
+  line-height: 1.5em !important;
+  margin-top: 0.8em !important;
+}
+#predicateColumn h2 
+{
+  line-height: 1.5em !important;
+  margin-top: 0.8em !important;
+}
+#objectColumn h2 
+{
+  line-height: 1.5em !important;
+  margin-top: 0.8em !important;
+}
+/* .cwrc .ui-widget */
+/* { */
+/*   font-size: 0.0em !important; */
+/* } */
+/* Add relationship fixes END*/
+#tripleColumnsParent
+{
+  font-size: 8pt !important;
+}
 #linkDialog
 {
   height:100% !important;

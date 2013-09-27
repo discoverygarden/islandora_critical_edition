@@ -135,6 +135,7 @@
 			t._menu = m;
 
 			var url = t.url+'/../../img/';
+			console.log("Testing img url: " +url+'calendar.png');
 			m.add({
 				title: 'Tag Person',
 				icon_src: url+'user.png',

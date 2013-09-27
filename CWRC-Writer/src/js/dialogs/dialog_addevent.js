@@ -75,7 +75,7 @@ var AddEventDialog = function(config) {
 		maxDate: new Date(2020, 11, 31),
 		showOn: 'button',
 		buttonText: 'Date Picker',
-		buttonImage: 'img/calendar.png',
+		buttonImage: '../../img/calendar.png',
 		buttonImageOnly: true
 	});
 	
@@ -98,7 +98,7 @@ var AddEventDialog = function(config) {
 		maxDate: new Date(2020, 11, 31),
 		showOn: 'button',
 		buttonText: 'Date Picker',
-		buttonImage: 'img/calendar.png',
+		buttonImage: '../../img/calendar.png',
 		buttonImageOnly: true,
 		onSelect: function(selectedDate) {
 			var option = this.id == "startDate" ? "minDate" : "maxDate";
