@@ -548,6 +548,7 @@ ul.relationsList li:hover
 {
   height:100% !important;
 }
+
 .dragHead
 {
   border-bottom: 1px solid #aaa;
@@ -558,10 +559,12 @@ ul.relationsList li:hover
 {
   font-size: 12px !important;
 }
+
 #keywordDialog
 {
 /*   height: 100% !important; */
 }
+
 .dragBox
 {
   border: 1px solid #666;
@@ -571,10 +574,12 @@ ul.relationsList li:hover
 {
   height: 100% !important;
 }
+
 #noteDialog
 {
   height: 100% !important;
 }
+
 #dateDialog p
 {
    line-height: 1.0em !important;
@@ -584,6 +589,7 @@ ul.relationsList li:hover
 {
   height: 100% !important;
 }
+
 #citationDialog p
 {
   font-size: 8pt !important;
