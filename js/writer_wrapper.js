@@ -110,10 +110,11 @@ Islandora = {
       maybe_config_create_annotation();
     },
     load_next_anno_page: function() {
-    	// Load the next page document.
-    	Islandora.Writer.Document.load();
-    	// Update entities list.
-        writer.entitiesList.update();
+      Islandora.Writer.Document.load();
+      // Initilize shared canvas image annotation canvas processing.
+      Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
+        init_canvas_div);
+      
       // Pagenation on images/annotations.
       $('#annotations').children(":first").children(":first").attr('src', Drupal.settings.islandora_critical_edition.base_url + 
           '/islandora/object/' +
@@ -221,6 +222,8 @@ Islandora = {
             async: true,
             success: function(data, status, xhr) {
               islandora_canvas_params = data;
+              console.log("canvas params: ");
+              console.log(islandora_canvas_params);
               // Callback 'init_canvas_div' in startup.js.
               callback(data);
             },

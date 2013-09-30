@@ -70,7 +70,6 @@
           if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave.");
             if (!answer) {
-
               return;
             }
           }
