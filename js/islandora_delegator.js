@@ -1,4 +1,10 @@
-function Delegator(config) {
+/**
+ * Our implementation of the CWRC-Writer
+ * Delegator class. 
+ * @param config
+ * @returns {___anonymous83_84}
+ */
+function IslandoraDelegator(config) {
 	var w = config.writer;
 	
 	var del = {};
@@ -115,6 +121,7 @@ function Delegator(config) {
 	 * @param docName
 	 */
 	del.loadDocument = function(callback) {
+		console.log("Islandora Delegator");
 	    var baseUrl = window.location.protocol+'//'+window.location.host;
 	    
 		$.ajax({

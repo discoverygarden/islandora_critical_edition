@@ -14,7 +14,7 @@ Islandora = {
 	
 	var baseUrl = window.location.protocol+'//'+window.location.host;
 	var config = {
-		delegator: Delegator,
+		delegator: IslandoraDelegator,
 		cwrcRootUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/',
 		schemas: {
 			tei: {
@@ -56,6 +56,7 @@ Islandora = {
 					init_canvas_div);
 			Islandora.Writer.Document.load();
 		    Islandora.Writer.init();
+		    console.log('Pages: ' + JSON.stringify(cwrc_params.pages));
 		},
 		error: function() {
 			console.log("Error");
@@ -110,16 +111,23 @@ Islandora = {
       maybe_config_create_annotation();
     },
     load_next_anno_page: function() {
-      Islandora.Writer.Document.load();
-      // Initilize shared canvas image annotation canvas processing.
-      Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
-        init_canvas_div);
-      
+      //Islandora.Writer.Document.load();
+//    	Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
+//    	        init_canvas_div);
+    	//init_ui();
+		// Initilize shared canvas image annotation canvas processing.
+    	Islandora.Writer.Document.load();
+		Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
+				init_canvas_div);
+	   // Islandora.Writer.init();
       // Pagenation on images/annotations.
       $('#annotations').children(":first").children(":first").attr('src', Drupal.settings.islandora_critical_edition.base_url + 
           '/islandora/object/' +
-          islandora_canvas_params.pages[cwrc_params.position - 1] + 
+          islandora_canvas_params.pages[cwrc_params.position] + 
           '/datastream/JPG/view');
+//      Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
+//        init_canvas_div);
+//      writer.entitiesList.update();
     },
     Delegate : {
       lookupEntity : function(params, callback) {
@@ -219,7 +227,7 @@ Islandora = {
     setup_canvas : function(pagePid,callback) {
       $.ajax({
             url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup_canvas/' + pagePid,
-            async: true,
+            async: false,
             success: function(data, status, xhr) {
               islandora_canvas_params = data;
               console.log("canvas params: ");

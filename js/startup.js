@@ -42,6 +42,7 @@
           
           setReturnParams();
           cwrc_params.position = $('#page_choose :selected').attr('value');
+          console.log("page choose position: " + (cwrc_params.position -1));
           openColumn();
           PID = cwrc_params.pages[ cwrc_params.position];
           
@@ -65,8 +66,6 @@
 
         $('#page-prev').click(function(e) {
           e.preventDefault();
-          console.log("writer: ");
-          console.log(writer.editor);
           if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave.");
             if (!answer) {
@@ -76,16 +75,15 @@
           if (cwrc_params.position > 1) {
             $('#page-next').css('opacity', '1').removeClass('disabled');
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
-            $(selector).removeAttr('selected');
-            setReturnParams()
-            openColumn();
+            setReturnParams();
             cwrc_params.position--;
+            openColumn();
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
             Islandora.Writer.load_next_anno_page();
+            console.log("prev position: " + cwrc_params.position);
             setHeader();
-            
             if (cwrc_params.position == 0) {
               $('#page-prev').css('opacity', '.6').addClass('disabled');
             }
@@ -93,8 +91,6 @@
         });
         $('#page-next').click(function(e) {
           e.preventDefault();
-          console.log("writer: ");
-          console.log(writer.editor);
           if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave");
             if (!answer) {
@@ -108,10 +104,12 @@
             
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).removeAttr('selected');
+            cwrc_params.position++;
+            console.log("next position: " + cwrc_params.position);
             setReturnParams();
             
             openColumn();
-            cwrc_params.position++;
+            
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
