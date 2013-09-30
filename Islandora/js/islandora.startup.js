@@ -27,7 +27,7 @@
 
         // add page choice behavior to dropdown
         $('#page_choose').change(function(e) {
-          if (!writer.editor.isNotDirty) {
+          if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave page");
             if (!answer) {
               selector = "#page_choose option[value='" + cwrc_params.position + "']";
@@ -96,7 +96,7 @@
           e.preventDefault();
           console.log("writer: ");
           console.log(writer.editor);
-          if (!writer.editor.isNotDirty) {
+          if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave");
             if (!answer) {
               return;
