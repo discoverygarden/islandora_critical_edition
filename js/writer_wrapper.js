@@ -52,9 +52,8 @@ Islandora = {
 			// Initilize additional UI Elements
 			init_ui();
 			// Initilize shared canvas image annotation canvas processing.
-			Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
+			Islandora.Writer.setup_canvas(PID,
 					init_canvas_div);
-			Islandora.Writer.Document.load();
 		    Islandora.Writer.init();
 		    console.log('Pages: ' + JSON.stringify(cwrc_params.pages));
 		},
@@ -68,41 +67,10 @@ Islandora = {
       load: function() {
         // Calling load doc, which assigns a doc id (the page pid) and
         // calls the delegate function loadDocument().
-        writer.fm.loadDocument(Drupal.settings.islandora_critical_edition.page_pid);
+    	  writer.fm.loadDocument(PID);
       },
       get: function() {
         return writer.getDocument();
-      },
-      Entities : {
-        get_all: function() {
-          // Return all entities.
-        },
-        get: function(id) {
-          // Get the entity by id.
-        },
-        update: function(id) {
-          // Update entity by id.
-        },
-        destroy: function(id) {
-          // Remove entity by id.
-        },
-      },
-      Annotations  : {
-        load: function(OA_Annotations) {
-          writer.load(OA_Annotations);
-        },
-        get: function() {
-          return writer.getAnnotations();
-        },
-        add: function(rdf) {
-          // Add new annotation.
-        },
-        update: function(rdf) {
-          // Update existing annotation.
-        },
-        destroy: function(id) {
-          // Destroy/delete annotation
-        },
       },
     },
     init : function() {
@@ -111,21 +79,13 @@ Islandora = {
       maybe_config_create_annotation();
     },
     load_next_anno_page: function() {
-		// Initilize shared canvas image annotation canvas processing.
-    	
-		Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
-				init_canvas_div);
-//		console.log(Drupal.settings.islandora_critical_edition.base_url + 
-//          '/islandora/object/??' +
-//          cwrc_params.pages[cwrc_params.position] + 
-//          '??/datastream/JPG/view');
-		
-      // Pagenation on images/annotations.
-//      $('#annotations').children(":first").children(":first").attr('src', Drupal.settings.islandora_critical_edition.base_url + 
-//          '/islandora/object/' +
-//          cwrc_params.pages[cwrc_params.position] + 
-//          '/datastream/JPG/view');
+      
+      Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
+        init_canvas_div);
+      init_ui();
+      // Initilize shared canvas image annotation canvas processing.
       Islandora.Writer.Document.load();
+      
       writer.entitiesList.update();
     },
     setup_canvas : function(pagePid,callback) {
@@ -135,9 +95,6 @@ Islandora = {
             async: false,
             success: function(data, status, xhr) {
               islandora_canvas_params = data;
-              console.log("canvas params: ");
-              console.log(islandora_canvas_params);
-              // Callback 'init_canvas_div' in startup.js.
               callback(data);
             },
             error: function() {

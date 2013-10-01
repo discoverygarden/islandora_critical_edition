@@ -69,50 +69,50 @@ function IslandoraDelegator(config) {
 	del.validate = function(callback) {
 		var docText = w.fm.getDocumentContent(false);
 		var schemaUrl = w.schemas[w.schemaId].url;
-//		var valid = 'pass';
-//		callback.call(w, valid);
+		var valid = 'pass';
+		callback.call(w, valid);
 		//TODO: Implement true validator when/if cwrc makes this
 		// service available. Awaiting response.
 		// http://apps.testing.cwrc.ca/services/validator/validate.html
-		$.ajax({
-			url: 'http://discoverygarden-vagrant-emic.local:8080/cwrcxmlval-0.0.1-SNAPSHOT',
-			type: 'POST',
-			dataType: 'XML',
-			data: {
-				sch: schemaUrl,
-				type: 'RNG_XML',
-				content: docText
-			},
-			success: function(data, status, xhr) {
-				console.log("success???");
-				console.log(data);
-				if (callback) {
-					var valid = $('status', data).text() == 'pass';
-					callback.call(w, valid);
-				} else {
-					w.validation.showValidationResult(data, docText);
-				}
-			},
-			error: function() {
-				console.log("derp, thats a fail");
-				 $.ajax({
-					url : 'xml/validation.xml',
-					success : function(data, status, xhr) {
-						if (callback) {
-							var valid = $('status', data).text() == 'pass';
-							callback(valid);
-						} else {
-							w.validation.showValidationResult(data, docText);
-						}
-					}
-				}); 
-				w.dialogs.show('message', {
-					title: 'Error',
-					msg: 'An error occurred while trying to validate the document.',
-					type: 'error'
-				});
-			}
-		});
+//		$.ajax({
+//			url: 'http://discoverygarden-vagrant-emic.local:8080/cwrcxmlval-0.0.1-SNAPSHOT',
+//			type: 'POST',
+//			dataType: 'XML',
+//			data: {
+//				sch: schemaUrl,
+//				type: 'RNG_XML',
+//				content: docText
+//			},
+//			success: function(data, status, xhr) {
+//				console.log("success???");
+//				console.log(data);
+//				if (callback) {
+//					var valid = $('status', data).text() == 'pass';
+//					callback.call(w, valid);
+//				} else {
+//					w.validation.showValidationResult(data, docText);
+//				}
+//			},
+//			error: function() {
+//				console.log("derp, thats a fail");
+//				 $.ajax({
+//					url : 'xml/validation.xml',
+//					success : function(data, status, xhr) {
+//						if (callback) {
+//							var valid = $('status', data).text() == 'pass';
+//							callback(valid);
+//						} else {
+//							w.validation.showValidationResult(data, docText);
+//						}
+//					}
+//				}); 
+//				w.dialogs.show('message', {
+//					title: 'Error',
+//					msg: 'An error occurred while trying to validate the document.',
+//					type: 'error'
+//				});
+//			}
+//		});
 	};
 	
 	/**
@@ -121,7 +121,6 @@ function IslandoraDelegator(config) {
 	 * @param docName
 	 */
 	del.loadDocument = function(callback) {
-		console.log("Islandora Delegator");
 	    var baseUrl = window.location.protocol+'//'+window.location.host;
 	    
 		$.ajax({

@@ -2,7 +2,7 @@
 
   $('document').ready(function() {
 
-    // Functionality is wrapped up in 'islandora_writer_wrapper.js.
+    // Functionality is wrapped up in 'writer_wrapper.js.
     Islandora.init_writer();
   });
 
@@ -65,6 +65,7 @@
         });
 
         $('#page-prev').click(function(e) {
+        	console.log("prev hit");
           e.preventDefault();
           if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave.");
@@ -74,35 +75,36 @@
           }
           if (cwrc_params.position > 1) {
             $('#page-next').css('opacity', '1').removeClass('disabled');
-//            var selector = "#page_choose option[value='" + cwrc_params.position + "']";
-//            $(selector).removeAttr('selected');
-//            cwrc_params.position--;
-//            console.log("next position: " + cwrc_params.position);
-//            setReturnParams();
-//            
-//            openColumn();
-//            
-//            selector = "#page_choose option[value='" + cwrc_params.position + "']";
-//            $(selector).attr('selected', 'selected');
-//            PID = cwrc_params.pages[ cwrc_params.position];
-//            Islandora.Writer.load_next_anno_page();
-//            setHeader();
+            
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
-            setReturnParams();
+            $(selector).removeAttr('selected');
             cwrc_params.position--;
+            setReturnParams();
+            
             openColumn();
+            
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
             Islandora.Writer.load_next_anno_page();
-            console.log("prev position: " + cwrc_params.position);
             setHeader();
+//            var selector = "#page_choose option[value='" + cwrc_params.position + "']";
+//            setReturnParams();
+//            cwrc_params.position--;
+//            openColumn();
+//            selector = "#page_choose option[value='" + cwrc_params.position + "']";
+//            $(selector).attr('selected', 'selected');
+//            PID = cwrc_params.pages[ cwrc_params.position];
+//            Islandora.Writer.load_next_anno_page();
+//            console.log("prev position: " + cwrc_params.position);
+//            setHeader();
             if (cwrc_params.position == 0) {
               $('#page-prev').css('opacity', '.6').addClass('disabled');
             }
           }
         });
         $('#page-next').click(function(e) {
+        	console.log("next hit");
           e.preventDefault();
           if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave");
@@ -112,13 +114,11 @@
           }
 
           if (cwrc_params.position < cwrc_params.page_count) {
-        	
             $('#page-prev').css('opacity', '1').removeClass('disabled');
             
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).removeAttr('selected');
             cwrc_params.position++;
-            console.log("next position: " + cwrc_params.position);
             setReturnParams();
             
             openColumn();
@@ -194,7 +194,6 @@
       $('#create_annotation').hide();
     }
     opts.base = islandora_canvas_params.object_base;
-
     // build and populate page choice dropdown
     $('#canvas_page_selector').html('<select id="canvas_page_choose"></select>');
     $.each(islandora_canvas_params.pages, function(key, value) {
@@ -242,10 +241,13 @@
     // Setup a basic Canvas with explicit width to scale to from browser width
    initCanvas(nCanvas);
     // Manifest initialization.
+   console.log("Fetching manifest");
+   console.log("manifest url: " + islandora_canvas_params.manifest_url);
+   console.log("rdf base: " + );
    fetchTriples(islandora_canvas_params.manifest_url,
         rdfbase,
         cb_process_manifest);
-
+   console.log("after fetch");
     $('#color-picker-wrapper').click(function() {
       $('#anno_color_activated').attr('value', 'active');
     });
