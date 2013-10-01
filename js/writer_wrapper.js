@@ -111,120 +111,25 @@ Islandora = {
       maybe_config_create_annotation();
     },
     load_next_anno_page: function() {
-      //Islandora.Writer.Document.load();
-//    	Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
-//    	        init_canvas_div);
-    	//init_ui();
 		// Initilize shared canvas image annotation canvas processing.
-    	Islandora.Writer.Document.load();
+    	
 		Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
 				init_canvas_div);
-	   // Islandora.Writer.init();
+//		console.log(Drupal.settings.islandora_critical_edition.base_url + 
+//          '/islandora/object/??' +
+//          cwrc_params.pages[cwrc_params.position] + 
+//          '??/datastream/JPG/view');
+		
       // Pagenation on images/annotations.
-      $('#annotations').children(":first").children(":first").attr('src', Drupal.settings.islandora_critical_edition.base_url + 
-          '/islandora/object/' +
-          islandora_canvas_params.pages[cwrc_params.position] + 
-          '/datastream/JPG/view');
-//      Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
-//        init_canvas_div);
-//      writer.entitiesList.update();
-    },
-    Delegate : {
-      lookupEntity : function(params, callback) {
-        var type = params.type;
-        var query = params.query;
-        var lookupService = params.lookupService;
-        if (lookupService == 'project') {
-          jQuery.ajax({
-            url: cwrc_params.entities_search_callback +'/'+ type + '/' + query,
-            data: {"entities_query":query},
-            dataType: 'text json',
-            success: function(data, status, xhr) {
-              if (jQuery.isPlainObject(data)) data = [data];
-              if (data != null) {
-                callback.call(writer, data);
-              } else {
-                callback.call(writer, []);
-              }
-            },
-            error: function(xhr, status, error) {
-              if (status == 'parsererror') {
-                var lines = xhr.responseText.split(/\n/);
-                if (lines[lines.length-1] == '') {
-                  lines.pop();
-                }
-                var string = lines.join(',');
-                var data = jQuery.parseJSON('['+string+']');
-                callback.call(writer, data);
-              } else {
-                callback.call(writer, null);
-              }
-            }
-          });
-        } else if (lookupService == 'viaf') {
-          jQuery.ajax({
-            url: 'http://viaf.org/viaf/AutoSuggest',
-            data: {
-              query: query
-            },
-            dataType: 'jsonp',
-            success: function(data, status, xhr) {
-              if (data != null && data.result != null) {
-                callback.call(w, data.result);
-              } else {
-                callback.call(w, []);
-              }
-            },
-            error: function() {
-              callback.call(w, null);
-            }
-          });
-        }
-      },
-      validate : function (callback) {
-        // TODO: implement a true validator service/html page to hit.
-        var docText = writer.fm.getDocumentContent(false);
-        jQuery.ajax({
-          url: writer.baseUrl+'services/validator/validate.html',
-          type: 'POST',
-          dataType: 'XML',
-          data: {
-            sch: 'http://cwrc.ca/'+writer.validationSchema,
-            type: 'RNG_XML',
-            content: docText
-          },
-          success: function(data, status, xhr) {
-            if (callback) {
-              var valid = jQuery('status', data).text() == 'pass';
-              callback(valid);
-            } else {
-              writer.validation.showValidationResult(data, docText);
-            }
-          },
-          error: function() {
-            // TODO: come up with a better handler.
-            callback(true);
-//             jQuery.ajax({
-//              url : 'xml/validation.xml',
-//              success : function(data, status, xhr) {
-//                if (callback) {
-//                  var valid = jQuery('status', data).text() == 'pass';
-//                  callback(valid);
-//                } else {
-//                  w.validation.showValidationResult(data, docText);
-//                }
-//              }
-//            }); 
-//            w.dialogs.show('message', {
-//              title: 'Error',
-//              msg: 'An error occurred while trying to validate the document.',
-//              type: 'error'
-//            });
-          },
-        });
-      },
+//      $('#annotations').children(":first").children(":first").attr('src', Drupal.settings.islandora_critical_edition.base_url + 
+//          '/islandora/object/' +
+//          cwrc_params.pages[cwrc_params.position] + 
+//          '/datastream/JPG/view');
+      Islandora.Writer.Document.load();
+      writer.entitiesList.update();
     },
     setup_canvas : function(pagePid,callback) {
+    	console.log("setup canvas page: " + pagePid);
       $.ajax({
             url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup_canvas/' + pagePid,
             async: false,
