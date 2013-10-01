@@ -74,6 +74,7 @@
             }
           }
           if (cwrc_params.position > 1) {
+        	  console.log("writer doc id: " + writer.currentDocId);
             $('#page-next').css('opacity', '1').removeClass('disabled');
             
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
@@ -114,6 +115,7 @@
           }
 
           if (cwrc_params.position < cwrc_params.page_count) {
+        	  console.log("writer doc id: " + writer.currentDocId);
             $('#page-prev').css('opacity', '1').removeClass('disabled');
             
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";

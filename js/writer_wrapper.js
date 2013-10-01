@@ -42,7 +42,7 @@ Islandora = {
 	$.ajax({
 		url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
 		timeout: 3000,
-		async:false,
+		async:true,
 		dataType: 'json',
 		success: function(data, status, xhr) {
 			cwrc_params = data;
@@ -79,20 +79,17 @@ Islandora = {
       maybe_config_create_annotation();
     },
     load_next_anno_page: function() {
-      
       Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
         init_canvas_div);
-      init_ui();
       // Initilize shared canvas image annotation canvas processing.
       Islandora.Writer.Document.load();
-      
       writer.entitiesList.update();
     },
     setup_canvas : function(pagePid,callback) {
     	console.log("setup canvas page: " + pagePid);
       $.ajax({
             url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup_canvas/' + pagePid,
-            async: false,
+            async: true,
             success: function(data, status, xhr) {
               islandora_canvas_params = data;
               callback(data);
