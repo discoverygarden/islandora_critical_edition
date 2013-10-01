@@ -243,7 +243,7 @@
     // Manifest initialization.
    console.log("Fetching manifest");
    console.log("manifest url: " + islandora_canvas_params.manifest_url);
-   console.log("rdf base: " + );
+   console.log("rdf base: " + JSON.stringify(rdfbase));
    fetchTriples(islandora_canvas_params.manifest_url,
         rdfbase,
         cb_process_manifest);
