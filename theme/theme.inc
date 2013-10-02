@@ -56,7 +56,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'module_base' => $critical_edition_module_path)), 'setting');
-  drupal_add_js($critical_edition_module_path . "/js/islandora_delegator.js");
+  drupal_add_js($critical_edition_module_path . "/js/writer_backend_delegate.js");
   drupal_add_js($critical_edition_module_path . '/js/writer_wrapper.js');
 
   
