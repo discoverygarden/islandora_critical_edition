@@ -3,7 +3,7 @@
   $('document').ready(function() {
 
     // Functionality is wrapped up in 'writer_wrapper.js.
-    Islandora.init_writer();
+    islandoraCWRCWriter.init_writer();
   });
 
   function init_ui() {
@@ -45,7 +45,7 @@
           openColumn();
           PID = cwrc_params.pages[ cwrc_params.position];
           
-          Islandora.Writer.load_next_anno_page();
+          islandoraCWRCWriter.Writer.load_next_anno_page();
           
           setHeader();
           
@@ -84,7 +84,7 @@
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
-            Islandora.Writer.load_next_anno_page();
+            islandoraCWRCWriter.Writer.load_next_anno_page();
             setHeader();
             if (cwrc_params.position == 0) {
               $('#page-prev').css('opacity', '.6').addClass('disabled');
@@ -113,7 +113,7 @@
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
-            Islandora.Writer.load_next_anno_page();
+            islandoraCWRCWriter.Writer.load_next_anno_page();
             setHeader();
             if (cwrc_params.position == cwrc_params.page_count) {
               $('#page-next').css('opacity', '.2').addClass('disabled');

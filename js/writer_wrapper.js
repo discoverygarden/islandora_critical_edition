@@ -4,7 +4,7 @@
  * library. With the API unfinished, i have added function stubs to be called
  * from the writers 'Delegate'.
  */
-Islandora = {
+islandoraCWRCWriter = {
   // Initilize the writer, and get basic parameters for cwrc fedora integration.
   init_writer : function() {
     PID = Drupal.settings.islandora_critical_edition.page_pid;
@@ -52,9 +52,8 @@ Islandora = {
         // Initilize additional UI Elements
         init_ui();
         // Initilize shared canvas image annotation canvas processing.
-        Islandora.Writer.setup_canvas(PID,
-            init_canvas_div);
-          Islandora.Writer.init();
+        islandoraCWRCWriter.Writer.setup_canvas(PID, init_canvas_div);
+        islandoraCWRCWriter.Writer.init();
       },
       error: function() {
         console.log("Error");
@@ -78,10 +77,10 @@ Islandora = {
       maybe_config_create_annotation();
     },
     load_next_anno_page: function() {
-      Islandora.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
+      islandoraCWRCWriter.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
         init_canvas_div);
       // Initilize shared canvas image annotation canvas processing.
-      Islandora.Writer.Document.load();
+      islandoraCWRCWriter.Writer.Document.load();
       writer.entitiesList.update();
     },
     setup_canvas : function(pagePid,callback) {
