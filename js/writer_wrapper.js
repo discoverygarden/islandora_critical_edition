@@ -9,33 +9,33 @@ islandoraCWRCWriter = {
   init_writer : function() {
     PID = Drupal.settings.islandora_critical_edition.page_pid;
     cwrc_params = {};
-  
     writer = null;
-  
-    var baseUrl = window.location.protocol+'//'+window.location.host;
+    islandoraCriticalEditionsUrl = Drupal.settings.basePath +
+      Drupal.settings.islandora_critical_edition.module_base;
+    
     var config = {
       delegator: IslandoraDelegator,
-      cwrcRootUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/',
+      cwrcRootUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/',
       schemas: {
         tei: {
           name: 'CWRC Basic TEI Schema',
-          url: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'schema/CWRC-TEIBasic.rng',
-          cssUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'css/tei_converted.css'
+          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/CWRC-TEIBasic.rng',
+          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/tei_converted.css'
         },
         events: {
           name: 'Events Schema',
-          url: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'schema/events.rng',
-          cssUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'css/orlando_converted.css'
+          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/events.rng',
+          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/orlando_converted.css'
         },
         biography: {
           name: 'Biography Schema',
-          url: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'schema/biography.rng',
-          cssUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'css/orlando_converted.css'
+          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/biography.rng',
+          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/orlando_converted.css'
         },
         writing: {
           name: 'Writing Schema',
-          url: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'schema/writing.rng',
-          cssUrl: baseUrl+'/'+Drupal.settings.islandora_critical_edition.module_base+'/CWRC-Writer/src/'+'css/orlando_converted.css'
+          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/writing.rng',
+          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/orlando_converted.css'
         }
       }
     };

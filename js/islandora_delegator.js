@@ -121,10 +121,8 @@ function IslandoraDelegator(config) {
 	 * @param docName
 	 */
 	del.loadDocument = function(callback) {
-	    var baseUrl = window.location.protocol+'//'+window.location.host;
-	    
 		$.ajax({
-			url: baseUrl+Drupal.settings.basePath+'islandora/object/' + PID + '/datastream/CWRC/view',
+			url: Drupal.settings.basePath+'islandora/object/' + PID + '/datastream/CWRC/view',
 			type: 'GET',
 			async: false,
 			dataType: 'xml',
