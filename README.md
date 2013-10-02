@@ -30,3 +30,8 @@ CWRC-Writer API
 
 This version of the CWRC-Writer is build off of commit '7d301986965401f890f9f94ddafccbeefd44db23',
 Made by Andrew MacDonald. Current CWRC-Writer repo: https://github.com/cwrc/CWRC-Writer.git.
+
+KNOWN ISSUES: 
+----------------
+
+-The context menu does not always stay open in FireFox on mac OSX.

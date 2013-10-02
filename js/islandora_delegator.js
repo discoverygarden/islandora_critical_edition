@@ -164,7 +164,7 @@ function IslandoraDelegator(config) {
 					title: 'Document Saved',
 					msg: w.currentDocId+' was saved successfully.'
 				});
-				window.location.hash = '#'+w.currentDocId;
+				window.location.hash = '#'+PID;
 				if (callback) {
 					callback.call(w, true);
 				}
@@ -172,7 +172,7 @@ function IslandoraDelegator(config) {
 			error: function() {
 				w.dialogs.show('message', {
 					title: 'Error',
-					msg: 'An error occurred and '+w.currentDocId+' was not saved.',
+					msg: 'An error occurred and '+PID+' was not saved.',
 					type: 'error'
 				});
 				if (callback) {
