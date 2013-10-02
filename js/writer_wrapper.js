@@ -14,7 +14,7 @@ islandoraCWRCWriter = {
       Drupal.settings.islandora_critical_edition.module_base;
     
     var config = {
-      delegator: IslandoraDelegator,
+      delegator: islandoraBackendDelegate,
       cwrcRootUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/',
       schemas: {
         tei: {

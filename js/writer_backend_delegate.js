@@ -4,17 +4,15 @@
  * @param config
  * @returns {___anonymous83_84}
  */
-function IslandoraDelegator(config) {
+function islandoraBackendDelegate(config) {
 	var w = config.writer;
-	
-	var del = {};
 	
 	/**
 	 * @memberOf del
 	 * @param params
 	 * @param callback
 	 */
-	del.lookupEntity = function(params, callback) {
+	this.lookupEntity = function(params, callback) {
 		var type = params.type;
 		var query = params.query;
 		var lookupService = params.lookupService;
@@ -66,53 +64,12 @@ function IslandoraDelegator(config) {
 		}
 	};
 	
-	del.validate = function(callback) {
+	this.validate = function(callback) {
 		var docText = w.fm.getDocumentContent(false);
 		var schemaUrl = w.schemas[w.schemaId].url;
 		var valid = 'pass';
 		callback.call(w, valid);
-		//TODO: Implement true validator when/if cwrc makes this
-		// service available. Awaiting response.
-		// http://apps.testing.cwrc.ca/services/validator/validate.html
-//		$.ajax({
-//			url: 'http://discoverygarden-vagrant-emic.local:8080/cwrcxmlval-0.0.1-SNAPSHOT',
-//			type: 'POST',
-//			dataType: 'XML',
-//			data: {
-//				sch: schemaUrl,
-//				type: 'RNG_XML',
-//				content: docText
-//			},
-//			success: function(data, status, xhr) {
-//				console.log("success???");
-//				console.log(data);
-//				if (callback) {
-//					var valid = $('status', data).text() == 'pass';
-//					callback.call(w, valid);
-//				} else {
-//					w.validation.showValidationResult(data, docText);
-//				}
-//			},
-//			error: function() {
-//				console.log("derp, thats a fail");
-//				 $.ajax({
-//					url : 'xml/validation.xml',
-//					success : function(data, status, xhr) {
-//						if (callback) {
-//							var valid = $('status', data).text() == 'pass';
-//							callback(valid);
-//						} else {
-//							w.validation.showValidationResult(data, docText);
-//						}
-//					}
-//				}); 
-//				w.dialogs.show('message', {
-//					title: 'Error',
-//					msg: 'An error occurred while trying to validate the document.',
-//					type: 'error'
-//				});
-//			}
-//		});
+		//TODO: Implement true validator when/if cwrc makes this service available.
 	};
 	
 	/**
@@ -120,7 +77,7 @@ function IslandoraDelegator(config) {
 	 * TODO Move currentDocId system out of CWRCWriter
 	 * @param docName
 	 */
-	del.loadDocument = function(callback) {
+	this.loadDocument = function(callback) {
 		$.ajax({
 			url: Drupal.settings.basePath+'islandora/object/' + PID + '/datastream/CWRC/view',
 			type: 'GET',
@@ -145,7 +102,7 @@ function IslandoraDelegator(config) {
 	 * Performs the server call to save the document.
 	 * @param callback Called with one boolean parameter: true for successful save, false otherwise
 	 */
-	del.saveDocument = function(callback) {
+	this.saveDocument = function(callback) {
 		w.mode == w.XMLRDF;
 		var docText = w.fm.getDocumentContent(true);
 		$.ajax({
@@ -180,9 +137,7 @@ function IslandoraDelegator(config) {
 		});
 	};
 	
-	del.getHelp = function(tagName) {
+	this.getHelp = function(tagName) {
 		return w.u.getDocumentationForTag(tagName);
 	};
-	
-	return del;
 }
