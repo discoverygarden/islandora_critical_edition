@@ -989,6 +989,9 @@ function FileManager(config) {
 		} else if (start != '') {
 			w.fm.loadDocument(start.substr(1));
 		}
+    else if (w.currentDocId) {
+      w.fm.loadDocument(w.currentDocId);
+    }
 	};
 	
 	function _loadTemplate(url, hashName) {

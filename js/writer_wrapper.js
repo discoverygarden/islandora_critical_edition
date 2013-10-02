@@ -48,6 +48,7 @@ islandoraCWRCWriter = {
         cwrc_params = data;
         config.project = data;
         writer = new Writer(config);
+        writer.currentDocId = PID;
         writer.init();
         // Initilize additional UI Elements
         init_ui();
