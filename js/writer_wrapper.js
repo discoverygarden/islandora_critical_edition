@@ -42,7 +42,7 @@ Islandora = {
     $.ajax({
       url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
       timeout: 3000,
-      async:true,
+      async:false,
       dataType: 'json',
       success: function(data, status, xhr) {
         cwrc_params = data;
@@ -87,7 +87,7 @@ Islandora = {
     setup_canvas : function(pagePid,callback) {
       $.ajax({
             url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup_canvas/' + pagePid,
-            async: true,
+            async: false,
             success: function(data, status, xhr) {
               islandora_canvas_params = data;
               callback(data);

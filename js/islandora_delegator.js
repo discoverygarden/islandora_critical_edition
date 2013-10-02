@@ -126,7 +126,7 @@ function IslandoraDelegator(config) {
 		$.ajax({
 			url: baseUrl+Drupal.settings.basePath+'islandora/object/' + PID + '/datastream/CWRC/view',
 			type: 'GET',
-			async: true,
+			async: false,
 			dataType: 'xml',
 			success: function(doc, status, xhr) {
 				window.location.hash = '#'+PID;
@@ -153,7 +153,7 @@ function IslandoraDelegator(config) {
 		$.ajax({
 			url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
 			type: 'POST',
-			async: true,
+			async: false,
 			dataType: 'text',
 			data: {
 				"text": docText

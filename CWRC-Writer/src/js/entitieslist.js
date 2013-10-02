@@ -13,7 +13,7 @@ var EntitiesList = function(config) {
 			'<input type="radio" id="category" name="sortBy" /><label for="category">Category</label></div>'+
 			'<div><input type="checkbox" id="metaKeys" /><label for="metaKeys">Show Metadata</label></div>'+
 			'</div></div>');
-	$(document.body).append(''+
+	$('#entities').append(''+
 		'<div id="entitiesMenu" class="contextMenu" style="display: none;"><ul>'+
 		'<li id="editEntity"><ins style="background:url(../img/tag_blue_edit.png) center center no-repeat;" />Edit Entity</li>'+
 		'<li id="removeEntity"><ins style="background:url(../img/cross.png) center center no-repeat;" />Remove Entity</li>'+
@@ -132,7 +132,8 @@ var EntitiesList = function(config) {
 			if (!$(this).hasClass('selected')) {
 				$(this).removeClass('over');
 			}
-		}).mousedown(function(event) {
+		}).mouseup(function(event) {
+			console.log("mouse up");
 			$(this).removeClass('over');
 			w.highlightEntity(this.getAttribute('name'), null, true);
 		}).contextMenu('entitiesMenu', {
