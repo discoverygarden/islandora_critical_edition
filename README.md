@@ -24,3 +24,9 @@ new CWRC-Writer API. Most top level Islandora functionality is wrapped up
 in the 'islandora_writer_wrapper.js' file. That said, there is a file called
 'delegator.js' located in 'CWRC-Writer/src/js/delegator.js' that, in the 
 future, should be overridden and placed in this '/js' directory.
+
+CWRC-Writer API
+----------------
+
+This version of the CWRC-Writer is build off of commit '7d301986965401f890f9f94ddafccbeefd44db23',
+Made by Andrew MacDonald. Current CWRC-Writer repo: https://github.com/cwrc/CWRC-Writer.git.
