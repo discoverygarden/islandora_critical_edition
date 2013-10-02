@@ -8,7 +8,6 @@ function islandoraBackendDelegate(config) {
 	this.writer = config.writer;
 	
 	/**
-	 * @memberOf del
 	 * @param params
 	 * @param callback
 	 */
