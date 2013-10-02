@@ -129,13 +129,13 @@ function IslandoraDelegator(config) {
 			async: true,
 			dataType: 'xml',
 			success: function(doc, status, xhr) {
-				window.location.hash = '#'+w.currentDocId;
+				window.location.hash = '#'+PID;
 				callback.call(w, doc);
 			},
 			error: function(xhr, status, error) {
 				w.dialogs.show('message', {
 					title: 'Error',
-					msg: 'An error ('+status+') occurred and '+w.currentDocId+' was not loaded.',
+					msg: 'An error ('+status+') occurred and '+PID+' was not loaded.',
 					type: 'error'
 				});
 				w.currentDocId = null;

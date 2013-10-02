@@ -42,7 +42,6 @@
           
           setReturnParams();
           cwrc_params.position = $('#page_choose :selected').attr('value');
-          console.log("page choose position: " + (cwrc_params.position -1));
           openColumn();
           PID = cwrc_params.pages[ cwrc_params.position];
           
@@ -65,7 +64,6 @@
         });
 
         $('#page-prev').click(function(e) {
-        	console.log("prev hit");
           e.preventDefault();
           if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave.");
@@ -74,7 +72,6 @@
             }
           }
           if (cwrc_params.position > 1) {
-        	  console.log("writer doc id: " + writer.currentDocId);
             $('#page-next').css('opacity', '1').removeClass('disabled');
             
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
@@ -89,23 +86,12 @@
             PID = cwrc_params.pages[ cwrc_params.position];
             Islandora.Writer.load_next_anno_page();
             setHeader();
-//            var selector = "#page_choose option[value='" + cwrc_params.position + "']";
-//            setReturnParams();
-//            cwrc_params.position--;
-//            openColumn();
-//            selector = "#page_choose option[value='" + cwrc_params.position + "']";
-//            $(selector).attr('selected', 'selected');
-//            PID = cwrc_params.pages[ cwrc_params.position];
-//            Islandora.Writer.load_next_anno_page();
-//            console.log("prev position: " + cwrc_params.position);
-//            setHeader();
             if (cwrc_params.position == 0) {
               $('#page-prev').css('opacity', '.6').addClass('disabled');
             }
           }
         });
         $('#page-next').click(function(e) {
-        	console.log("next hit");
           e.preventDefault();
           if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave");
@@ -115,7 +101,6 @@
           }
 
           if (cwrc_params.position < cwrc_params.page_count) {
-        	  console.log("writer doc id: " + writer.currentDocId);
             $('#page-prev').css('opacity', '1').removeClass('disabled');
             
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
@@ -139,7 +124,7 @@
           $.contextMenu({
             selector: '.comment_title',
             callback: function(key, options) {
-
+              console.log("context menu callback");
               var urn = $(this).parent('div').attr('urn');
               var title = $(this).text().substring(2, 100);
               title = title.trim();
@@ -243,13 +228,9 @@
     // Setup a basic Canvas with explicit width to scale to from browser width
    initCanvas(nCanvas);
     // Manifest initialization.
-   console.log("Fetching manifest");
-   console.log("manifest url: " + islandora_canvas_params.manifest_url);
-   console.log("rdf base: " + JSON.stringify(rdfbase));
    fetchTriples(islandora_canvas_params.manifest_url,
         rdfbase,
         cb_process_manifest);
-   console.log("after fetch");
     $('#color-picker-wrapper').click(function() {
       $('#anno_color_activated').attr('value', 'active');
     });

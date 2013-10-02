@@ -105,7 +105,7 @@
     width: 22px;
 }
 .entitiesList .person .box {
-    background-image: url("../../CWRC-Writer/src/img/user.png");
+    background-image: url("../CWRC-Writer/src/img/user.png");
 }
 .entitiesList .person .box, .entitiesList .person.over {
     background-color: #FF8080;
@@ -114,7 +114,7 @@
     background-color: #FF0000;
 }
 .entitiesList .place .box {
-    background-image: url("../../CWRC-Writer/src/img/world.png");
+    background-image: url("../CWRC-Writer/src/img/world.png");
 }
 .entitiesList .place .box, .entitiesList .place.over {
     background-color: #4C9999;
@@ -123,7 +123,7 @@
     background-color: #009999;
 }
 .entitiesList .date .box {
-    background-image: url("../../CWRC-Writer/src/img/calendar.png");
+    background-image: url("../CWRC-Writer/src/img/calendar.png");
 }
 .entitiesList .date .box, .entitiesList .date.over {
     background-color: #FFB980;
@@ -132,7 +132,7 @@
     background-color: #FF7400;
 }
 .entitiesList .event .box {
-    background-image: url("../../CWRC-Writer/src/img/cake.png");
+    background-image: url("../CWRC-Writer/src/img/cake.png");
 }
 .entitiesList .event .box, .entitiesList .event.over {
     background-color: #66CC66;
@@ -141,7 +141,7 @@
     background-color: #00CC00;
 }
 .entitiesList .org .box {
-    background-image: url("../../CWRC-Writer/src/img/group.png");
+    background-image: url("../CWRC-Writer/src/img/group.png");
 }
 .entitiesList .org .box, .entitiesList .org.over {
     background-color: #8172B0;
@@ -150,7 +150,7 @@
     background-color: #3914AF;
 }
 .entitiesList .citation .box {
-    background-image: url("../../CWRC-Writer/src/img/vcard.png");
+    background-image: url("../CWRC-Writer/src/img/vcard.png");
 }
 .entitiesList .citation .box, .entitiesList .citation.over {
     background-color: #CC66A0;
@@ -159,7 +159,7 @@
     background-color: #CD0074;
 }
 .entitiesList .note .box {
-    background-image: url("../../CWRC-Writer/src/img/note.png");
+    background-image: url("../CWRC-Writer/src/img/note.png");
 }
 .entitiesList .note .box, .entitiesList .note.over {
     background-color: #6C88A6;
@@ -168,7 +168,7 @@
     background-color: #0D56A6;
 }
 .entitiesList .title .box {
-    background-image: url("../../CWRC-Writer/src/img/book.png");
+    background-image: url("../CWRC-Writer/src/img/book.png");
 }
 .entitiesList .title .box, .entitiesList .title.over {
     background-color: #F2D747;
@@ -562,7 +562,7 @@ div.mceDropDown {
     margin: 2px 2px 0 !important;
 }
 #vakata-contextmenu .submenu > a span {
-    background-image: url("../img/menu_arrow.gif");
+    background-image: url("../CWRC-Writer/src/img/menu_arrow.gif");
     color: #FFFFFF;
     display: block;
     float: right;
@@ -597,23 +597,23 @@ div.mceDropDown {
     margin-left: -18px;
 }
 .jstree .paraTag a .ui-icon {
-    background-image: url("../../CWRC-Writer/src/img/para.png") !important;
+    background-image: url("../CWRC-Writer/src/img/para.png") !important;
     background-position: 0 0 !important;
 }
 .jstree .headTag a .ui-icon {
-    background-image: url("../../CWRC-Writer/src/img/heading.png") !important;
+    background-image: url("../CWRC-Writer/src/img/heading.png") !important;
     background-position: 0 0 !important;
 }
 .jstree .emphTag a .ui-icon {
-    background-image: url("../../CWRC-Writer/src/img/text_italic.png") !important;
+    background-image: url("../CWRC-Writer/src/img/text_italic.png") !important;
     background-position: 0 0 !important;
 }
 .jstree .titleTagQuotes a .ui-icon, .jstree .titleTagItalics a .ui-icon {
-    background-image: url("../../CWRC-Writer/src/img/title.png") !important;
+    background-image: url("../CWRC-Writer/src/img/title.png") !important;
     background-position: 0 0 !important;
 }
 .jstree .quoteTagShort a .ui-icon, .jstree .quoteTagLong a .ui-icon {
-    background-image: url("../../CWRC-Writer/src/img/quote.png") !important;
+    background-image: url("../CWRC-Writer/src/img/quote.png") !important;
     background-position: 0 0 !important;
 }
 .splitButtons .ui-dialog-buttonpane {

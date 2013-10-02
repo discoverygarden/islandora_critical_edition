@@ -294,7 +294,7 @@ function StructureTree(config) {
 			}
 			inserts[key] = {
 				label: '<span title="'+doc+'">'+key+'</span>',
-				icon: 'img/tag_blue.png',
+				icon: '../img/tag_blue.png',
 				action: function(obj) {
 					var actionType = obj.parents('li.submenu').children('a').attr('rel');
 					var key = obj.text();
@@ -317,7 +317,7 @@ function StructureTree(config) {
 		if (!inserted) {
 			inserts['no_tags'] = {
 				label: 'No tags available.',
-				icon: 'img/cross.png',
+				icon: '../img/cross.png',
 				action: function(obj) {}
 			};
 		}
@@ -400,13 +400,13 @@ function StructureTree(config) {
 					var items = {
 						'before': {
 							label: 'Insert Tag Before',
-							icon: 'img/tag_blue_add.png',
+							icon: '../img/tag_blue_add.png',
 							_class: 'submenu',
 							submenu: siblingSubmenu
 						},
 						'after': {
 							label: 'Insert Tag After',
-							icon: 'img/tag_blue_add.png',
+							icon: '../img/tag_blue_add.png',
 							_class: 'submenu',
 							submenu: siblingSubmenu
 						},
@@ -418,20 +418,20 @@ function StructureTree(config) {
 	//					},
 						'inside': {
 							label: 'Insert Tag Inside',
-							icon: 'img/tag_blue_add.png',
+							icon: '../img/tag_blue_add.png',
 							_class: 'submenu',
 							separator_after: true,
 							submenu: submenu
 						},
 						'change': {
 							label: 'Change Tag',
-							icon: 'img/tag_blue_edit.png',
+							icon: '../img/tag_blue_edit.png',
 							_class: 'submenu',
 							submenu: siblingSubmenu
 						},
 						'edit': {
 							label: 'Edit Tag',
-							icon: 'img/tag_blue_edit.png',
+							icon: '../img/tag_blue_edit.png',
 							separator_after: true,
 							action: function(obj) {
 								var offset = $('#vakata-contextmenu').offset();
@@ -444,21 +444,21 @@ function StructureTree(config) {
 						},
 						'delete': {
 							label: 'Remove Tag Only',
-							icon: 'img/tag_blue_delete.png',
+							icon: '../img/tag_blue_delete.png',
 							action: function(obj) {
 								w.tagger.removeStructureTag(obj.attr('name'));
 							}
 						},
 						'delete_content': {
 							label: 'Remove Content Only',
-							icon: 'img/tag_blue_delete.png',
+							icon: '../img/tag_blue_delete.png',
 							action: function(obj) {
 								w.tagger.removeStructureTagContents(obj.attr('name'));
 							}
 						},
 						'delete_all': {
 							label: 'Remove Tag and All Content',
-							icon: 'img/tag_blue_delete.png',
+							icon: '../img/tag_blue_delete.png',
 							action: function(obj) {
 								w.tagger.removeStructureTag(obj.attr('name'), true);
 							}
@@ -471,7 +471,7 @@ function StructureTree(config) {
 					return {
 						'editEntity': {
 							label: 'Edit Entity',
-							icon: 'img/tag_blue_edit.png',
+							icon: '../img/tag_blue_edit.png',
 							action: function(obj) {
 								var offset = $('#vakata-contextmenu').offset();
 								var pos = {
@@ -483,7 +483,7 @@ function StructureTree(config) {
 						},
 						'copyEntity': {
 							label: 'Copy Entity',
-							icon: 'img/tag_blue_copy.png',
+							icon: '../img/tag_blue_copy.png',
 							action: function(obj) {
 								w.copyEntity(obj.attr('name'));
 							}
