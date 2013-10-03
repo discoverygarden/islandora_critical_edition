@@ -128,7 +128,10 @@
           $(this).css('position','relative');
           cnt++;
         });
-        
+        // Initialize image annotation dialog.
+        var anno_d = annotation_dialog();
+        anno_d.dialog('close');
+        maybe_config_create_annotation();
   }
 
   var init_canvas_div = function(islandora_canvas_params) {
