@@ -56,6 +56,7 @@ function annotation_dialog() {
       if(saveAndEndAnnotating() == 1) {
         annotation_dialog.dialog('close');
         closeAndEndAnnotating();
+        attachContextMenu();
       }
     },
     'Cancel': function() {
