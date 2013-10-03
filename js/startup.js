@@ -120,6 +120,7 @@
             }
           }
         });
+        
         var cnt = 0;
         $('#relations').children().each(function() {
         	if(cnt == 0) {
@@ -127,6 +128,49 @@
         	}
           $(this).css('position','relative');
           cnt++;
+        });
+        $.contextMenu({
+          selector: '.comment_title',
+          callback: function(key, options) {
+            console.log("context menu callback");
+            var urn = $(this).parent('div').attr('urn');
+            var title = $(this).text().substring(2, 100);
+            title = title.trim();
+
+            var comment_text = $(this).next('.comment_text');
+            var anno_type = comment_text.find('.comment_type').text();
+
+            if (key == 'delete') {
+              if (confirm("Permananently Delete Annotation '" + title + "'")) {
+                islandora_deleteAnno(urn);
+              }
+
+            }
+
+            if (key == 'edit') {
+              $(this).addClass('annotation-opened').next().show();
+              var annotation = comment_text.find('.comment_content').text();
+              var pm = $(this).find('.comment_showhide');
+              if (pm.text() == '+ ') {
+                pm.empty().append('- ');
+                var id = $(this).attr('id').substring(5, 100);
+                var canvas = $(this).attr('canvas');
+                paint_commentAnnoTargets(this, canvas, id);
+              }
+              startEditting(title, annotation, anno_type, urn)
+            }
+          },
+          items: {
+            "edit": {
+              name: "Edit",
+              icon: "edit",
+              accesskey: "e"
+            },
+            "delete": {
+              name: "Delete annotation",
+              icon: "delete"
+            }
+          }
         });
         // Initialize image annotation dialog.
         var anno_d = annotation_dialog();
