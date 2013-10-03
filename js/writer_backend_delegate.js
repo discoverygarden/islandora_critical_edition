@@ -18,7 +18,7 @@ function islandoraBackendDelegate(config) {
     
     if (lookupService == 'project') {
       $.ajax({
-        url: cwrc_params['entities_search_callback']+ '/' + query,
+        url: cwrc_params['entities_search_callback'] + '/' + params.type + '?entities_query=' + query,
         dataType: 'json',
         success: function(data, status, xhr) {
           if ($.isPlainObject(data)) data = [data];
