@@ -15,9 +15,10 @@ function islandoraBackendDelegate(config) {
 		var type = params.type;
 		var query = params.query;
 		var lookupService = params.lookupService;
+		
 		if (lookupService == 'project') {
 			$.ajax({
-				url: cwrc_params['entities_search_callback'] + '/' + params.type + '?entities_query=' + query,
+				url: cwrc_params['entities_search_callback']+ '/' + query,
 				dataType: 'json',
 				success: function(data, status, xhr) {
 					if ($.isPlainObject(data)) data = [data];
@@ -157,7 +158,9 @@ function islandoraBackendDelegate(config) {
 			}
 		});
 	};
-	
+	this.attachContextMenu = function() {
+		
+	}
 	/**
 	 * Performs the server call to save the document.
 	 * @param callback Called with one boolean parameter: true for successful save, false otherwise
