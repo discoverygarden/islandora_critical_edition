@@ -54,7 +54,6 @@ islandoraCWRCWriter = {
         init_ui();
         // Initilize shared canvas image annotation canvas processing.
         islandoraCWRCWriter.Writer.setup_canvas(PID, init_canvas_div);
-        islandoraCWRCWriter.Writer.init();
       },
       error: function() {
         console.log("Error");
@@ -71,11 +70,6 @@ islandoraCWRCWriter = {
       get: function() {
         return writer.getDocument();
       },
-    },
-    init : function() {
-      var anno_d = annotation_dialog();
-      anno_d.dialog('close');
-      maybe_config_create_annotation();
     },
     load_next_anno_page: function() {
       islandoraCWRCWriter.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
