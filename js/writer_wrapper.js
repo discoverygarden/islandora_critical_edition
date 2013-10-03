@@ -76,6 +76,7 @@ islandoraCWRCWriter = {
       var anno_d = annotation_dialog();
       anno_d.dialog('close');
       maybe_config_create_annotation();
+      //islandoraCWRCWriter.ContextMenu.init();
     },
     load_next_anno_page: function() {
       islandoraCWRCWriter.Writer.setup_canvas(cwrc_params.pages[cwrc_params.position],
@@ -98,5 +99,5 @@ islandoraCWRCWriter = {
             dataType: 'json'
           });
     },
-  },
+  }
 }
