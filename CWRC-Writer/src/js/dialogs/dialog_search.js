@@ -236,7 +236,20 @@ var SearchDialog = function(config) {
 			},{
 				text: 'Add New '+config.title,
 				click: function() {
-					window.open(cwrc_params.BASE_PATH + '/fedora/repository/' + cwrc_params.authority_mappings[config.title]);
+				  switch(config.type) {
+            case 'place':
+              window.open(cwrc_params.create_entity_callbacks.places);
+              break;
+            case 'person':
+              window.open(cwrc_params.create_entity_callbacks.people);
+              break;
+            case 'event':
+              window.open(cwrc_params.create_entity_callbacks.events);
+              break;
+            case 'org':
+              window.open(cwrc_params.create_entity_callbacks.organizations);
+              break;
+				  }
 				}
 			},{
 				text: 'Tag '+config.title,
