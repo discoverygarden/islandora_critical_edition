@@ -15,7 +15,7 @@ var SearchDialog = function(config) {
 		    '<label for="search_query">Search</label>'+
 		    '<input type="text" name="query" id="search_query" />'+
 	    '</div>'+
-	    '<div style="position: absolute; top: 41px; left: 10px; right: 10px; bottom: 70px;">'+
+	    '<div style="position: absolute; top: 55px; left: 10px; right: 10px; bottom: 70px;">'+
 		    '<div id="lookupServices">'+
 		    	'<div id="lookup_project">'+
 			    '<h3>Results from '+w.project.title+' Project</h3>'+
