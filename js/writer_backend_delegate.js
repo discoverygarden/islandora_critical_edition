@@ -23,9 +23,9 @@ function islandoraBackendDelegate(config) {
         success: function(data, status, xhr) {
           if ($.isPlainObject(data)) data = [data];
           if (data != null) {
-            callback.call(this.writer, data);
+            callback.call(writer, data);
           } else {
-            callback.call(this.writer, []);
+            callback.call(writer, []);
           }
         },
         error: function(xhr, status, error) {
@@ -36,9 +36,9 @@ function islandoraBackendDelegate(config) {
             }
             var string = lines.join(',');
             var data = $.parseJSON('['+string+']');
-            callback.call(this.writer, data);
+            callback.call(writer, data);
           } else {
-            callback.call(this.writer, null);
+            callback.call(writer, null);
           }
         }
       });
@@ -51,23 +51,23 @@ function islandoraBackendDelegate(config) {
         dataType: 'jsonp',
         success: function(data, status, xhr) {
           if (data != null && data.result != null) {
-            callback.call(this.writer, data.result);
+            callback.call(writer, data.result);
           } else {
-            callback.call(this.writer, []);
+            callback.call(writer, []);
           }
         },
         error: function() {
-          callback.call(this.writer, null);
+          callback.call(writer, null);
         }
       });
     }
   };
   
   this.validate = function(callback) {
-    var docText = this.writer.fm.getDocumentContent(false);
-    var schemaUrl = this.writer.schemas[this.writer.schemaId].url;
+    var docText = writer.fm.getDocumentContent(false);
+    var schemaUrl = writer.schemas[writer.schemaId].url;
     var valid = 'pass';
-    callback.call(this.writer, valid);
+    callback.call(writer, valid);
     //TODO: Implement true validator when/if cwrc makes this service available.
   };
   
@@ -84,15 +84,15 @@ function islandoraBackendDelegate(config) {
       dataType: 'xml',
       success: function(doc, status, xhr) {
         window.location.hash = '#' + PID;
-        callback.call(this.writer, doc);
+        callback.call(writer, doc);
       },
       error: function(xhr, status, error) {
-        this.writer.dialogs.show('message', {
+        writer.dialogs.show('message', {
           title: 'Error',
           msg: 'An error ('+status+') occurred and '+PID+' was not loaded.',
           type: 'error'
         });
-        this.writer.currentDocId = null;
+        writer.currentDocId = null;
       }
     });
   };
@@ -101,8 +101,8 @@ function islandoraBackendDelegate(config) {
    * @param callback Called with one boolean parameter: true for successful save, false otherwise
    */
   this.saveDocument = function(callback) {
-    this.writer.mode == this.writer.XMLRDF;
-    var docText = this.writer.fm.getDocumentContent(true);
+    writer.mode == writer.XMLRDF;
+    var docText = writer.fm.getDocumentContent(true);
     $.ajax({
       url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
       type: 'POST',
@@ -112,24 +112,24 @@ function islandoraBackendDelegate(config) {
         "text": docText
       },
       success: function(data, status, xhr) {
-        this.writer.editor.isNotDirty = 1; // force clean state
-        this.writer.dialogs.show('message', {
+        writer.editor.isNotDirty = 1; // force clean state
+        writer.dialogs.show('message', {
           title: 'Document Saved',
-          msg: this.writer.currentDocId+' was saved successfully.'
+          msg: writer.currentDocId+' was saved successfully.'
         });
         window.location.hash = '#' + PID;
         if (callback) {
-          callback.call(this.writer, true);
+          callback.call(writer, true);
         }
       },
       error: function() {
-        this.writer.dialogs.show('message', {
+        writer.dialogs.show('message', {
           title: 'Error',
           msg: 'An error occurred and ' + PID + ' was not saved.',
           type: 'error'
         });
         if (callback) {
-          callback.call(this.writer, false);
+          callback.call(writer, false);
         }
       }
     });
