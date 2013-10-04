@@ -60,7 +60,6 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
  *   The fedora object to upload the CWRC datastream to.
  */
 function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
-
   $data = html_entity_decode(stripslashes($_POST['text']), ENT_QUOTES, 'UTF-8');
   // @codingStandardsIgnoreStart
   $cwrc = str_replace('<br>', '<br />', $data);
@@ -69,7 +68,7 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
 
   $fedora_object["CWRC"]->content = $cwrc;
 
-  echo "Success";
+  echo $cwrc;
 }
 
 /**
@@ -101,6 +100,6 @@ function islandora_critical_edition_canvas_setup(AbstractObject $fedora_object) 
   $results['position'] = $position;
   $results['pages'] = $pages;
   $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
-
+  $results['entities_search_callback'] = url('islandora/entities/search');
   drupal_json_output($results);
 }

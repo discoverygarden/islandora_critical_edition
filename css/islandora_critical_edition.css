@@ -1,8 +1,50 @@
+/* Full Screen Styling */
 
-.islandora_crited_list {
-  list-style-type: none;
+#full-window-button
+{
+ float: top;
+  margin: 5px 5px 5px 0px;
 }
 
-.islandora_crited_list * {
-  text-decoration: none;
+#bookview_button
+{
+  float: top;
+  margin: 5px 5px 5px 0px;
 }
+.islandora-crited-fullwindow
+{
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  top-padding: 20px;
+  top: 25px;
+  z-index: 10;
+  background: #fff;
+}
+
+.islandora-crited-fullwindow .islandora-crited-iframe-wrapper
+{
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+
+  width: 100%;
+  z-index: 60;
+
+  background: #fff;
+}
+
+.islandora-crited-fullwindow .islandora-crited-iframe-wrapper .iframe_replacement
+{
+  position: absolute;
+  width: 100%;
+   height: 100% !important;
+}
+
+/* #searchDialog */
+/* { */
+/*   height: 100% !important; */
+/* } */
