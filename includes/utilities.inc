@@ -57,27 +57,35 @@ function islandora_critical_edition_get_object_of_critical_edition(AbstractObjec
 function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_object) {
   $ocr_in = $fedora_object['OCR']->content;
   $lines = explode("\n", $ocr_in);
-  $preface = '<?xml version="1.0"?>
-<html>
-    <head>
-        <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-            xmlns:w="http://cwrctc.artsrn.ualberta.ca/#"></rdf:RDF>
-    </head>
-    <body>
-        <tei id="struct_01" _tag="TEI" _display="TEI" _struct="true">
-            <span _tag="text" _struct="true" id="struct_02" _display="text">';
+
+  $preface = '<?xml version="1.0" encoding="UTF-8"?>
+        <TEI xml:id="struct_35" xmlns="http://www.tei-c.org/ns/1.0">
+          <teiHeader xml:id="struct_530">
+           <fileDesc xml:id="struct_531">
+             <titleStmt xml:id="struct_532"> 
+               <title xml:id="struct_533">Sample Document Title</title> 
+             </titleStmt>
+             <publicationStmt xml:id="struct_534">
+               <p xml:id="struct_535"></p>
+             </publicationStmt>
+             <sourceDesc xml:id="struct_536" sameAs="http://www.cwrc.ca">
+               <p xml:id="struct_537">Created from islandora book ingest unless otherwise noted.</p>
+             </sourceDesc>
+           </fileDesc>
+         </teiHeader>
+         <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#"></rdf:RDF>
+                 <span _tag="text" _struct="true" id="struct_02" _display="text">';
 
   $postscript = '            </span>
-        </tei>
-    </body>
-</html>';
-  $ocr = "";
+        </TEI>';
+  $ocr = '<text xml:id="struct_611"><body xml:id="struct_612"><div xml:id="struct_613" type="letter">﻿<p>';
   if (is_array($lines)) {
     foreach ($lines as $line) {
       $line = trim(preg_replace('/&£/', '£', $line));
       $line = htmlspecialchars($line);
       $ocr .= $line . '<br />';
     }
+    $ocr .= '</p></div></body></text>';
   }
   if (empty($ocr)) {
     $ocr = "Blank Page";
