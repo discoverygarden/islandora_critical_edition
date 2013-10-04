@@ -78,8 +78,6 @@ function Delegator(config) {
 				content: docText
 			},
 			success: function(data, status, xhr) {
-				console.log("success???");
-				console.log(data);
 				if (callback) {
 					var valid = $('status', data).text() == 'pass';
 					callback.call(w, valid);
@@ -88,7 +86,6 @@ function Delegator(config) {
 				}
 			},
 			error: function() {
-				console.log("derp, thats a fail");
 				 $.ajax({
 					url : 'xml/validation.xml',
 					success : function(data, status, xhr) {

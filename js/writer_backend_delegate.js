@@ -6,7 +6,7 @@
  */
 function islandoraBackendDelegate(config) {
   this.writer = config.writer;
-  
+
   /**
    * @param params
    * @param callback
@@ -85,13 +85,6 @@ function islandoraBackendDelegate(config) {
       success: function(doc, status, xhr) {
         window.location.hash = '#' + PID;
         callback.call(this.writer, doc);
-        // Need to wait on response to initilize.
-        $(document.body).append(''+
-                  '<div id="annoMenuContext" class="contextMenu" style="display: none;"><ul>'+
-                  '<li id="editAnno"><ins style="background:url('+islandoraCriticalEditionsUrl+'/CWRC-Writer/src/img/tag_blue_edit.png) center center no-repeat;" />Edit Annotation</li>'+
-                  '<li id="removeAnno"><ins style="background:url('+islandoraCriticalEditionsUrl+'/CWRC-Writer/src/img/cross.png) center center no-repeat;" />Remove Annotation</li>'+
-                  '</ul></div>'
-                );
       },
       error: function(xhr, status, error) {
         this.writer.dialogs.show('message', {
