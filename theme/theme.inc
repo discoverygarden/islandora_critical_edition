@@ -75,8 +75,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($critical_edition_module_path . '/CWRC-Writer/src/js/lib/jquery/jquery.collapsiblepanel.js');
   drupal_add_css($critical_edition_module_path . '/CWRC-Writer/src/js/lib/jquery/jquery.collapsiblepanel.css');
 
-  drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.contextmenu.js");
-
   drupal_add_js($critical_edition_module_path . '/js/dialog_annotate.js');
   drupal_add_css($critical_edition_module_path . "/css/style_2.css");
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/tei.css");

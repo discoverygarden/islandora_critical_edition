@@ -92,7 +92,6 @@ function islandoraBackendDelegate(config) {
                   '<li id="removeAnno"><ins style="background:url('+islandoraCriticalEditionsUrl+'/CWRC-Writer/src/img/cross.png) center center no-repeat;" />Remove Annotation</li>'+
                   '</ul></div>'
                 );
-        attachContextMenu();
       },
       error: function(xhr, status, error) {
         this.writer.dialogs.show('message', {
@@ -147,59 +146,3 @@ function islandoraBackendDelegate(config) {
     return this.writer.u.getDocumentationForTag(tagName);
   };
 }
-
-function attachContextMenu() {
-  $(document).contextMenu('annoMenuContext', {
-    delegate: '.comment_title',
-        bindings: {
-          'editAnno': function(tag) {
-            console.log("editAnno");
-            var urn = $('#' + tag.id).parent('div').attr('urn');
-            var title = $('#' + tag.id).text().substring(2, 100);
-            var comment_text = $('#' + tag.id).next('.comment_text');
-            var anno_type = comment_text.find('.comment_type').text();
-            $('#' + tag.id).addClass('annotation-opened').next().show();
-            var annotation = comment_text.find('.comment_content').text();
-            var pm = $('#' + tag.id).find('.comment_showhide');
-            if (pm.text() == '+ ') {
-              pm.empty().append('- ');
-              var id = $('#' + tag.id).attr('id').substring(5, 100);
-              var canvas = $('#' + tag.id).attr('canvas');
-              paint_commentAnnoTargets('#' + tag.id, canvas, id);
-            }
-            startEditting(title, annotation, anno_type, urn);
-          },
-          'removeAnno': function(tag) {
-             var urn = $('#' + tag.id).parent('div').attr('urn');
-             var title = $('#' + tag.id).text().substring(2, 100);
-             if(urn) {
-               if (confirm("Permananently Delete Annotation '" + title + "'")) {
-                 islandora_deleteAnno(urn);
-               }
-            }
-          }
-        },
-        shadow: false,
-        menuStyle: {
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #D4D0C8',
-            boxShadow: '1px 1px 2px #CCCCCC',
-            padding: '0px'
-        },
-        itemStyle: {
-          fontFamily: 'Tahoma,Verdana,Arial,Helvetica',
-          fontSize: '11px',
-          color: '#000',
-          lineHeight: '20px',
-          padding: '0px',
-          cursor: 'pointer',
-          textDecoration: 'none',
-          border: 'none'
-        },
-        itemHoverStyle: {
-          color: '#000',
-          backgroundColor: '#DBECF3',
-          border: 'none'
-        }
-      });
-};
