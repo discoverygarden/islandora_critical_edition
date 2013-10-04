@@ -115,7 +115,7 @@ function islandoraBackendDelegate(config) {
         writer.editor.isNotDirty = 1; // force clean state
         writer.dialogs.show('message', {
           title: 'Document Saved',
-          msg: writer.currentDocId+' was saved successfully.'
+          msg: PID+' was saved successfully.'
         });
         window.location.hash = '#' + PID;
         if (callback) {
