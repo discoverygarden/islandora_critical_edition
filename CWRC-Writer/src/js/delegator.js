@@ -14,31 +14,8 @@ function Delegator(config) {
 		var lookupService = params.lookupService;
 		
 		if (lookupService == 'project') {
-			$.ajax({
-				url: cwrc_params['entities_search_callback']+ '/' + query,
-				dataType: 'json',
-				success: function(data, status, xhr) {
-					if ($.isPlainObject(data)) data = [data];
-					if (data != null) {
-						callback.call(w, data);
-					} else {
-						callback.call(w, []);
-					}
-				},
-				error: function(xhr, status, error) {
-					if (status == 'parsererror') {
-						var lines = xhr.responseText.split(/\n/);
-						if (lines[lines.length-1] == '') {
-							lines.pop();
-						}
-						var string = lines.join(',');
-						var data = $.parseJSON('['+string+']');
-						callback.call(w, data);
-					} else {
-						callback.call(w, null);
-					}
-				}
-			});
+			var results = lookup_entity(query);
+			callback.call(w,$results);
 		} else if (lookupService == 'viaf') {
 			$.ajax({
 				url: 'http://viaf.org/viaf/AutoSuggest',
