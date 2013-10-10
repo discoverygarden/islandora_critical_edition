@@ -44,7 +44,8 @@
    height: 100% !important;
 }
 
-/* #searchDialog */
-/* { */
-/*   height: 100% !important; */
-/* } */
+.base_img
+{
+  top: 1px !important;
+  left: 1px !important;
+}
