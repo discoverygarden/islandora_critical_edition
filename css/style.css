@@ -1116,3 +1116,81 @@ div.mceDropDown {
 .ui-icon-help {
 	cursor: pointer;
 }
+/**
+* Attributes Widget Fixes
+**/
+.attributeWidget label {
+    display: inline;
+}
+
+.attributeWidget input, .attributeWidget select {
+    width: 150px;
+    border: 1px solid #ccc;
+}
+
+.attributeWidget .attributeSelector {
+    border: 1px solid #999;
+    top: 5px;
+    bottom: 0;
+    width: 130px;
+    position: absolute;
+}
+
+.attributeWidget .attributeSelector ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 23px;
+    bottom: 0;
+}
+
+.attributeWidget .attributeSelector li {
+    padding: 3px;
+    background-color: #fff;
+}
+
+.attributeWidget .attributeSelector li:hover {
+     background-color: #ddd; 
+     cursor: pointer;
+}
+
+.attributeWidget .attributeSelector li.selected {
+     background-color: #ccc; 
+}
+
+.attributeWidget .attsContainer {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    left: 147px;
+    bottom: 0;
+    overflow: auto;
+}
+
+.attributeWidget .level1Atts, .attributeWidget .highLevelAtts {
+    float: left;
+}
+
+.attributeWidget .attsContainer label {
+    width: 135px;
+}
+
+.attributeWidget .schemaHelp {
+    float: right;
+    width: 185px;
+}
+
+.attributeWidget h2 {
+    font-size: 1.5em;
+    line-height: 1em;
+    margin-bottom: .5em;
+    margin-top: .1em;
+}
+
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}

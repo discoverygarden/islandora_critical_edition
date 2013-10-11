@@ -21,7 +21,6 @@
               <div class="header-nav">
                 <a href="" id="page-prev"></a>
                 <a href="" id="page-next"></a>
-                
               </div>
             </div>
             <div id ="pageChange"></div>
@@ -30,7 +29,7 @@
           </div>
           <div id="headerButtons"></div>
         </div>
-        <div class="ui-layout-west">
+        <div class="cwrc ui-layout-west ui-widget-content">
           <div id="westTabs" class="tabs">
             <ul>
               <li><a href="#entities">Entities</a></li>
@@ -69,7 +68,7 @@
               <?php print $anno_img_pane; ?>
                 <!--  At least one visible image needed for GData transport -->
                 <div class="shared-canvas-logo" style="font-size: 8pt">
-                  <img height="25" src="../imgs/small-logo.png"
+                  <img id="shared-canvas-logo-img" src="../imgs/small-logo.png"
                     style="padding: 0px; margin: 0px; border: 0px; border-top: 2px;" />
                   Powered by SharedCanvas
                 </div>

@@ -83,7 +83,7 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
     foreach ($lines as $line) {
       $line = trim(preg_replace('/&£/', '£', $line));
       $line = htmlspecialchars($line);
-      $ocr .= $line . '<br />';
+      $ocr .= $line . "<lb/>";
     }
     $ocr .= '</p></div></body></text>';
   }
