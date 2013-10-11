@@ -49,3 +49,9 @@
   top: 1px !important;
   left: 1px !important;
 }
+
+#shared-canvas-logo-img
+{
+  width: 25px !important;
+  height: 30px !important;
+}
