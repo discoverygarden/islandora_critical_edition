@@ -29,7 +29,7 @@
           </div>
           <div id="headerButtons"></div>
         </div>
-        <div class="ui-layout-west">
+        <div class="cwrc ui-layout-west ui-widget-content">
           <div id="westTabs" class="tabs">
             <ul>
               <li><a href="#entities">Entities</a></li>
