@@ -1190,3 +1190,7 @@ div.mceDropDown {
     margin-bottom: .5em;
     margin-top: .1em;
 }
+
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}
