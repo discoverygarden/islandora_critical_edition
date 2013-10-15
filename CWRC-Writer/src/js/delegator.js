@@ -14,8 +14,31 @@ function Delegator(config) {
 		var lookupService = params.lookupService;
 		
 		if (lookupService == 'project') {
-			var results = lookup_entity(query);
-			callback.call(w,$results);
+			$.ajax({
+				url: cwrc_params.authority_url + type + '/' + query,
+				dataType: 'text json',
+				success: function(data, status, xhr) {
+					if ($.isPlainObject(data)) data = [data];
+					if (data != null) {
+						callback.call(w, data);
+					} else {
+						callback.call(w, []);
+					}
+				},
+				error: function(xhr, status, error) {
+					if (status == 'parsererror') {
+						var lines = xhr.responseText.split(/\n/);
+						if (lines[lines.length-1] == '') {
+							lines.pop();
+						}
+						var string = lines.join(',');
+						var data = $.parseJSON('['+string+']');
+						callback.call(w, data);
+					} else {
+						callback.call(w, null);
+					}
+				}
+			});
 		} else if (lookupService == 'viaf') {
 			$.ajax({
 				url: 'http://viaf.org/viaf/AutoSuggest',
@@ -40,13 +63,9 @@ function Delegator(config) {
 	del.validate = function(callback) {
 		var docText = w.fm.getDocumentContent(false);
 		var schemaUrl = w.schemas[w.schemaId].url;
-//		var valid = 'pass';
-//		callback.call(w, valid);
-		//TODO: Implement true validator when/if cwrc makes this
-		// service available. Awaiting response.
-		// http://apps.testing.cwrc.ca/services/validator/validate.html
+		
 		$.ajax({
-			url: 'http://discoverygarden-vagrant-emic.local:8080/cwrcxmlval-0.0.1-SNAPSHOT',
+			url: w.baseUrl+'services/validator/validate.html',
 			type: 'POST',
 			dataType: 'XML',
 			data: {
@@ -63,17 +82,17 @@ function Delegator(config) {
 				}
 			},
 			error: function() {
-				 $.ajax({
-					url : 'xml/validation.xml',
-					success : function(data, status, xhr) {
-						if (callback) {
-							var valid = $('status', data).text() == 'pass';
-							callback(valid);
-						} else {
-							w.validation.showValidationResult(data, docText);
-						}
-					}
-				}); 
+//				 $.ajax({
+//					url : 'xml/validation.xml',
+//					success : function(data, status, xhr) {
+//						if (callback) {
+//							var valid = $('status', data).text() == 'pass';
+//							callback(valid);
+//						} else {
+//							w.validation.showValidationResult(data, docText);
+//						}
+//					}
+//				}); 
 				w.dialogs.show('message', {
 					title: 'Error',
 					msg: 'An error occurred while trying to validate the document.',
@@ -90,10 +109,8 @@ function Delegator(config) {
 	 */
 	del.loadDocument = function(callback) {
 		$.ajax({
-			url: Drupal.settings.basePath + 'islandora/object/' + PID + '/datastream/CWRC/view',
+			url: w.baseUrl+'editor/documents/'+w.currentDocId,
 			type: 'GET',
-			async: false,
-			dataType: 'xml',
 			success: function(doc, status, xhr) {
 				window.location.hash = '#'+w.currentDocId;
 				callback.call(w, doc);
@@ -105,7 +122,8 @@ function Delegator(config) {
 					type: 'error'
 				});
 				w.currentDocId = null;
-			}
+			},
+			dataType: 'xml'
 		});
 	};
 	
@@ -114,15 +132,12 @@ function Delegator(config) {
 	 * @param callback Called with one boolean parameter: true for successful save, false otherwise
 	 */
 	del.saveDocument = function(callback) {
-		w.mode == w.XMLRDF;
 		var docText = w.fm.getDocumentContent(true);
 		$.ajax({
-			url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
-			type: 'POST',
-			dataType: 'text',
-			data: {
-				"text": docText
-			},
+			url : w.baseUrl+'editor/documents/'+w.currentDocId,
+			type: 'PUT',
+			dataType: 'json',
+			data: docText,
 			success: function(data, status, xhr) {
 				w.editor.isNotDirty = 1; // force clean state
 				w.dialogs.show('message', {
