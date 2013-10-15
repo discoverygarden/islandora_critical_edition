@@ -56,6 +56,7 @@ function islandora_critical_edition_menu() {
   );
   $items['islandora/object/%islandora_object/manage/datastreams/regen_cwrc_datastream'] = array(
   		'title' => 'Regenerate CWRC datastream',
+  		'file' => 'includes/regen_cwrc_datastream.form.inc',
   		'page callback' => 'drupal_get_form',
   		'page arguments' => array('islandora_critical_edition_regen_cwrc_datastream_form', 2),
   		'type' => MENU_LOCAL_ACTION,
@@ -64,12 +65,7 @@ function islandora_critical_edition_menu() {
   );
   return $items;
 }
-function islandora_critical_edition_regen_cwrc_datastream(array $form, array &$form_state, AbstractObject $object) {
-	
-}
-function islandora_critical_edition_regen_cwrc_access() {
-  return TRUE;
-}
+
 /**
  * Implements hook_islandora_edit_object_alter().
  */
