@@ -15,33 +15,9 @@ function islandoraBackendDelegate(config) {
     var type = params.type;
     var query = params.query;
     var lookupService = params.lookupService;
-    
     if (lookupService == 'project') {
-      $.ajax({
-        url: cwrc_params['entities_search_callback'] + '/' + params.type + '?entities_query=' + query,
-        dataType: 'json',
-        success: function(data, status, xhr) {
-          if ($.isPlainObject(data)) data = [data];
-          if (data != null) {
-            callback.call(writer, data);
-          } else {
-            callback.call(writer, []);
-          }
-        },
-        error: function(xhr, status, error) {
-          if (status == 'parsererror') {
-            var lines = xhr.responseText.split(/\n/);
-            if (lines[lines.length-1] == '') {
-              lines.pop();
-            }
-            var string = lines.join(',');
-            var data = $.parseJSON('['+string+']');
-            callback.call(writer, data);
-          } else {
-            callback.call(writer, null);
-          }
-        }
-      });
+      var results = lookup_entity(params.type + '?entities_query=' + query);
+      callback.call(this.writer,results);
     } else if (lookupService == 'viaf') {
       $.ajax({
         url: 'http://viaf.org/viaf/AutoSuggest',
