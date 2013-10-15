@@ -36,7 +36,6 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
   $results['no_edit'] = !islandora_critical_edition_edit_cwrc_access($fedora_object);
   $results['page_count'] = count($pages);
   $results['islandora_anno_stroke_width'] = $stroke_width;
-  $results['entities_search_callback'] = url('islandora/entities/search');
 
   $place_entity_collection = variable_get('islandora_entities_places_collection', 'islandora:entity_collection');
   $results['create_entity_callbacks']['places'] = url('islandora/object/' . $place_entity_collection . '/manage/overview/ingest');
