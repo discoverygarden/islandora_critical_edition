@@ -155,7 +155,9 @@
                 var canvas = $(this).attr('canvas');
                 paint_commentAnnoTargets(this, canvas, id);
               }
-              startEditting(title, annotation, anno_type, urn)
+              $('#hidden_annotation_type').attr('anno_type','Update Annotation');
+              $('#hidden_annotation_type').attr('urn',urn);
+              startEditting(title, annotation, anno_type, urn);
             }
           },
           items: {
@@ -248,6 +250,7 @@
     $('#stroke_width').append(s_options);
     $('#shared-canvas-logo-img').attr('src',Drupal.settings.basePath +
       Drupal.settings.islandora_critical_edition.image_anno_img + 'small-logo.png')
+      
   }
 
   // @XXX openColumn and setReturnParams may not be necessary dependent on theme
