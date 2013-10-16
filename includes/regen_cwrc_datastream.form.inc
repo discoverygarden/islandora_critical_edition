@@ -11,7 +11,7 @@
  *   The Drupal form.
  * @param array $form_state
  *   The Drupal form state.
- * @param AbstractDatastream $object
+ * @param AbstractObject $object
  *   The object to rebuild the cwrc datastream for.
  *
  * @return array
@@ -22,7 +22,10 @@ function islandora_critical_edition_regen_cwrc_datastream($form, &$form_state, $
   return confirm_form($form,
     t('Are you sure you want to regenerate the RDF-TEI datastream for object %id?', array('%id' => $object->id)),
     "islandora/object/$object->id",
-    t('Changes made to this datastream, including linking entities within the text (corrects, tei, entities etc...) will be erased permanently.'),
+    t('Changes made to this datastream, including linking entities' .
+       'within the text (corrects, tei, entities etc...) will be erased permanently. '.
+       'If datastream versioning is enabled, this will create a new version from the ' .
+       'origional source to be used by default, preserving edits in a previous version.'),
     t('Yes'),
     t('Cancel')
   );
@@ -40,7 +43,6 @@ function islandora_critical_edition_regen_cwrc_datastream_submit($form, &$form_s
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
   $object = islandora_object_load($form_state['islandora_critical_edition']);
   $source_pid = $object->relationships->get(ISLANDORA_RELS_EXT_URI, 'isEditionOf');
-  dsm($source_pid, "source");
   $source = islandora_object_load($source_pid[0]['object']['value']);
   if ($source) {
     // Replace the OCR content in the critical edition page source
