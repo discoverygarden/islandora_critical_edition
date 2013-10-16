@@ -174,6 +174,7 @@
         var anno_d = annotation_dialog();
         anno_d.dialog('close');
         maybe_config_create_annotation();
+        
   }
 
   var init_canvas_div = function(islandora_canvas_params) {
@@ -236,6 +237,17 @@
       $('#anno_color_activated').attr('value', 'active');
     });
     $('.color-picker').miniColors();
+    var stroke_widths = islandora_canvas_params.islandora_anno_stroke_widths.split(" ");
+    var s_options = "";
+    for (var i = 0; i < stroke_widths.length; i++) {
+      s_options += '<option value="'+ stroke_widths[i] + '">' + stroke_widths[i] + '</option>';
+    }
+    $('#stroke-width-wrapper').empty();
+    $('#stroke-width-wrapper').append('<label for"stroke_width">Stroke Width:</label>');
+    $('#stroke-width-wrapper').append('<select id="stroke_width" />');
+    $('#stroke_width').append(s_options);
+    $('#shared-canvas-logo-img').attr('src',Drupal.settings.basePath +
+      Drupal.settings.islandora_critical_edition.image_anno_img + 'small-logo.png')
   }
 
   // @XXX openColumn and setReturnParams may not be necessary dependent on theme

@@ -75,7 +75,6 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
          </teiHeader>
          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#"></rdf:RDF>
                  <span _tag="text" _struct="true" id="struct_02" _display="text">';
-
   $postscript = '            </span>
         </TEI>';
   $ocr = '<text xml:id="struct_611"><body xml:id="struct_612"><div xml:id="struct_613" type="letter">﻿<p>';

@@ -186,6 +186,7 @@ function maybeResize() {
         $('.base_img').children(":first").css("height", "auto");
         $('.base_img').css("height", $('.base_img').children(":first").height());
         $('#canvas_0').css("width", (w));
+        $('#canvas_0').css("height", $('.base_img').children(":first").height());
       }
     }
   }
