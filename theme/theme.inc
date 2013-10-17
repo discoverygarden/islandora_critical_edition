@@ -65,7 +65,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
 
   drupal_add_css($critical_edition_module_path . "/css/islandora_critical_edition_style.css");
   drupal_add_css($critical_edition_module_path . "/css/style.css");
-  
   drupal_add_js($critical_edition_module_path . "/js/writer_backend_delegate.js");
   drupal_add_js($critical_edition_module_path . '/js/writer_wrapper.js');
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout-latest.min.js");
