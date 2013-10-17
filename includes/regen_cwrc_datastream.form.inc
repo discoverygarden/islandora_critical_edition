@@ -19,14 +19,13 @@
  */
 function islandora_critical_edition_regen_cwrc_datastream($form, &$form_state, AbstractObject $object) {
   $form_state['islandora_critical_edition'] = $object->id;
-  $message = 'Changes made to this datastream, including linking entities' .
-    'within the text (corrects, tei, entities) will be erased permanently.' .
-    ' If datastream versioning is enabled, this will create a new version from the ' .
-    'origional source to be used by default, preserving edits in a previous version.';
   return confirm_form($form,
     t('Are you sure you want to regenerate the RDF-TEI datastream for object %id?', array('%id' => $object->id)),
     "islandora/object/$object->id",
-    t($message),
+    t('Changes made to this datastream, including linking entities' .
+      'within the text (corrects, tei, entities) will be erased permanently.' .
+      ' If datastream versioning is enabled, this will create a new version from the ' .
+      'origional source to be used by default, preserving edits in a previous version.'),
     t('Yes'),
     t('Cancel')
   );
