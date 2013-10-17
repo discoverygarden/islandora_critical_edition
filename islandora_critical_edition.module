@@ -54,7 +54,15 @@ function islandora_critical_edition_menu() {
     'access arguments' => array(3),
     'file' => 'includes/callbacks.inc',
   );
-
+  $items['islandora/object/%islandora_object/manage/datastreams/regen_cwrc_datastream'] = array(
+    'title' => 'Regenerate CWRC datastream',
+    'file' => 'includes/regen_cwrc_datastream.form.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_critical_edition_regen_cwrc_datastream', 2),
+    'type' => MENU_LOCAL_ACTION,
+    'access callback' => 'islandora_critical_edition_cwrc_access',
+    'access arguments' => array(2),
+  );
   return $items;
 }
 

@@ -75,7 +75,6 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
          </teiHeader>
          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#"></rdf:RDF>
                  <span _tag="text" _struct="true" id="struct_02" _display="text">';
-
   $postscript = '            </span>
         </TEI>';
   $ocr = '<text xml:id="struct_611"><body xml:id="struct_612"><div xml:id="struct_613" type="letter">﻿<p>';
@@ -83,7 +82,7 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
     foreach ($lines as $line) {
       $line = trim(preg_replace('/&£/', '£', $line));
       $line = htmlspecialchars($line);
-      $ocr .= $line . "<lb/>";
+      $ocr .= $line . '<lb/>';
     }
     $ocr .= '</p></div></body></text>';
   }
@@ -92,9 +91,18 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
   }
 
   $cwrc_stream = $preface . $ocr . $postscript;
-  $cwrc_datastream = $fedora_object->constructDatastream('CWRC');
-  $cwrc_datastream->label = 'CWRC';
-  $cwrc_datastream->mimetype = 'text/plain';
+  if (!$fedora_object['CWRC']) {
+    $cwrc_datastream = $fedora_object->constructDatastream('CWRC');
+  }
+  else {
+    $cwrc_datastream = $fedora_object['CWRC'];
+  }
+  if ($cwrc_datastream->label != 'CWRC') {
+    $cwrc_datastream->label = 'CWRC';
+  }
+  if ($cwrc_datastream->mimetype != 'text/plain') {
+    $cwrc_datastream->mimetype = 'text/plain';
+  }
   $cwrc_datastream->setContentFromString($cwrc_stream);
   $fedora_object->ingestDatastream($cwrc_datastream);
 }
