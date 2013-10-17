@@ -17,7 +17,7 @@
  * @return array
  *   The drupal form definition.
  */
-function islandora_critical_edition_regen_cwrc_datastream($form, &$form_state, $object) {
+function islandora_critical_edition_regen_cwrc_datastream($form, &$form_state, AbstractObject $object) {
   $form_state['islandora_critical_edition'] = $object->id;
   $message = 'Changes made to this datastream, including linking entities' .
     'within the text (corrects, tei, entities) will be erased permanently.' .
