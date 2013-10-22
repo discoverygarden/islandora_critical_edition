@@ -47,7 +47,7 @@ function islandoraBackendDelegate(config) {
     var docText = writer.fm.getDocumentContent(false);
     var schemaUrl = writer.schemas[writer.schemaId].url;
     $.ajax({
-      url: Drupal.settings.basePath+ 'validator/validate.html',
+      url: Drupal.settings.islandora_critical_edition.validate_path,
       type: 'POST',
       dataType: 'XML',
       data: {
@@ -56,7 +56,6 @@ function islandoraBackendDelegate(config) {
         content: docText
       },
       success: function(data, status, xhr) {
-        console.log("success");
         if (callback) {
           var valid = $('status', data).text() == 'pass';
           callback.call(writer, valid);
