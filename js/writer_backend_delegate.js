@@ -43,7 +43,7 @@ function islandoraBackendDelegate(config) {
    * Validates a document based on the document schema.
    * @param callback function.
    */
-  this.validate = function(callback) {
+    this.validate = function(callback) {
     var docText = writer.fm.getDocumentContent(false);
     var schemaUrl = writer.schemas[writer.schemaId].url;
     $.ajax({
