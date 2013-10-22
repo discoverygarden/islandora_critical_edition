@@ -2,7 +2,8 @@
 
 /**
  * @file
- * islandora_critical_edition.install
+ * islandora_critical_edition file handles the
+ * install/uninstall hooks.
  */
 
 /**
