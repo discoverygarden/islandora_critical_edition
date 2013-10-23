@@ -15,7 +15,7 @@ function islandora_critical_edition_admin($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Validation endpoint'),
     '#default_value' => variable_get('islandora_critical_edition_validate_url', 'validator/validate.html'),
-    '#description' => t('Configure the cwrc-validator endpoint. With an external enpoint, proxy configuration my be required.'),
+    '#description' => t('Configure the cwrc-validator endpoint. With an external endpoint, proxy configuration my be required.'),
     '#required' => TRUE,
   );
   return system_settings_form($form);
