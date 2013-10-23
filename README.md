@@ -46,11 +46,8 @@ NOTE: Do not use the webapp manager to deploy this .war file.
 * After a moment, the .war should deploy and can be tested by visiting 
 {base_url}:8080/validator/index.html
 * If not already configured, Add a reverse proxy setting on the server. 
-ex: edit sites-available/default add the following lines above the </VirtualHost> tag
+ex: (Debian) edit sites-available/default add the following lines above the </VirtualHost> tag
   ProxyPass /validator/ http://localhost:8080/validator/
   ProxyPassReverse /validator/ http://localhost:8080/validator/
 * Restart apache. The validator should now be available to test at
 {base_url}/validator/index.html
-
-PLEASE NOTE: Any TEI-RDF data generated prior to this version of the cwrc-writer may not pass validation.
-Please regenerate the CWRC datastream to pass validation, if required.
