@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * islandora_critical_edition file handles the
+ * install/uninstall hooks.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_critical_edition_uninstall() {
+  // Remove module variables.
+  variable_del('islandora_critical_edition_validate_url');
+}
