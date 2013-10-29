@@ -75,8 +75,8 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
              </fileDesc>
            </teiHeader>
            <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#"></rdf:RDF>
-                   <text><body><p>';
-    $postscript = '            </p></body></text>
+                   <text><body><ab>';
+    $postscript = '            </ab></body></text>
           </TEI>';
     $ocr = '';
     if (is_array($lines)) {
