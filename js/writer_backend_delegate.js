@@ -38,13 +38,39 @@ function islandoraBackendDelegate(config) {
       });
     }
   };
-  
-  this.validate = function(callback) {
+
+  /**
+   * Validates a document based on the document schema.
+   * @param callback function.
+   */
+    this.validate = function(callback) {
     var docText = writer.fm.getDocumentContent(false);
     var schemaUrl = writer.schemas[writer.schemaId].url;
-    var valid = 'pass';
-    callback.call(writer, valid);
-    //TODO: Implement true validator when/if cwrc makes this service available.
+    $.ajax({
+      url: Drupal.settings.islandora_critical_edition.validate_path,
+      type: 'POST',
+      dataType: 'XML',
+      data: {
+        sch: window.location.protocol+'//'+window.location.host+ schemaUrl,
+        type: 'RNG_XML',
+        content: docText
+      },
+      success: function(data, status, xhr) {
+        if (callback) {
+          var valid = $('status', data).text() == 'pass';
+          callback.call(writer, valid);
+        } else {
+          writer.validation.showValidationResult(data, docText);
+        }
+      },
+      error: function() {
+        writer.dialogs.show('message', {
+          title: 'Error',
+          msg: 'An error occurred while trying to validate the document.',
+          type: 'error'
+        });
+      }
+    });
   };
   
   /**

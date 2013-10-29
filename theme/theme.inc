@@ -26,6 +26,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   $image_annotation_module_path = drupal_get_path('module', 'islandora_image_annotation');
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);
   $pids = array_keys($pages);
+  $validate_path = variable_get('islandora_critical_edition_validate_url', '/validator/validate.html');
   // Use the theme files from image annotation for annotation list
   // and image annotation pane's.
   $variables['anno_list_pane'] = theme('islandora_anno_list_pane');
@@ -46,6 +47,9 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js(array(
       'islandora_critical_edition' => array(
         'base_url' => $base_url)), 'setting');
+  drupal_add_js(array(
+      'islandora_critical_edition' => array(
+        'validate_path' => $validate_path)), 'setting');
   // Passing the page pid, instead of getting if from the
   // URL on the javascript side.
   drupal_add_js(array(
