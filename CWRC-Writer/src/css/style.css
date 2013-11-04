@@ -32,6 +32,17 @@ body {
 	margin-right: 5px;
 }
 
+#cwrc_header {
+	padding: 0 10px;
+	color: #eee;
+	background-color: #455372;
+	border-bottom: 1px solid #ccc;
+	overflow: hidden;
+	background-image: url(../img/cwrc_logo_small.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+
 #cwrc_header h1 {
 	float: left;
 	cursor: pointer;
@@ -566,6 +577,8 @@ body {
 .attributeWidget .schemaHelp {
 	float: right;
 	width: 185px;
+	margin-top: 5px;
+	margin-right: 5px;
 }
 
 .cwrc .required {
@@ -574,6 +587,7 @@ body {
 
 .cwrc-tooltip {
 	max-width: 250px;
+	background-color: #fff;
 }
 
 #personName input {
@@ -697,12 +711,19 @@ body {
 	text-align: left;
 }
 
-#headerDialog textarea {
+#headerDialog div {
 	position: absolute;
 	top: 5px;
 	right: 5px;
 	bottom: 5px;
 	left: 5px;
+}
+
+#headerDialog textarea {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
 }
 
 /* tinymce style overrides */

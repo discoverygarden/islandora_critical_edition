@@ -4,6 +4,7 @@
 		init: function(ed, url) {
 			var t = this;
 			t.url = url;
+			//TODO: this needs to be more configurable.
 			t.imageUrl = t.url+'/../../img/';
 			t.editor = ed;
 			t.currentKey = null;
@@ -95,6 +96,7 @@
 					return;
 				}
 				
+				var tagId = t.editor.currentBookmark.tagId;
 				t.editor.selection.moveToBookmark(t.editor.currentBookmark);
 				
 				var valid = t.editor.execCommand('isSelectionValid', true, t.action);
@@ -105,6 +107,9 @@
 				
 				// reset bookmark after possible modification by isSelectionValid
 				t.editor.currentBookmark = t.editor.selection.getBookmark(1);
+				if (tagId != null) {
+					t.editor.currentBookmark.tagId = tagId;
+				}
 				
 				// isSelectionValid should perform this function
 //				var sel = t.editor.selection;
@@ -147,8 +152,9 @@
 					'<div class="attsContainer">'+
 						'<div class="level1Atts"></div>'+
 						'<div class="highLevelAtts"></div>'+
-						'<div class="schemaHelp"></div>'+
 					'</div>'+
+					'<input type="hidden" name="attsAllowed" value="" />'+
+					'<div class="schemaHelp"></div>'+
 				'</div>'
 			);
 			
@@ -157,14 +163,13 @@
 				resizable: true,
 				dialogClass: 'splitButtons',
 				closeOnEscape: false,
-				open: function(event, ui) {
-					t.schemaDialog.parent().find('.ui-dialog-titlebar-close').hide();
-				},
 				height: 460,
 				width: 550,
+				minWidth: 510,
 				autoOpen: false,
 				open: function(event, ui) {
 					t.dialogOpenTimestamp = event.timeStamp;
+					t.schemaDialog.parent().find('.ui-dialog-titlebar-close').hide();
 				},
 				beforeClose: function(event, ui) {
 					if (event.timeStamp - t.dialogOpenTimestamp < 150) {
@@ -255,6 +260,8 @@
 			
 			var atts = t.editor.writer.u.getChildrenForTag({tag: key, type: 'attribute', returnType: 'array'});
 			
+			var canTagContainAttributes = atts.length != 0;
+			$('input[name="attsAllowed"]', parent).val(canTagContainAttributes);
 			// build atts
 			var level1Atts = '';
 			var highLevelAtts = '';
@@ -392,6 +399,7 @@
 				return;
 			}
 			
+			attributes._attsallowed = $('input[name="attsAllowed"]', parent).val() != 'false';
 			attributes._tag = t.currentKey;
 			
 			t.schemaDialog.dialog('close');

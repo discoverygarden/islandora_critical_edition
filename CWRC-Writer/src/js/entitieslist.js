@@ -31,7 +31,6 @@ var EntitiesList = function(config) {
 	});
 	$('#sortBy').buttonset();
 	$('#metaKeys').button().click(function() {
-		console.log("meta clicked");
 		showMetaKeys = !showMetaKeys;
 		w.entitiesList.update();
 		w.highlightEntity(w.editor.currentEntity);
@@ -117,7 +116,6 @@ var EntitiesList = function(config) {
 					entry = w.entities[id];
 				}
 				if (entry) {
-					entityTags = entityTags.not('[name='+id+']');
 					entitiesString += _buildEntity(entry);
 				}
 			});
@@ -132,7 +130,7 @@ var EntitiesList = function(config) {
 			if (!$(this).hasClass('selected')) {
 				$(this).removeClass('over');
 			}
-		}).click(function(event) {
+		}).mousedown(function(event) {
 			$(this).removeClass('over');
 			w.highlightEntity(this.getAttribute('name'), null, true);
 		}).contextMenu('entitiesMenu', {
