@@ -33,7 +33,7 @@ li.jstree-closed > ul {
   width: 30px;
   height: 35px;
 
-  background-image: url('../CWRC-Writer/src/img/nav-arrows.png'); /* 38px x 85px */ 
+  background-image: url('../img/nav-arrows.png'); /* 38px x 85px */ 
   background-position: 0px 0px;
   background-repeat: no-repeat;
   background-color: transparent;
