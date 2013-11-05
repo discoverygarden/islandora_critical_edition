@@ -190,7 +190,6 @@
       $('#canvas_page_choose').append('<option  value="' + key + '">Page ' + (key + 1) + '</option>');
     });
     if (islandora_canvas_params.use_dropdown == 1) {
-      console.log("use dropdown");
         $('#islandora_classification').empty();
         var sel = $('<select  id="anno_classification">').appendTo('#islandora_classification');
         $(islandora_canvas_params.categories).each(function() {
