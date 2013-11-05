@@ -1112,6 +1112,7 @@ div.mceDropDown {
 .ui-icon-help {
 	cursor: pointer;
 }
+
 /**
 * Attributes Widget Fixes
 **/
@@ -1124,6 +1125,13 @@ div.mceDropDown {
     border: 1px solid #ccc;
 }
 
+#certainty {
+  height: 100px !important;
+}
+
+#dateDialog {
+  height: auto !important;
+}
 .attributeWidget .attributeSelector {
     border: 1px solid #999;
     top: 5px;
