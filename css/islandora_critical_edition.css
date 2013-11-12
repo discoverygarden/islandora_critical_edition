@@ -11,6 +11,11 @@
   float: top;
   margin: 5px 5px 5px 0px;
 }
+
+#image-annotations
+{
+  height: 100% !important;
+}
 .islandora-crited-fullwindow
 {
   position: fixed;
@@ -54,4 +59,20 @@
 {
   width: 25px !important;
   height: 30px !important;
+}
+
+.entitiesList .txtimglnk .box {
+    background-image: url('../CWRC-Writer/src/img/cake.png');
+}
+
+.entitiesList .txtimglnk .box, .entitiesList .txtimglnk.over {
+    background-color: #7F00FF;
+}
+
+.entitiesList .txtimglnk.selected, .entitiesList .txtimglnk.selected .box {
+    background-color: #7F00FF;
+}
+
+#tree.jstree li.txtimglnk {
+    background-color: #7F00FF;
 }
