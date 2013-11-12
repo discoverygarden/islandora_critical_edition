@@ -60,3 +60,24 @@
   width: 25px !important;
   height: 30px !important;
 }
+
+/* custome entity color*/
+/* .showEntityBrackets .txtimglnk { */
+/*     border-color: #00CC00; */
+/* } */
+
+.entitiesList .txtimglnk .box {
+    background-image: url('../CWRC-Writer/src/img/cake.png');
+}
+
+.entitiesList .txtimglnk .box, .entitiesList .txtimglnk.over {
+    background-color: #00CC00;
+}
+
+.entitiesList .txtimglnk.selected, .entitiesList .txtimglnk.selected .box {
+    background-color: #00CC00;
+}
+
+#tree.jstree li.txtimglnk {
+    background-color: #FFCCCC;
+}

@@ -175,6 +175,11 @@
         // Initialize image annotation dialog.
         var anno_d = annotation_dialog();
         anno_d.dialog('close');
+        
+        // Initialize text/image annotations dialog.
+//        var anno_text = text_image_anno_dialog();
+//        anno_text.hide;
+        
         maybe_config_create_annotation();
         
   }

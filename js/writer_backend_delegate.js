@@ -87,6 +87,7 @@ function islandoraBackendDelegate(config) {
       success: function(doc, status, xhr) {
         window.location.hash = '#' + PID;
         callback.call(writer, doc);
+        islandoraCWRCWriter.Writer.Extensions.text_image_linking();
       },
       error: function(xhr, status, error) {
         writer.dialogs.show('message', {
@@ -139,5 +140,20 @@ function islandoraBackendDelegate(config) {
   
   this.getHelp = function(tagName) {
     return this.writer.u.getDocumentationForTag(tagName);
+  };
+  
+  this.editorCallback = function(name,data) {
+    switch (name) {
+      case 'highlightEntity_looseFocus':
+        if($(data).hasClass('txtimglnk')) {
+          islandoraCWRCWriter.Writer.Extensions.text_image_linking_hide_highlight(data);
+        }
+        break;
+      case 'highlightEntity_gainFocus':
+        if($(data).hasClass('txtimglnk')) {
+          islandoraCWRCWriter.Writer.Extensions.text_image_linking_show_highlight(data);
+        }
+        break;
+    }
   };
 }
