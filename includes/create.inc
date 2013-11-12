@@ -61,11 +61,8 @@ function islandora_create_edition_form_submit($form, &$form_state) {
   $book_object = islandora_object_load($book_pid);
 
   // Create Critical edition Fedora Object.
-  $content_models = array(array('pid' => 'islandora:criticalEditionCModel'));
-
   $fedora_object = islandora_critical_edition_create_object(islandora_get_namespace($book_pid),
-                                                            $form_state['values']['title'],
-                                                            $content_models);
+                                                            $form_state['values']['title']);
 
   $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF, $book_pid, RELS_TYPE_PLAIN_LITERAL);
   $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:criticalEditionCModel');

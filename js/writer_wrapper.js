@@ -87,7 +87,7 @@ islandoraCWRCWriter = {
               callback(data);
             },
             error: function() {
-              alert("Please log in to host site.");
+              //alert("Please log in to host site.");
             },
             dataType: 'json'
           });
