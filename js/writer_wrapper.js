@@ -112,11 +112,13 @@ islandoraCWRCWriter = {
     },
     Extensions: {
       text_image_linking: function() {
+        var img_local = Drupal.settings.basePath +
+          Drupal.settings.islandora_critical_edition.module_base;
         // Hack to add the image text linking to the tinymce toolbar.
         $('#editor_toolbar1 tr td:first').after('<td style="position: relative">' +
-            '<a id="editor_addtxtimglnk" class="mceButton mceButtonEnabled entityButton addtextimganno" title="Add Text Annotation" aria-labelledby="editor_addperson_voice" onmousedown="return false;" href="javascript:;" role="button" tabindex="-1">'+
-            '<span class="mceIcon entityButton person">'+
-            '<img class="mceIcon" alt="Tag Person" src="/sites/all/modules/islandora_critical_edition/CWRC-Writer/src/img/user.png">'+
+            '<a id="editor_addtxtimglnk" class="mceButton wideButton mceButtonEnabled addtextimganno" title="Tag Text Annotation" aria-labelledby="editor_addperson_voice" onmousedown="return false;" href="javascript:;" role="button" tabindex="-1">'+
+            '<span class="mceIcon wideButton">'+
+            '<img class="mceIcon" alt="Tag Person" src="' + img_local + '/img/img_text.png">'+
             '</span></a><td>');
         $('#editor_addtxtimglnk').click(function(){
           islandoraCWRCWriter.Writer.Extensions.textImageAnnotation();
