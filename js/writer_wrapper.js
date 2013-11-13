@@ -19,9 +19,8 @@ islandoraCWRCWriter = {
       schemas: {
         tei: {
           name: 'CWRC Basic TEI Schema',
-          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/CWRC-TEIBasic.rng',
-          //url: islandoraCriticalEditionsUrl + '/tei_all.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/tei.css'
+          url: islandoraCriticalEditionsUrl + '/tei_all.rng',
+          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/tei_converted.css'
         },
         events: {
           name: 'Events Schema',
