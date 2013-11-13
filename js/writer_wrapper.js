@@ -19,9 +19,9 @@ islandoraCWRCWriter = {
       schemas: {
         tei: {
           name: 'CWRC Basic TEI Schema',
-          //url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/CWRC-TEIBasic.rng',
-          url: islandoraCriticalEditionsUrl + '/tei_all.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/tei_converted.css'
+          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/CWRC-TEIBasic.rng',
+          //url: islandoraCriticalEditionsUrl + '/tei_all.rng',
+          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/tei.css'
         },
         events: {
           name: 'Events Schema',
@@ -176,12 +176,18 @@ islandoraCWRCWriter = {
             query: query
           });
         } else {
-          w.showError(result);
+          writer.showError(result);
         }
       },
     },
   }
 }
+/**
+ * Get the Tag id for the given image entity's uuid.
+ *
+ * @param uuid
+ * @returns {Array}
+ */
 function get_tag_id(uuid) {
   var arr = new Array();
   var name = "";
