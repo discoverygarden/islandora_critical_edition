@@ -120,7 +120,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/structuretree.js");
 
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/layout-default-latest.css");
-  drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/image_local.css");
+  drupal_add_css($critical_edition_module_path . "/css/image_local.css");
 
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/editor.js");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/tagger.js");
@@ -131,5 +131,4 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($critical_edition_module_path . "/js/init.js");
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.css");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/tinymce/jquery.tinymce.js");
-
 }

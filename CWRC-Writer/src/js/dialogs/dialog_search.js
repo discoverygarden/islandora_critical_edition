@@ -35,11 +35,11 @@ var SearchDialog = function(config) {
 			    '</div>'+
 		    '</div>'+
 	    '</div>'+
-	    '<div id="certainty" style="position: absolute; bottom: 0; left: 10px; right: 10px;">'+
+	    '<div id="certainty" style="position: absolute; bottom: 0; left: 10px; right: 10px; height: 65px;">'+
 	    	'<p>This identification is:</p>'+
-			'<input type="radio" id="c_definite" name="certainty" value="definite" /><label for="c_definite">Definite</label>'+
-			'<input type="radio" id="c_reasonable" name="certainty" value="reasonable" /><label for="c_reasonable">Reasonably Certain</label>'+
-			'<input type="radio" id="c_speculative" name="certainty" value="speculative" /><label for="c_speculative">Speculative</label>'+
+			'<input type="radio" id="c_definite" name="search_certainty" value="definite" /><label for="c_definite">Definite</label>'+
+			'<input type="radio" id="c_reasonable" name="search_certainty" value="reasonable" /><label for="c_reasonable">Reasonably Certain</label>'+
+			'<input type="radio" id="c_speculative" name="search_certainty" value="speculative" /><label for="c_speculative">Speculative</label>'+
 	    '</div>'+
 	'</div>');
 	
@@ -94,7 +94,6 @@ var SearchDialog = function(config) {
 	});
 	
 	$('#certainty').buttonset();
-	var lookupService;
 	var doQuery = function() {
 		var lookupService = $('#lookupServices div.ui-accordion-content-active').parent()[0].id.replace('lookup_', '');
 		var type = search.dialog('option', 'title');
@@ -107,8 +106,6 @@ var SearchDialog = function(config) {
 		
 		w.delegator.lookupEntity({type: type, query: query, lookupService: lookupService}, handleResults);
 	};
-	
-	
 	var handleResults = function(results) {
 		var formattedResults = '';
 		var last = '';
@@ -121,9 +118,7 @@ var SearchDialog = function(config) {
 			var r, i, label;
 			for (i = 0; i < results.length; i++) {
 				r = results[i];
-				
-				label = r.identifier || r.term || r[currentType];
-
+				label = r.name || r.identifier || r.term || r[currentType];
 				if (i == results.length - 1) last = 'last';
 				else last = '';
 				

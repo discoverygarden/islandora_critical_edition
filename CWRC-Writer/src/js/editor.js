@@ -108,8 +108,7 @@ function Writer(config) {
 				var val = $(start).offset().top;
 				$(w.editor.dom.doc.body).scrollTop(val);
 			}
-			
-			w.tree.selectNode($('#entityHighlight', w.editor.getBody())[0]);
+			w.tree.highlightNode($('#entityHighlight', w.editor.getBody())[0]);
 			
 			$('#entities > ul > li[name="'+id+'"]').addClass('selected').find('div[class="info"]').show();
 		}
@@ -315,18 +314,39 @@ function Writer(config) {
 		w.editor.onNodeChange.dispatch(w.editor, w.editor.controlManager, nodeEl, false, w.editor);
 	};
 	
-	// browsers have trouble deleting divs, so use the tree and jquery as a workaround
 	function _onKeyDownDeleteHandler(ed, evt) {
-		if (evt.which == 8 || evt.which == 46) {
-			if (w.tree.currentlySelectedNode != null) {
-				// cancel keyboard delete
-				tinymce.dom.Event.cancel(evt);
+		if (w.tree.currentlySelectedNode != null) {
+			// browsers have trouble deleting divs, so use the tree and jquery as a workaround
+			if (evt.which == 8 || evt.which == 46) {
+					// cancel keyboard delete
+					tinymce.dom.Event.cancel(evt);
+					if (w.tree.selectionType == w.tree.NODE_SELECTED) {
+						w.tagger.removeStructureTag(w.tree.currentlySelectedNode, true);
+					} else {
+						var id = w.tree.currentlySelectedNode;
+						w.tagger.removeStructureTagContents(w.tree.currentlySelectedNode);
+						w.selectStructureTag(id, true);
+					}
+			} else if (evt.ctrlKey == false && evt.metaKey == false && evt.which >= 48 && evt.which <= 90) {
+				// handle alphanumeric characters when whole tree node is selected
+				// remove the selected node and set the focus to the closest node
 				if (w.tree.selectionType == w.tree.NODE_SELECTED) {
-					w.tagger.removeStructureTag(w.tree.currentlySelectedNode, true);
-				} else {
-					var id = w.tree.currentlySelectedNode;
-					w.tagger.removeStructureTagContents(w.tree.currentlySelectedNode);
-					w.selectStructureTag(id, true);
+					var currNode = $('#'+w.tree.currentlySelectedNode, ed.getBody());
+					var closestNode = currNode.prev();
+					if (closestNode.length == 0) {
+						closestNode = currNode.next();
+					}
+					var rng = w.editor.selection.getRng(true);
+					if (closestNode.length == 0) {
+						closestNode = currNode.parent();
+						w.tagger.removeStructureTag(w.tree.currentlySelectedNode, true);
+						rng.selectNodeContents(closestNode[0]);
+					} else {
+						w.tagger.removeStructureTag(w.tree.currentlySelectedNode, true);
+						rng.selectNode(closestNode[0]);
+					}
+					rng.collapse(true);
+					w.editor.selection.setRng(rng);
 				}
 			}
 		}
@@ -338,6 +358,7 @@ function Writer(config) {
 	};
 	
 	function _onKeyDownHandler(ed, evt) {
+		ed.lastKeyPress = evt.which; // store the last key press
 		// TODO move to keyup
 		// redo/undo listener
 		if ((evt.which == 89 || evt.which == 90) && evt.ctrlKey) {
@@ -437,9 +458,10 @@ function Writer(config) {
 		}
 		
 		// if the user's typing we don't want the currentlySelectedNode to be set
-		// calling selectNode will clear currentlySelectedNode
+		// calling highlightNode will clear currentlySelectedNode
 		if (w.tree.currentlySelectedNode != null) {
-			w.tree.selectNode($('#'+w.tree.currentlySelectedNode, w.editor.getBody())[0]);
+			var currNode = $('#'+w.tree.currentlySelectedNode, w.editor.getBody())[0];
+			w.tree.highlightNode(currNode);
 		}
 	};
 	
@@ -452,6 +474,8 @@ function Writer(config) {
 	};
 	
 	function _onNodeChangeHandler(ed, cm, e) {
+//		console.log('onNodeChangeHandler');
+//		console.time('nodechange');
 		if (e != null) {
 			if (e.nodeType != 1) {
 				ed.currentNode = w.u.getRootTag()[0];
@@ -459,7 +483,30 @@ function Writer(config) {
 				if (e.getAttribute('_tag') == null) {
 					if (e.getAttribute('data-mce-bogus') != null) {
 						// artifact from selectStructureTag
-						var sibling = $(e).next('[_tag]')[0];
+						var sibling;
+						var rng = ed.selection.getRng(true);
+						if (rng.collapsed) {
+							// the user's trying to type in a bogus tag
+							// find the closest valid tag and correct the cursor location
+							var backwardDirection = true;
+							if (ed.lastKeyPress == 36 || ed.lastKeyPress == 37 || ed.lastKeyPress == 38) {
+								sibling = $(e).prevAll('[_tag]')[0];
+								backwardDirection = false;
+							} else {
+								sibling = $(e).nextAll('[_tag]')[0];
+								if (sibling == null) {
+									sibling = $(e).parent().nextAll('[_tag]')[0];
+								}
+							}
+							if (sibling != null) {
+								rng.selectNodeContents(sibling);
+								rng.collapse(backwardDirection);
+								ed.selection.setRng(rng);
+							}
+						} else {
+							// the structure is selected
+							sibling = $(e).next('[_tag]')[0];
+						}
 						if (sibling != null) {
 							e = sibling;
 						} else {
@@ -471,6 +518,7 @@ function Writer(config) {
 					
 					// use setTimeout to add to the end of the onNodeChange stack
 					window.setTimeout(function(){
+//						console.log('fireNodeChange');
 						w._fireNodeChange(e);
 					}, 0);
 				} else {
@@ -478,7 +526,7 @@ function Writer(config) {
 				}
 			}
 			if (ed.currentNode) {
-				w.tree.selectNode(ed.currentNode);
+				w.tree.highlightNode(ed.currentNode);
 			}
 			if (w.emptyTagId) {
 				delete w.entities[w.emptyTagId];
@@ -522,12 +570,13 @@ function Writer(config) {
 	};
 	
 	function _doHighlightCheck(ed, evt) {
+//		console.log('_doHighlightCheck');
 		var range = ed.selection.getRng(true);
 		
 		// check if inside boundary tag
-		var parent = range.commonAncestorContainer.parentNode;
-		if (parent.hasAttribute('_entity')) {
-			w.highlightEntity();
+		var parent = range.commonAncestorContainer;
+		if (parent.nodeType == 1 && parent.hasAttribute('_entity')) {
+			w.highlightEntity(); // remove highlight
 			if ((w.editor.dom.hasClass(parent, 'start') && evt.which == 37) || 
 				(w.editor.dom.hasClass(parent, 'end') && evt.which != 39)) {
 				var prevNode = w.u.getPreviousTextNode(parent);
@@ -601,6 +650,11 @@ function Writer(config) {
 				size: 'auto',
 				minSize: 325,
 				resizable: true,
+				onresize: function(region, pane, state, options) {
+					var tabsHeight = $('#westTabs > ul').outerHeight();
+					$('#westTabsContent').height(state.layoutHeight - tabsHeight);
+//					$.layout.callbacks.resizeTabLayout(region, pane);
+				}
 			}
 		});
 		w.layout.panes.center.layout({
@@ -776,7 +830,7 @@ function Writer(config) {
 				ed.entityCopy = null; // store a copy of an entity for pasting
 				ed.contextMenuPos = null; // the position of the context menu (used to position related dialog box)
 				ed.copiedElement = {selectionType: null, element: null}; // the element that was copied (when first selected through the structure tree)
-				
+				ed.lastKeyPress = null; // the last key the user pressed
 				ed.onInit.add(function(ed) {
 					// modify isBlock method to check _tag attributes
 					ed.dom.isBlock = function(node) {
@@ -786,7 +840,6 @@ function Writer(config) {
 						if (type) {
 							if (type === 1) {
 								var tag = node.getAttribute('_tag') || node.nodeName;
-//								return !!(ed.schema.getBlockElements()[tag]);
 								return true;
 							}
 						}

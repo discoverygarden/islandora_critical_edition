@@ -11,6 +11,11 @@
   float: top;
   margin: 5px 5px 5px 0px;
 }
+
+#image-annotations
+{
+  height: 100% !important;
+}
 .islandora-crited-fullwindow
 {
   position: fixed;

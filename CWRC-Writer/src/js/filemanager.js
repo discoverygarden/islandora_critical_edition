@@ -241,6 +241,7 @@ function FileManager(config) {
 				bodyString += el.data;
 			}
 		});
+		bodyString = bodyString.replace(/\uFEFF/g, ''); // remove characters inserted by node selecting
 		
 		xmlString += rdfString + bodyString;
 		
@@ -267,6 +268,22 @@ function FileManager(config) {
 				_entitiesToUnicode(el);
 			}
 		});
+	};
+	
+	/**
+	 * For debug
+	 */
+	fm.getEntityOffsets = function() {
+		var body = $(w.editor.getBody());
+		var offsets = _getNodeOffsetsFromRoot(body);
+		var ents = [];
+		for (var i = 0; i < offsets.length; i++) {
+			var o = offsets[i];
+			if (o.entity) {
+				ents.push(o);
+			}
+		}
+		return ents;
 	};
 	
 	function _getNodeOffsetsFromRoot(root) {
@@ -353,10 +370,9 @@ function FileManager(config) {
 		$.ajax({
 			url: docUrl,
 			type: 'GET',
-			dataType: 'xml',
 			success: function(doc, status, xhr) {
 				window.location.hash = '';
-				fm.loadDocumentFromXml(doc);
+				fm.processDocument(doc);
 			},
 			error: function(xhr, status, error) {
 				w.currentDocId = null;
@@ -413,9 +429,10 @@ function FileManager(config) {
 				editorString += ' id="'+id+'"';
 			}
 			var idNum = parseInt(id.split('_')[1]);
-			if (idNum > tinymce.DOM.counter) tinymce.DOM.counter = idNum;
+			if (idNum >= tinymce.DOM.counter) tinymce.DOM.counter = idNum+1;
 			
 			var canContainText = w.u.canTagContainText(tag);
+			// TODO find non-intensive way to check if tags can possess attributes
 			editorString += ' _textallowed="'+canContainText+'"';
 			
 			w.structs[id] = {
@@ -511,6 +528,7 @@ function FileManager(config) {
 			
 			var docMode;
 			var rdfs = $(doc).find('rdf\\:RDF, RDF');
+
 			if (rdfs.length) {
 				var mode = parseInt(rdfs.find('w\\:mode, mode').first().text());
 				if (mode == w.XML) {
@@ -525,13 +543,12 @@ function FileManager(config) {
 			if (w.mode != docMode) {
 				var editorModeStr = w.mode == w.XML ? 'XML only' : 'XML & RDF';
 				var docModeStr = docMode == w.XML ? 'XML only' : 'XML & RDF';
-				
+
 				w.dialogs.show('message', {
 					title: 'Editor Mode changed',
 					msg: 'The Editor Mode ('+editorModeStr+') has been changed to match the Document Mode ('+docModeStr+').',
 					type: 'info'
 				});
-				
 				
 				w.mode = docMode;
 			}
@@ -547,7 +564,7 @@ function FileManager(config) {
 						// entity
 						if (entity != '') {
 							var idNum = parseInt(id.split('_')[1]);
-							if (idNum > tinymce.DOM.counter) tinymce.DOM.counter = idNum;
+							if (idNum >= tinymce.DOM.counter) tinymce.DOM.counter = idNum+1;
 							
 							offsets.push({
 								id: id,
@@ -754,6 +771,7 @@ function FileManager(config) {
 			w.entitiesList.update();
 			w.tree.update(true);
 			w.relations.update();
+			w.validation.clearResult();
 			
 			// try putting the cursor in the body
 			window.setTimeout(function() {
@@ -793,9 +811,11 @@ function FileManager(config) {
 	 */
 	fm.loadSchema = function(schemaId, startText, callback) {
 		var baseUrl = ''; //w.project == null ? '' : w.baseUrl; // handling difference between local and server urls
-		w.schemaId = schemaId; 
+		w.schemaId = schemaId;
+		var schemaUrl = w.schemas[w.schemaId].url;
+		
 		$.ajax({
-			url: w.schemas[w.schemaId].url,
+			url: schemaUrl,
 			dataType: 'xml',
 			success: function(data, status, xhr) {
 				w.schemaXML = data;
@@ -884,9 +904,23 @@ function FileManager(config) {
 				// handle includes
 				var include = $('include:first', w.schemaXML); // TODO add handling for multiple includes
 				if (include.length == 1) {
-					var href = include.attr('href');
+					var url = '';
+					var includeHref = include.attr('href');
+					var schemaFile;
+					if (includeHref.indexOf('/') != -1) {
+						schemaFile = includeHref.match(/(.*\/)(.*)/)[2]; // grab the filename
+					} else {
+						schemaFile = includeHref;
+					}
+					var schemaBase = schemaUrl.match(/(.*\/)(.*)/)[1];
+					if (schemaBase != null) {
+						url = schemaBase + schemaFile;
+					} else {
+						url = baseUrl + 'schema/'+schemaFile;
+					}
+					
 					$.ajax({
-						url: baseUrl + 'schema/'+href,
+						url: url,
 						dataType: 'xml',
 						success: function(data, status, xhr) {
 							// handle redefinitions
@@ -989,9 +1023,6 @@ function FileManager(config) {
 		} else if (start != '') {
 			w.fm.loadDocument(start.substr(1));
 		}
-    else if (w.currentDocId) {
-      w.fm.loadDocument(w.currentDocId);
-    }
 	};
 	
 	function _loadTemplate(url, hashName) {

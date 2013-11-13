@@ -55,9 +55,6 @@ body .cwrc_wrapper{
 	vertical-align: top;
 }
 
-#relation_alter {
-  height: 100% !important;
-}
 .cwrc_wrapper #helpDialog iframe {
 	border: none;
 	width: 100%;
@@ -123,7 +120,6 @@ body .cwrc_wrapper{
 	margin: 0;
 	padding: 0;
 	position: relative !important;
-	height: 100% !important;
 }
 
 .entitiesList li .box {
@@ -1116,6 +1112,7 @@ div.mceDropDown {
 .ui-icon-help {
 	cursor: pointer;
 }
+
 /**
 * Attributes Widget Fixes
 **/
@@ -1128,6 +1125,13 @@ div.mceDropDown {
     border: 1px solid #ccc;
 }
 
+#certainty {
+  height: 100px !important;
+}
+
+#dateDialog {
+  height: auto !important;
+}
 .attributeWidget .attributeSelector {
     border: 1px solid #999;
     top: 5px;
