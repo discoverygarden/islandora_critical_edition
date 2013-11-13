@@ -60,3 +60,19 @@
   width: 25px !important;
   height: 30px !important;
 }
+
+.entitiesList .txtimglnk .box {
+    background-image: url('../CWRC-Writer/src/img/cake.png');
+}
+
+.entitiesList .txtimglnk .box, .entitiesList .txtimglnk.over {
+    background-color: #7F00FF;
+}
+
+.entitiesList .txtimglnk.selected, .entitiesList .txtimglnk.selected .box {
+    background-color: #7F00FF;
+}
+
+#tree.jstree li.txtimglnk {
+    background-color: #7F00FF;
+}
