@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * This file contains themeing functions for islandora_critical_edition.
@@ -38,39 +37,29 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   $image_anno_images = $image_annotation_module_path . '/shared_canvas/imgs/';
   drupal_add_js(array('islandora_critical_edition' => array('image_anno_img' => $image_anno_images)), 'setting');
   drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'book_pid' => islandora_critical_edition_get_object_of_critical_edition(
+      'islandora_critical_edition' => array(
+        'book_pid' => islandora_critical_edition_get_object_of_critical_edition(
           $variables['islandora_object']))), 'setting');
 
   drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'images_path' => $variables['images_path'])), 'setting');
+      'islandora_critical_edition' => array(
+        'images_path' => $variables['images_path'])), 'setting');
   drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'base_url' => $base_url)), 'setting');
+      'islandora_critical_edition' => array(
+        'base_url' => $base_url)), 'setting');
   drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'validate_path' => $validate_path)), 'setting');
+      'islandora_critical_edition' => array(
+        'validate_path' => $validate_path)), 'setting');
   // Passing the page pid, instead of getting if from the
   // URL on the javascript side.
   drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'page_pid' => $pids[0])), 'setting');
+      'islandora_critical_edition' => array(
+        'page_pid' => $pids[0])), 'setting');
 
   // To avoid hard coded values in js, this is the best option.
-  islandora_critical_edition_add_js();
-}
-
-
-/**
- * Adds all relevant javascript prior to rendering TEI_RDF object.
- */
-function islandora_critical_edition_add_js() {
-  module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
-  $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
   drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'module_base' => $critical_edition_module_path)), 'setting');
+      'islandora_critical_edition' => array(
+        'module_base' => $critical_edition_module_path)), 'setting');
   drupal_add_js($critical_edition_module_path . "/js/writer_backend_delegate.js");
   drupal_add_js($critical_edition_module_path . '/js/writer_wrapper.js');
 
@@ -87,6 +76,7 @@ function islandora_critical_edition_add_js() {
   drupal_add_css($critical_edition_module_path . "/css/islandora_critical_edition.css");
 
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/lib/jquery/jquery.layout.resizeTabLayout-1.3.js");
+
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/smoothness/jquery-ui-1.10.3.custom.min.css");
   islandora_image_annotation_include_common_css();
 
@@ -130,12 +120,17 @@ function islandora_critical_edition_add_js() {
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_triple.js");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialogs/dialog_filemanager.js");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/structuretree.js");
+
   drupal_add_js($critical_edition_module_path . "/js/dialog_text_image_anno.js");
+  
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/css/layout-default-latest.css");
   drupal_add_css($critical_edition_module_path . "/css/image_local.css");
+
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/editor.js");
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/tagger.js");
+
   drupal_add_js($critical_edition_module_path . "/CWRC-Writer/src/js/dialog.js");
+
   drupal_add_js($critical_edition_module_path . "/js/startup.js");
   drupal_add_js($critical_edition_module_path . "/js/init.js");
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/js/lib/snippet/jquery.snippet.css");
