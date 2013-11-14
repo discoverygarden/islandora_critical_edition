@@ -130,7 +130,6 @@
         $.contextMenu({
           selector: '.comment_title',
           callback: function(key, options) {
-            console.log("context menu callback");
             var urn = $(this).parent('div').attr('urn');
             var title = $(this).text().substring(2, 100);
             title = title.trim();
@@ -194,9 +193,11 @@
     $.each(islandora_canvas_params.pages, function(key, value) {
       $('#canvas_page_choose').append('<option  value="' + key + '">Page ' + (key + 1) + '</option>');
     });
+    console.log(islandora_canvas_params.use_dropdown);
     if (islandora_canvas_params.use_dropdown == 1) {
         $('#islandora_classification').empty();
         var sel = $('<select  id="anno_classification">').appendTo('#islandora_classification');
+        console.log(islandora_canvas_params.categories);
         $(islandora_canvas_params.categories).each(function() {
           value = this.toString();
           sel.append($("<option>").attr('value', value).text(value));
