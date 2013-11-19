@@ -36,6 +36,13 @@ function islandora_critical_edition_schema() {
               'length' => 255,
               'description' => 'The pid of the schema to apply. May also hold one of the default pids.',
           ),
+          'valid' => array(
+              'type' => 'int',
+              'unsigned' => TRUE,
+              'not null' => TRUE,
+              'default' => 0,
+              'description' => '1 if the cwrc stream is valid for this schema, 0 if it is not.',
+          ),
       ),
       'primary key' => array('name'),
   );

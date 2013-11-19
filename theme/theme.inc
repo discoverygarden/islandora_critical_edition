@@ -44,10 +44,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   // Local Critical Editions module path.
   $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
 
-  
-
-  dsm(islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]));
-
   // Get the schema for the first page.
   drupal_add_js(array(
     'islandora_critical_edition' => array(

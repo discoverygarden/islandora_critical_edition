@@ -510,9 +510,7 @@ function FileManager(config) {
 					schemaId = 'writing';
 				}
 				if(w.schemaId) {
-					console.log(w.schemaId);
 					schemaId = w.schemaId;
-					console.log(w.schemas)
 				}
 				fm.loadSchema(schemaId, false, doProcessing);
 			} else {
@@ -673,13 +671,8 @@ function FileManager(config) {
 				}
 				processEntities($(doc.firstChild), offsets);
 			}
-			console.log("doc");
-			console.log(doc);
 			// FIXME temp fix until document format is correct
 			var root = $(w.root+', '+w.root.toLowerCase(), doc)[0];
-			console.log("selector: "+w.root+', '+w.root.toLowerCase());
-			console.log("root: ");
-			console.log(root);
 			var editorString = fm.buildEditorString(root);
 			w.editor.setContent(editorString);
 			
@@ -819,8 +812,6 @@ function FileManager(config) {
 	fm.loadSchema = function(schemaId, startText, callback) {
 		var baseUrl = ''; //w.project == null ? '' : w.baseUrl; // handling difference between local and server urls
 		w.schemaId = schemaId;
-		console.log("schema id: " + schemaId);
-		console.log(w.schemas);
 		var schemaUrl = w.schemas[w.schemaId].url;
 		
 		$.ajax({

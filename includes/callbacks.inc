@@ -12,6 +12,18 @@
  * @param AbstractObject $schema_object
  */
 function islandora_critical_edition_set_user_schema(AbstractObject $islandora_object, AbstractObject $schema_object) {
+  islandora_critical_edition_schema_work($islandora_object, $schema_object);
+  drupal_json_output('Saved');
+}
+
+/**
+ * Worker function for schema definitions.
+ *
+ * @param AbstractObject $islandora_object
+ * @param AbstractObject $schema_object
+ * @return Object
+ */
+function islandora_critical_edition_schema_work(AbstractObject $islandora_object, AbstractObject $schema_object, $valid) {
   global $user;
   module_load_include('inc', 'islandora_critical_edition', 'includes/schema_table_utils');
 
@@ -22,10 +34,8 @@ function islandora_critical_edition_set_user_schema(AbstractObject $islandora_ob
     islandora_critical_edition_remove_user_selected_schema($user->name, $islandora_object->id);
   }
   // Set it to the currently selected schema.
-  $save = islandora_critical_edition_add_user_selected_schema($user->name, $islandora_object->id, $schema_object->id);
-  drupal_json_output($save);
+  islandora_critical_edition_add_user_selected_schema($user->name, $islandora_object->id, $schema_object->id, $valid);
 }
-
 /**
  * Provides all the parameters necessary for CWRCWriter to operate with Fedora.
  *
@@ -88,8 +98,9 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object, Abst
 
   $fedora_object["CWRC"]->content = $cwrc;
 
+  $valid = html_entity_decode(stripslashes($_POST['valid']), ENT_QUOTES, 'UTF-8');
   // Save the user selection for the schema as default
-  islandora_critical_edition_set_user_schema($fedora_object, $schema_object);
+  islandora_critical_edition_schema_work($fedora_object, $schema_object, $valid);
 
   echo $cwrc;
 }

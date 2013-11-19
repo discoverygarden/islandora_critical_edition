@@ -28,7 +28,13 @@ islandoraCWRCWriter = {
         config.project = data;
         writer = new Writer(config);
         writer.currentDocId = PID;
-        writer.schemaId = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
+        var usr_schema;
+        if(Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1) {
+          usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
+        } else {
+          usr_schema['name'] = "CWRC Basic TEI Schema";
+        }
+        writer.schemaId = usr_schema['name'];
         writer.init();
         // Initilize additional UI Elements   get_schema_id_for_pid
         init_ui();
@@ -184,14 +190,15 @@ islandoraCWRCWriter = {
 function get_schema_id_for_pid(schema_pid) {
   if(schema_pid) {
     for(var key in writer.schemas) {
+      // if we find the right pid, and the schema is valid, use that schema. && Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1
       if(writer.schemas[key]['pid'] == schema_pid) {
-        return writer.schemas[key]['name'];
+        return writer.schemas[key];
       }
     }
   }
 
   // Return the basic TEI by default.
-  return 'tei';
+  return 'CWRC-TEIBasicSchema';
 }
 
 /**

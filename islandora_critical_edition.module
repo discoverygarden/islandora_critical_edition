@@ -54,7 +54,7 @@ function islandora_critical_edition_menu() {
       'access arguments' => array(2),
       'file' => 'includes/callbacks.inc',
   );
-  $items['islandora/cwrcwriter/save_data/%islandora_object/$islandora_object'] = array(
+  $items['islandora/cwrcwriter/save_data/%islandora_object/%islandora_object'] = array(
     'title' => 'Save Data',
     'page callback' => 'islandora_critical_edition_savedata',
     'page arguments' => array(3,4),
