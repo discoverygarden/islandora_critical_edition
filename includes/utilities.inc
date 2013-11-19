@@ -168,24 +168,6 @@ function islandora_critical_edition_construct_schema_config_object() {
       "cssUrl" => url($critical_edition_module_path . "/CWRC-Writer/src/css/tei_converted.css"),
       "pid" => $schema_pid,
   );
-  
-//   $config_sample['schemas']['events'] = array(
-//       "name" => "Events Schema",
-//       "url" => url($critical_edition_module_path . "/CWRC-Writer/src/schema/events.rng"),
-//       "cssUrl" => url($critical_edition_module_path . "/CWRC-Writer/src/css/orlando_converted.css"),
-//   );
-  
-//   $config_sample['schemas']['biography'] = array(
-//       "name" => "Biography Schema",
-//       "url" => url($critical_edition_module_path . "/CWRC-Writer/src/schema/biography.rng"),
-//       "cssUrl" => url($critical_edition_module_path . "/CWRC-Writer/src/css/orlando_converted.css"),
-//   );
-  
-//   $config_sample['schemas']['writing'] = array(
-//       "name" => "Writing Schema",
-//       "url" => url($critical_edition_module_path . "/CWRC-Writer/src/schema/writing.rng"),
-//       "cssUrl" => url($critical_edition_module_path . "/CWRC-Writer/src/css/orlando_converted.css"),
-//   );
   return $config_sample;
 }
 /**
