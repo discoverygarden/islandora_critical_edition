@@ -4,9 +4,6 @@
  * Holds utility functions for islandora_critical_editions.
  */
 
-// @param array $content_models
-//  *   An array of content model PIDs to which the new object should subscribe.
-
 /**
  * Returns PID and title of all critical editions associated with an object.
  *
@@ -133,25 +130,27 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
 }
 
 /**
- * 
- * @return Ambigous <multitype:, multitype:NULL >
+ * Constructs the basic schemas.
+ *
+ * @return array
+ *   An array of constructed, default schemas.
  */
 function islandora_critical_edition_construct_schema_config_object() {
   // Get all available schemas.
   $schema_collection = islandora_object_load('islandora:tei_schema_collection');
   $schema_pids = islandora_critical_edition_get_schema_pids($schema_collection);
   $config_sample['schemas'] = array();
-  
+
   // Fill schemas from the schema's collection.
   foreach ($schema_pids as $schema_pid) {
     $schema = islandora_object_load($schema_pid);
     $rdf_datastream = $schema['RDF-SCHEMA'];
-    
+
     $css_datastream = $schema['RDF-CSS'];
-    
+
     $schema_dc = new DublinCore($schema['DC']->content);
     $all_titles = $schema_dc->dc->dc['dc:title'];
-    
+
     $config_sample['schemas'][$all_titles[0]] = array(
       "name" => $all_titles[0],
       "url" => url("islandora/object/$schema_pid/datastream/RDF-SCHEMA/view/$rdf_datastream->label"),
@@ -159,14 +158,14 @@ function islandora_critical_edition_construct_schema_config_object() {
       "pid" => $schema_pid,
     );
   }
-  
-  // Add all the sample schemas
+
+  // Add all the sample schemas.
   $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
   $config_sample['schemas']['tei'] = array(
-      "name" => 'CWRC Basic TEI Schema',
-      "url" =>  url($critical_edition_module_path . "/CWRC-Writer/src/schema/CWRC-TEIBasic.rng"),
-      "cssUrl" => url($critical_edition_module_path . "/CWRC-Writer/src/css/tei_converted.css"),
-      "pid" => $schema_pid,
+    "name" => 'CWRC Basic TEI Schema',
+    "url" => url($critical_edition_module_path . "/CWRC-Writer/src/schema/CWRC-TEIBasic.rng"),
+    "cssUrl" => url($critical_edition_module_path . "/CWRC-Writer/src/css/tei_converted.css"),
+    "pid" => $schema_pid,
   );
   return $config_sample;
 }
@@ -184,8 +183,8 @@ function islandora_critical_edition_construct_schema_config_object() {
 function islandora_critical_edition_get_schema_pids(AbstractObject $object, $type = 'islandora:criticaleditionschemaCModel') {
   module_load_include('inc', 'islandora', 'includes/utilities');
   $params = array(
-      'object' => $object,
-      'page_size' => -1,
+    'object' => $object,
+    'page_size' => -1,
   );
 
   if (isset($type)) {

@@ -50,6 +50,10 @@ islandoraCWRCWriter = {
     set_user_schema: function() {
       $.ajax({
             dataType: 'json',
+            dataType: 'text',
+            data: {
+              "valid": is_doc_valid,
+            },
             url: Drupal.settings.basePath + 'islandora/cwrc/' + PID + '/schema/' + writer.schemas[writer.schemaId]['pid'],
             success: function(data, status, xhr) {
               console.log("success schema");

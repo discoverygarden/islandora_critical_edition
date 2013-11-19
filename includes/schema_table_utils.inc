@@ -11,8 +11,11 @@
  * Create a user prefered TEI Schema.
  * 
  * @param string $name
+ *   The name of the current user.
  * @param string $page_pid
+ *   The pid of the page.
  * @param string $schema_pid
+ *   The pid of the schema.
  */
 function islandora_critical_edition_add_user_selected_schema($name, $page_pid, $schema_pid, $valid) {
   db_insert('islandora_critical_edition_user_schema')
@@ -29,8 +32,11 @@ function islandora_critical_edition_add_user_selected_schema($name, $page_pid, $
  * Edit a user prefered TEI Schema.
  * 
  * @param string $name
+ *   The name of the current user.
  * @param string $page_pid
+ *   The pid of the page.
  * @param string $schema_pid
+ *   The pid of the schema.
  */
 function islandora_critical_edition_edit_user_selected_schema($name, $page_pid, $schema_pid) {
   db_update('islandora_critical_edition_user_schema')
@@ -44,7 +50,9 @@ function islandora_critical_edition_edit_user_selected_schema($name, $page_pid, 
  * Remove a user prefered TEI Schema.
  * 
  * @param string $name
+ *   The name of the current user.
  * @param string $page_pid
+ *   The pid of the page.
  */
 function islandora_critical_edition_remove_user_selected_schema($name, $page_pid) {
   db_delete('islandora_critical_edition_user_schema')
@@ -57,12 +65,16 @@ function islandora_critical_edition_remove_user_selected_schema($name, $page_pid
  * Get a user prefered TEI Schema.
  *
  * @param string $name
+ *   The name of the current user.
  * @param string $page_pid
- * @return array
+ *   The pid of the page.
+ *
+ * @return object
+ *   The queried object returned.
  */
 function islandora_critical_edition_get_user_selected_schema($name, $page_pid) {
   $schema = db_select('islandora_critical_edition_user_schema', 'n')
-  ->fields('n', array('name','page_pid','schema_pid', 'valid'))
+  ->fields('n', array('name', 'page_pid', 'schema_pid', 'valid'))
   ->condition('name', $name, '=')
   ->condition('page_pid', $page_pid, '=')
   ->execute();

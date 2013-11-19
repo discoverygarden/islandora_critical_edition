@@ -31,16 +31,16 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js(array(
     'islandora_critical_edition' => array(
       'schema_object' => $schema_object,
-      )
+    ),
     ), 'setting');
-  
+
   $schema_pref = islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]);
   drupal_add_js(array(
     'islandora_critical_edition' => array(
       'schema_pref' => $schema_pref,
-      )
+    ),
     ), 'setting');
-  
+
   // Local Critical Editions module path.
   $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
 
@@ -50,7 +50,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
       'page_schema' => islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]))),
       'setting');
 
-  
   $validate_path = variable_get('islandora_critical_edition_validate_url', '/validator/validate.html');
   // Use the theme files from image annotation for annotation list
   // and image annotation pane's.
