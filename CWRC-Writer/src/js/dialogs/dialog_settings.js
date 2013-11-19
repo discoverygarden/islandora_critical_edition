@@ -21,7 +21,7 @@ var SettingsDialog = function(writer, config) {
 	'<div id="settingsLink"><h2>Settings</h2></div>');
 	var schemasHTML;
 	for(var schema in w.schemas){
-		schemasHTML += '<option value="' + schema + '">"' + w.schemas[schema]['name'] + '"</option>';
+		schemasHTML += '<option value="' + schema + '">' + w.schemas[schema]['name'] + '</option>';
 	}
 	
 	$(document.body).append(''+
@@ -175,7 +175,14 @@ var SettingsDialog = function(writer, config) {
 			fontSize: settings.fontSize,
 			fontFamily: settings.fontFamily
 		};
+		
 		w.editor.dom.setStyles(w.editor.dom.getRoot(), styles);
+		
+		var eventObj = {
+		  "settings" : settings,
+		  "schemaId" : w.schemaId,
+		}
+		w.delegator.editorCallback('editor_settingsChanged', eventObj);
 	};
 	
 	var setDefaults = function() {

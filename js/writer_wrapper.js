@@ -12,33 +12,12 @@ islandoraCWRCWriter = {
     writer = null;
     islandoraCriticalEditionsUrl = Drupal.settings.basePath +
       Drupal.settings.islandora_critical_edition.module_base;
-    
     var config = {
       delegator: islandoraBackendDelegate,
       cwrcRootUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/',
-      schemas: {
-        tei: {
-          name: 'CWRC Basic TEI Schema',
-          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/CWRC-TEIBasic.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/tei_converted.css'
-        },
-        events: {
-          name: 'Events Schema',
-          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/events.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/orlando_converted.css'
-        },
-        biography: {
-          name: 'Biography Schema',
-          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/biography.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/orlando_converted.css'
-        },
-        writing: {
-          name: 'Writing Schema',
-          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/writing.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/orlando_converted.css'
-        }
-      }
+      schemas: Drupal.settings.islandora_critical_edition.schema_object['schemas']
     };
+    
     $.ajax({
       url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
       timeout: 3000,
@@ -49,8 +28,9 @@ islandoraCWRCWriter = {
         config.project = data;
         writer = new Writer(config);
         writer.currentDocId = PID;
+        writer.schemaId = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
         writer.init();
-        // Initilize additional UI Elements
+        // Initilize additional UI Elements   get_schema_id_for_pid
         init_ui();
         // Initilize shared canvas image annotation canvas processing.
         islandoraCWRCWriter.Writer.setup_canvas(PID, init_canvas_div);
@@ -61,6 +41,19 @@ islandoraCWRCWriter = {
     });
   },
   Writer : {
+    set_user_schema: function() {
+      $.ajax({
+            dataType: 'json',
+            url: Drupal.settings.basePath + 'islandora/cwrc/' + PID + '/schema/' + writer.schemas[writer.schemaId]['pid'],
+            success: function(data, status, xhr) {
+              console.log("success schema");
+              console.log(data);
+            },
+            error: function(xhRequest, ErrorText, thrownError) {
+              console.log(ErrorText);
+            },
+          });
+    },
     Document : {
       load: function() {
         // Calling load doc, which assigns a doc id (the page pid) and
@@ -181,6 +174,26 @@ islandoraCWRCWriter = {
     },
   }
 }
+
+/**
+ * Get the schema name for the given schema id.
+ *
+ * @param schema_pid
+ * @returns string
+ */
+function get_schema_id_for_pid(schema_pid) {
+  if(schema_pid) {
+    for(var key in writer.schemas) {
+      if(writer.schemas[key]['pid'] == schema_pid) {
+        return writer.schemas[key]['name'];
+      }
+    }
+  }
+
+  // Return the basic TEI by default.
+  return 'tei';
+}
+
 /**
  * Get the Tag id for the given image entity's uuid.
  *

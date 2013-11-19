@@ -143,6 +143,7 @@ function islandoraBackendDelegate(config) {
   };
   
   this.editorCallback = function(name,data) {
+	  islandoraCWRCWriter.Writer.set_user_schema();
     switch (name) {
       case 'highlightEntity_looseFocus':
         if($(data).hasClass('txtimglnk')) {
@@ -153,6 +154,9 @@ function islandoraBackendDelegate(config) {
         if($(data).hasClass('txtimglnk')) {
           islandoraCWRCWriter.Writer.Extensions.text_image_linking_show_highlight(data);
         }
+        break;
+      case 'editor_settingsChanged' :
+          islandoraCWRCWriter.Writer.set_user_schema();
         break;
     }
   };

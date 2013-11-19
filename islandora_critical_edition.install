@@ -13,3 +13,31 @@ function islandora_critical_edition_uninstall() {
   // Remove module variables.
   variable_del('islandora_critical_edition_validate_url');
 }
+
+/**
+ * Implements hook_schema().
+ */
+function islandora_critical_edition_schema() {
+  $schema['islandora_critical_edition_user_schema'] = array(
+      'description' => 'Table that stores user prefered schemas, referenced to a cwrc datastream.',
+      'fields' => array(
+          'name' => array(
+              'type' => 'varchar',
+              'length' => 255,
+              'description' => 'The users username.',
+          ),
+          'page_pid' => array(
+              'type' => 'varchar',
+              'length' => 255,
+              'description' => 'The pid of the page to apply the schema.',
+          ),
+          'schema_pid' => array(
+              'type' => 'varchar',
+              'length' => 255,
+              'description' => 'The pid of the schema to apply. May also hold one of the default pids.',
+          ),
+      ),
+      'primary key' => array('name'),
+  );
+  return $schema;
+}
