@@ -1,3 +1,8 @@
+BUILD STATUS
+------------
+Current build status:
+[![Build Status](https://travis-ci.org/discoverygarden/islandora_critical_edition.png?branch=7.x)](https://travis-ci.org/discoverygarden/islandora_critical_edition)
+
 CONTENTS OF THIS FILE
 ---------------------
 
@@ -19,8 +24,8 @@ annotation of the Islandora Page Content Model on the JPG datastream for
 successful viewing of the shared canvas in Firefox.
 
 The CSS/JS folders has all the files necessary to make Islandora work with CWRC.
-Included are custom CSS and JavaScript files required to interact with the 
-new CWRC-Writer API. Most top level Islandora functionality is wrapped up 
+Included are custom CSS and JavaScript files required to interact with the
+new CWRC-Writer API. Most top level Islandora functionality is wrapped up
 in the 'writer_wrapper.js' file. That said, there is a file called
 'delegator.js' located in 'CWRC-Writer/src/js/delegator.js' that has been
 overridden and placed in this '/js' directory.
@@ -43,9 +48,9 @@ you install the validator:
 * Rename the .war file to 'validator.war'.
 * Deploy the war to tomcats webapp directory (ex: ../tomcat/webapps).
 NOTE: Do not use the webapp manager to deploy this .war file.
-* After a moment, the .war should deploy and can be tested by visiting 
+* After a moment, the .war should deploy and can be tested by visiting
 {base_url}:8080/validator/index.html
-* If not already configured, Add a reverse proxy setting on the server. 
+* If not already configured, Add a reverse proxy setting on the server.
 ex: (Debian) edit sites-available/default add the following lines above the </VirtualHost> tag
   ProxyPass /validator/ http://localhost:8080/validator/
   ProxyPassReverse /validator/ http://localhost:8080/validator/
