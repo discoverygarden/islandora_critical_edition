@@ -36,7 +36,7 @@ islandoraCWRCWriter = {
         }
         writer.schemaId = usr_schema['name'];
         writer.init();
-        // Initilize additional UI Elements   get_schema_id_for_pid
+        // Initilize additional UI Elements.
         init_ui();
         // Initilize shared canvas image annotation canvas processing.
         islandoraCWRCWriter.Writer.setup_canvas(PID, init_canvas_div);
