@@ -130,7 +130,6 @@
         $.contextMenu({
           selector: '.comment_title',
           callback: function(key, options) {
-            console.log("context menu callback");
             var urn = $(this).parent('div').attr('urn');
             var title = $(this).text().substring(2, 100);
             title = title.trim();

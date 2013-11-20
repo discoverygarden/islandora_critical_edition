@@ -406,7 +406,6 @@ function FileManager(config) {
 	 */
 	fm.buildEditorString = function(node) {
 		var editorString = '';
-		
 		function doBuild(currentNode, forceInline) {
 			var tag = currentNode.nodeName;
 			var jQNode = $(currentNode);
@@ -509,6 +508,9 @@ function FileManager(config) {
 					schemaId = 'biography';
 				} else if (rootName == 'writing') {
 					schemaId = 'writing';
+				}
+				if(w.schemaId) {
+					schemaId = w.schemaId;
 				}
 				fm.loadSchema(schemaId, false, doProcessing);
 			} else {
@@ -669,10 +671,8 @@ function FileManager(config) {
 				}
 				processEntities($(doc.firstChild), offsets);
 			}
-
 			// FIXME temp fix until document format is correct
 			var root = $(w.root+', '+w.root.toLowerCase(), doc)[0];
-			
 			var editorString = fm.buildEditorString(root);
 			w.editor.setContent(editorString);
 			
@@ -863,10 +863,8 @@ function FileManager(config) {
 					$('element', w.schemaXML).each(function(index, el) {
 						var tag = $(el).attr('name');
 						if (tag != null && elements.indexOf(tag) == -1) {
-							
 							elements.push(tag);
 							var tagName = w.u.getTagForEditor(tag);
-							console.log('tag: ' + tagName);
 							schemaTags += '.showStructBrackets '+tagName+'[_tag='+tag+']:before { color: #aaa; font-weight: normal; font-style: normal; font-family: monospace; content: "<'+tag+'>"; }';
 							schemaTags += '.showStructBrackets '+tagName+'[_tag='+tag+']:after { color: #aaa; font-weight: normal; font-style: normal; font-family: monospace; content: "</'+tag+'>"; }';
 						}

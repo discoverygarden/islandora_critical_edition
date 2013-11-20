@@ -6,7 +6,6 @@
  */
 function islandoraBackendDelegate(config) {
   this.writer = config.writer;
-
   /**
    * @param params
    * @param callback
@@ -45,7 +44,9 @@ function islandoraBackendDelegate(config) {
    */
     this.validate = function(callback) {
     var docText = writer.fm.getDocumentContent(false);
-    var schemaUrl = writer.schemas[writer.schemaId].url;
+    var usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
+    // Always validate against the prefered schema.
+    var schemaUrl = usr_schema['url'];
     $.ajax({
       url: Drupal.settings.islandora_critical_edition.validate_path,
       type: 'POST',
@@ -56,6 +57,7 @@ function islandoraBackendDelegate(config) {
         content: docText
       },
       success: function(data, status, xhr) {
+        islandoraCWRCWriter.Writer.set_is_doc_valid(1);
         if (callback) {
           var valid = $('status', data).text() == 'pass';
           callback.call(writer, valid);
@@ -64,6 +66,7 @@ function islandoraBackendDelegate(config) {
         }
       },
       error: function() {
+        islandoraCWRCWriter.Writer.set_is_doc_valid(0);
         writer.dialogs.show('message', {
           title: 'Error',
           msg: 'An error occurred while trying to validate the document.',
@@ -106,13 +109,15 @@ function islandoraBackendDelegate(config) {
   this.saveDocument = function(callback) {
     writer.mode == writer.XMLRDF;
     var docText = writer.fm.getDocumentContent(true);
+
     $.ajax({
-      url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
+      url : window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID + '/' + writer.schemas[writer.schemaId]['pid'],
       type: 'POST',
       async: false,
       dataType: 'text',
       data: {
-        "text": docText
+        "text": docText,
+        "valid": islandoraCWRCWriter.Writer.get_is_doc_valid(1),
       },
       success: function(data, status, xhr) {
         writer.editor.isNotDirty = 1; // force clean state
@@ -153,6 +158,10 @@ function islandoraBackendDelegate(config) {
         if($(data).hasClass('txtimglnk')) {
           islandoraCWRCWriter.Writer.Extensions.text_image_linking_show_highlight(data);
         }
+        break;
+      case 'editor_settingsChanged' :
+    	  //TODO: May want this to update dynamically, but could break the document load/cwrc datastream.
+          //islandoraCWRCWriter.Writer.set_user_schema();
         break;
     }
   };

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:id="struct_35" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:id="struct_530">
+    <fileDesc xml:id="struct_531">
+      <titleStmt xml:id="struct_532">
+        <title xml:id="struct_533">Sample Document Title</title>
+      </titleStmt>
+      <publicationStmt xml:id="struct_534">
+        <p xml:id="struct_535"/>
+      </publicationStmt>
+      <sourceDesc xml:id="struct_536" sameAs="http://www.cwrc.ca">
+        <p xml:id="struct_537">Created from islandora book ingest unless otherwise noted.</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#"></rdf:RDF>
+  <text>
+    <body>
+      <ab/>
+    </body>
+  </text>
+</TEI>

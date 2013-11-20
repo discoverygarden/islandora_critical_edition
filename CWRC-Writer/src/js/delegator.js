@@ -217,7 +217,8 @@ function Delegator(config) {
 	 * Editor based event system.
 	 * @param name: The name of the editor event. Possible values
 	 *   are highlightEntity_looseFocus,
-	 *       highlightEntity_gainFocus
+	 *       highlightEntity_gainFocus,
+	 *       editor_settingsChanged
 	 * @param data: Editor data associated with the event.
 	 */
 	del.editorCallback = function(name,data) {
@@ -231,6 +232,8 @@ function Delegator(config) {
 				if($(data).hasClass('place')) {
 					
 				}
+				break;
+			case 'editor_settingsChanged' :
 				break;
 			}
 	};
