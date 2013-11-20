@@ -18,14 +18,14 @@
  */
 function islandora_critical_edition_schema_upload_form(array $form, array &$form_state) {
   $upload_size = min((int) ini_get('post_max_size'), (int) ini_get('upload_max_filesize'));
-  $rng_extensions = array('.rng');
-  $css_extensions = array('.css');
+  $rng_extensions = array('rng');
+  $css_extensions = array('css');
   $form = array();
   $form['rng_file'] = array(
-    '#title' => t('RDF File'),
+    '#title' => t('RNG File'),
     '#type' => 'managed_file',
     '#required' => TRUE,
-    ' #description' => t('Select file to upload.<br/>Files must be less than <b>@size MB.</b><br/>Allowed file types: <b>@ext.</b>', array('@size' => $upload_size, '@ext' => $rng_extensions[0])),
+    '#description' => t('Select file to upload.<br/>Files must be less than <b>@size MB.</b><br/>Allowed file types: <b>@ext.</b>', array('@size' => $upload_size, '@ext' => $rng_extensions[0])),
     '#default_value' => isset($form_state['values']['files']) ? $form_state['values']['files'] : NULL,
     '#upload_location' => 'temporary://',
     '#upload_validators' => array(
