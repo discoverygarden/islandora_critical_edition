@@ -35,8 +35,6 @@ islandoraCWRCWriter = {
           usr_schema = new Array();
           usr_schema['name'] = "tei";
         }
-        console.log(writer.schemas);
-        console.log(usr_schema['name']);
         writer.schemaId = usr_schema['name'];
         writer.init();
         // Initilize additional UI Elements.
@@ -66,7 +64,6 @@ islandoraCWRCWriter = {
             },
             url: Drupal.settings.basePath + 'islandora/cwrc/' + PID + '/schema/' + writer.schemas[writer.schemaId]['pid'],
             success: function(data, status, xhr) {
-              console.log("success schema");
               console.log(data);
             },
             error: function(xhRequest, ErrorText, thrownError) {
