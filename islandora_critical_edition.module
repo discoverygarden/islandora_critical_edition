@@ -214,7 +214,6 @@ function islandora_critical_edition_islandora_criticalEditionCModel_islandora_vi
 function islandora_critical_edition_islandora_required_objects(IslandoraTuque $connection) {
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
-  global $base_url;
   // Page Content Model.
   $critical_edition_page_content_model = $connection->repository->constructObject('islandora:criticalEditionCModelPage');
   $critical_edition_page_content_model->owner = 'fedoraAdmin';
