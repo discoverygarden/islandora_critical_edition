@@ -140,7 +140,6 @@ function islandora_critical_edition_construct_schema_config_object() {
   $schema_collection = islandora_object_load('islandora:tei_schema_collection');
   $schema_pids = islandora_critical_edition_get_schema_pids($schema_collection);
   $config_sample['schemas'] = array();
-  dsm(array("test"=>"testing"));
   // Fill schemas from the schema's collection.
   foreach ($schema_pids as $schema_pid) {
     $schema = islandora_object_load($schema_pid);
@@ -149,7 +148,6 @@ function islandora_critical_edition_construct_schema_config_object() {
     $css_datastream = $schema['RDF-CSS'];
 
     $schema_dc = new DublinCore($schema['DC']->content);
-    dsm($schema_dc);
     $all_titles = $schema_dc->dc->dc['dc:title'];
 
     $config_sample['schemas'][$all_titles[0]] = array(
