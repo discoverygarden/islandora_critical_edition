@@ -60,7 +60,7 @@ islandoraCWRCWriter = {
             dataType: 'json',
             dataType: 'text',
             data: {
-              "valid": islandoraCWRCWriter.Writer.get_is_doc_valid();,
+              "valid": islandoraCWRCWriter.Writer.get_is_doc_valid(),
             },
             url: Drupal.settings.basePath + 'islandora/cwrc/' + PID + '/schema/' + writer.schemas[writer.schemaId]['pid'],
             success: function(data, status, xhr) {
