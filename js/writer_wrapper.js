@@ -32,8 +32,11 @@ islandoraCWRCWriter = {
         if(Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1) {
           usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
         } else {
-          usr_schema['name'] = "CWRC Basic TEI Schema";
+          usr_schema = new Array();
+          usr_schema['name'] = "tei";
         }
+        console.log(writer.schemas);
+        console.log(usr_schema['name']);
         writer.schemaId = usr_schema['name'];
         writer.init();
         // Initilize additional UI Elements.
@@ -47,12 +50,19 @@ islandoraCWRCWriter = {
     });
   },
   Writer : {
+    writer_valid_doc: 0,
+    set_is_doc_valid: function(is_valid) {
+      this.writer_valid_doc = is_valid;
+    },
+    get_is_doc_valid: function() {
+      return this.writer_valid_doc;
+    },
     set_user_schema: function() {
       $.ajax({
             dataType: 'json',
             dataType: 'text',
             data: {
-              "valid": is_doc_valid,
+              "valid": islandoraCWRCWriter.Writer.get_is_doc_valid();,
             },
             url: Drupal.settings.basePath + 'islandora/cwrc/' + PID + '/schema/' + writer.schemas[writer.schemaId]['pid'],
             success: function(data, status, xhr) {

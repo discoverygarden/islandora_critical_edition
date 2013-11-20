@@ -73,7 +73,7 @@ function islandora_critical_edition_schema_upload_form_submit(array $form, array
   $rng_path = drupal_realpath($rng_file->uri);
   $ds->setContentFromFile($rng_path, FALSE);
   $ds->label = $rng_file->filename;
-  $ds->mimetype = $rng_file->filemime;
+  $ds->mimetype = "text/plain";
 
   if (empty($object['RDF-CSS'])) {
     $ds = $object->constructDatastream('RDF-CSS', 'M');
@@ -86,6 +86,5 @@ function islandora_critical_edition_schema_upload_form_submit(array $form, array
   $css_path = drupal_realpath($css_file->uri);
   $ds->setContentFromFile($css_path, FALSE);
   $ds->label = $css_file->filename;
-  $ds->mimetype = $css_file->filemime;
-
+  $ds->mimetype = "text/plain";
 }

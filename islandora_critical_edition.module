@@ -247,7 +247,7 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
   // DS-COMPOSITE-MODEL Datastream.
   $datastream = $critical_edition_schema_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'M');
   $datastream->label = 'DS-COMPOSITE-MODEL';
-  $datastream->mimetype = 'text/plain';
+  $datastream->mimetype = 'text/xml';
   $datastream->setContentFromFile("$module_path/xml/islandora_crtitical_edition_schema_ds_composite_model.xml", FALSE);
   $critical_edition_schema_content_model->ingestDatastream($datastream);
 
@@ -265,26 +265,23 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
   $schema_collection->ingestDatastream($datastream);
 
   // Ingest the basic schema types.
-  $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
-  $path = $critical_edition_module_path . '/CWRC-Writer/src/';
+  $sample_schema = $connection->repository->constructObject('islandora:tei_sample_schema');
+  $sample_schema->owner = 'fedoraAdmin';
+  $sample_schema->label = 'CWRC-TEIBasicSchema';
+  $sample_schema->models = 'islandora:criticaleditionschemaCModel';
+  $sample_schema->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:tei_schema_collection');
 
-  $fedora_object = $connection->repository->constructObject('islandora:tei_sample_schema');
-  $fedora_object->owner = 'fedoraAdmin';
-  $fedora_object->label = 'CWRC-TEIBasicSchema';
-  $fedora_object->models = 'islandora:criticaleditionschemaCModel';
-  $fedora_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:tei_schema_collection');
-
-  $new_ds = $fedora_object->constructDatastream('RDF-SCHEMA', 'M');
+  $new_ds = $sample_schema->constructDatastream('RDF-SCHEMA', 'M');
   $new_ds->label = 'RDF-SCHEMA';
   $new_ds->mimetype = 'text/plain';
-  $new_ds->setContentFromUrl(url($base_url . '/' . $path . 'schema/CWRC-TEIBasic.rng'));
-  $fedora_object->ingestDatastream($new_ds);
+  $new_ds->setContentFromFile("$module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng", FALSE);
+  $sample_schema->ingestDatastream($new_ds);
 
-  $new_ds_css = $fedora_object->constructDatastream('RDF-CSS', 'M');
+  $new_ds_css = $sample_schema->constructDatastream('RDF-CSS', 'M');
   $new_ds_css->label = 'RDF-CSS';
   $new_ds_css->mimetype = 'text/plain';
-  $new_ds_css->setContentFromUrl(url($base_url . '/' . $path . 'css/tei.css'));
-  $fedora_object->ingestDatastream($new_ds_css);
+  $new_ds_css->setContentFromFile("$module_path/CWRC-Writer/src/css/tei.css", FALSE);
+  $sample_schema->ingestDatastream($new_ds_css);
 
   return array(
     'islandora_critical_edition' => array(
@@ -294,7 +291,7 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
         $critical_edition_page_content_model,
         $critical_edition_schema_content_model,
         $schema_collection,
-        $fedora_object,
+        $sample_schema,
       ),
     ),
   );

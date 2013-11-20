@@ -4,7 +4,6 @@
  * @param config
  * @returns {___anonymous83_84}
  */
-var is_doc_valid = 0;
 function islandoraBackendDelegate(config) {
   this.writer = config.writer;
   /**
@@ -58,7 +57,7 @@ function islandoraBackendDelegate(config) {
         content: docText
       },
       success: function(data, status, xhr) {
-        is_doc_valid = 1;
+        islandoraCWRCWriter.Writer.set_is_doc_valid(1);
         if (callback) {
           var valid = $('status', data).text() == 'pass';
           callback.call(writer, valid);
@@ -67,7 +66,7 @@ function islandoraBackendDelegate(config) {
         }
       },
       error: function() {
-        is_doc_valid = 0;
+        islandoraCWRCWriter.Writer.set_is_doc_valid(0);
         writer.dialogs.show('message', {
           title: 'Error',
           msg: 'An error occurred while trying to validate the document.',
@@ -118,7 +117,7 @@ function islandoraBackendDelegate(config) {
       dataType: 'text',
       data: {
         "text": docText,
-        "valid": is_doc_valid,
+        "valid": islandoraCWRCWriter.Writer.get_is_doc_valid(1),
       },
       success: function(data, status, xhr) {
         writer.editor.isNotDirty = 1; // force clean state
