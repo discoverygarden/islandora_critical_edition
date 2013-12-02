@@ -4,7 +4,7 @@
  * library. With the API unfinished, i have added function stubs to be called
  * from the writers 'Delegate'.
  */
-islandoraCWRCWriter = {
+var islandoraCWRCWriter = {
   // Initilize the writer, and get basic parameters for cwrc fedora integration.
   init_writer : function() {
     PID = Drupal.settings.islandora_critical_edition.page_pid;
@@ -35,7 +35,7 @@ islandoraCWRCWriter = {
           usr_schema = new Array();
           usr_schema['name'] = "tei";
         }
-        writer.schemaId = usr_schema['name'];
+        writer.schemaId = "tei";//usr_schema['name'];
         writer.init();
         // Initilize additional UI Elements.
         init_ui();
@@ -76,6 +76,7 @@ islandoraCWRCWriter = {
         // Calling load doc, which assigns a doc id (the page pid) and
         // calls the delegate function loadDocument().
         writer.fm.loadDocument(PID);
+        
       },
       get: function() {
         return writer.getDocument();

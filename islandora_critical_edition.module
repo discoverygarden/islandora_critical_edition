@@ -96,12 +96,11 @@ function islandora_critical_edition_menu() {
  */
 function islandora_critical_edition_cwrc_access(AbstractObject $object = NULL) {
   $islandora_object = islandora_object_load($object);
+
   if (is_null($object)) {
     return FALSE;
   }
-
   $is_page = in_array('islandora:criticalEditionCModelPage', $object->models);
-
   return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access(ISLANDORA_CRITICAL_EDITION_USE_CWRC_WRITER);
 }
 
