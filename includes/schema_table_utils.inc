@@ -9,7 +9,7 @@
 
 /**
  * Create a user prefered TEI Schema.
- * 
+ *
  * @param string $name
  *   The name of the current user.
  * @param string $page_pid
@@ -30,7 +30,7 @@ function islandora_critical_edition_add_user_selected_schema($name, $page_pid, $
 
 /**
  * Edit a user prefered TEI Schema.
- * 
+ *
  * @param string $name
  *   The name of the current user.
  * @param string $page_pid
@@ -48,7 +48,7 @@ function islandora_critical_edition_edit_user_selected_schema($name, $page_pid, 
 
 /**
  * Remove a user prefered TEI Schema.
- * 
+ *
  * @param string $name
  *   The name of the current user.
  * @param string $page_pid

@@ -12,7 +12,7 @@
  *   The current form.
  * @param array $form_state
  *   The current form state.
- * 
+ *
  * @return array
  *   The current form.
  */
