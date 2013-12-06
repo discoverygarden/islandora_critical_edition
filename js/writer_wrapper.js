@@ -12,33 +12,12 @@ islandoraCWRCWriter = {
     writer = null;
     islandoraCriticalEditionsUrl = Drupal.settings.basePath +
       Drupal.settings.islandora_critical_edition.module_base;
-    
     var config = {
       delegator: islandoraBackendDelegate,
       cwrcRootUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/',
-      schemas: {
-        tei: {
-          name: 'CWRC Basic TEI Schema',
-          url: islandoraCriticalEditionsUrl + '/tei_all.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/tei_converted.css'
-        },
-        events: {
-          name: 'Events Schema',
-          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/events.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/orlando_converted.css'
-        },
-        biography: {
-          name: 'Biography Schema',
-          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/biography.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/orlando_converted.css'
-        },
-        writing: {
-          name: 'Writing Schema',
-          url: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'schema/writing.rng',
-          cssUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/'+'css/orlando_converted.css'
-        }
-      }
+      schemas: Drupal.settings.islandora_critical_edition.schema_object['schemas']
     };
+    
     $.ajax({
       url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
       timeout: 3000,
@@ -49,8 +28,16 @@ islandoraCWRCWriter = {
         config.project = data;
         writer = new Writer(config);
         writer.currentDocId = PID;
+        var usr_schema;
+        if(Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1) {
+          usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
+        } else {
+          usr_schema = new Array();
+          usr_schema['name'] = "tei";
+        }
+        writer.schemaId = usr_schema['name'];
         writer.init();
-        // Initilize additional UI Elements
+        // Initilize additional UI Elements.
         init_ui();
         // Initilize shared canvas image annotation canvas processing.
         islandoraCWRCWriter.Writer.setup_canvas(PID, init_canvas_div);
@@ -61,6 +48,29 @@ islandoraCWRCWriter = {
     });
   },
   Writer : {
+    writer_valid_doc: 0,
+    set_is_doc_valid: function(is_valid) {
+      this.writer_valid_doc = is_valid;
+    },
+    get_is_doc_valid: function() {
+      return this.writer_valid_doc;
+    },
+    set_user_schema: function() {
+      $.ajax({
+            dataType: 'json',
+            dataType: 'text',
+            data: {
+              "valid": islandoraCWRCWriter.Writer.get_is_doc_valid(),
+            },
+            url: Drupal.settings.basePath + 'islandora/cwrc/' + PID + '/schema/' + writer.schemas[writer.schemaId]['pid'],
+            success: function(data, status, xhr) {
+              console.log(data);
+            },
+            error: function(xhRequest, ErrorText, thrownError) {
+              console.log(ErrorText);
+            },
+          });
+    },
     Document : {
       load: function() {
         // Calling load doc, which assigns a doc id (the page pid) and
@@ -181,6 +191,27 @@ islandoraCWRCWriter = {
     },
   }
 }
+
+/**
+ * Get the schema name for the given schema id.
+ *
+ * @param schema_pid
+ * @returns string
+ */
+function get_schema_id_for_pid(schema_pid) {
+  if(schema_pid) {
+    for(var key in writer.schemas) {
+      // if we find the right pid, and the schema is valid, use that schema. && Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1
+      if(writer.schemas[key]['pid'] == schema_pid) {
+        return writer.schemas[key];
+      }
+    }
+  }
+
+  // Return the basic TEI by default.
+  return 'CWRC-TEIBasicSchema';
+}
+
 /**
  * Get the Tag id for the given image entity's uuid.
  *

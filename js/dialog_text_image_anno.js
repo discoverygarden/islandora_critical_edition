@@ -71,10 +71,18 @@ function text_image_anno_dialog() {
           $('#anno_classification').val($('#anno_classification1').val());
           var save_result;
           var activeAccordionIndex = $( "#text_image_accordion" ).accordion( "option", "active");
-          var activeTabIndex = $("#text_image_accordion > div:eq(" + activeAccordionIndex + ")").find(".tabs").tabs( "option", "active");
-          if(activeTabIndex == 0) {
+          if(activeAccordionIndex == 0) {
             save_result = saveAndEndAnnotating();
+            if(save_result == 0) {
+                $("#cbo_image_anno").val('0');
+                closeAndEndAnnotating();
+                txt_image_anno_dialog.dialog('close');
+                return;
+            }
           } else {
+            if(!topinfo['annotations']['comment'][canvas]){
+              return alert("Ensure an annotation exists and is selected before saving.");
+            }
             save_result = construct_result();
           }
           
@@ -136,13 +144,15 @@ function build_combo() {
 		var cmbo = '<label for="cbo_image_anno">Choose Existing</label>'+'<select id="cbo_image_anno">';
 		cmbo += '<option value="select">Select...</option>';
 		var annos = topinfo['annotations']['comment'][canvas];
-		for(var i = 0;i<annos.length;i++) {
-			var cbo_value = annos[i].id + ',' + annos[i].targets[0].partOf.id;
-			cmbo += '<option value="' + cbo_value + '">"' + annos[i].body.value + '"</option>';
-		}
-		cmbo += "</select>";
-		$('#anno_combo_wrapper').append(cmbo);
-		$('#cbo_image_anno').change(function() {
+		if(annos) {
+			for(var i = 0;i<annos.length;i++) {
+				var cbo_value = annos[i].id + ',' + annos[i].targets[0].partOf.id;
+				cmbo += '<option value="' + cbo_value + '">"' + annos[i].body.value + '"</option>';
+			}
+			cmbo += "</select>";
+			$('#anno_combo_wrapper').append(cmbo);
+			
+			$('#cbo_image_anno').change(function() {
 			
 			var val = $(this).attr('value');
 			combo_value_array = val.split(",");
@@ -155,7 +165,8 @@ function build_combo() {
 				'canvas_0',
 				uuid,
 				"TextImageLink");
-		});
+			});
+		}
 		
 		$('.annoShape_text').click(function() {
 			topinfo['svgAnnoShape'] = $(this).attr('id').substr(10,4);

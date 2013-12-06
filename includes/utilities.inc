@@ -83,7 +83,7 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
       foreach ($lines as $line) {
         $line = trim(preg_replace('/&£/', '£', $line));
         $line = htmlspecialchars($line);
-        $ocr .= '<lb/>' . $line;
+        $ocr .= $line . '<lb/>';
       }
     }
     if (empty($ocr)) {
@@ -127,4 +127,76 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $fedora_o
       WATCHDOG_ERROR
     );
   }
+}
+
+/**
+ * Constructs the basic schemas.
+ *
+ * @return array
+ *   An array of constructed, default schemas.
+ */
+function islandora_critical_edition_construct_schema_config_object() {
+  // Get all available schemas.
+  $schema_collection = islandora_object_load('islandora:tei_schema_collection');
+  $schema_pids = islandora_critical_edition_get_schema_pids($schema_collection);
+  $config_sample['schemas'] = array();
+  // Fill schemas from the schema's collection.
+  foreach ($schema_pids as $schema_pid) {
+    $schema = islandora_object_load($schema_pid);
+    $rdf_datastream = $schema['RDF-SCHEMA'];
+
+    $css_datastream = $schema['RDF-CSS'];
+
+    $schema_dc = new DublinCore($schema['DC']->content);
+    $all_titles = $schema_dc->dc->dc['dc:title'];
+
+    $config_sample['schemas'][$all_titles[0]] = array(
+      "name" => $all_titles[0],
+      "url" => url("islandora/object/$schema_pid/datastream/RDF-SCHEMA/view/$rdf_datastream->label"),
+      "cssUrl" => url("islandora/object/$schema_pid/datastream/RDF-CSS/view/$css_datastream->label"),
+      "pid" => $schema_pid,
+    );
+  }
+
+  // Add all the sample schemas.
+  $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
+  $config_sample['schemas']['tei'] = array(
+    "name" => 'CWRC Basic TEI Schema',
+    "url" => url($critical_edition_module_path . "/CWRC-Writer/src/schema/CWRC-TEIBasic.rng"),
+    "cssUrl" => url($critical_edition_module_path . "/CWRC-Writer/src/css/tei_converted.css"),
+    "pid" => $schema_pid,
+  );
+  return $config_sample;
+}
+
+/**
+ * Gets a list of all schema PIDs.
+ *
+ * @param AbstractObject $object
+ *   The collection object.
+ * @param string $type
+ *   Limit the child PID's to those of the given content model.
+ *
+ * @return array
+ *   The list of child PIDs.
+ */
+function islandora_critical_edition_get_schema_pids(AbstractObject $object, $type = 'islandora:criticaleditionschemaCModel') {
+  module_load_include('inc', 'islandora', 'includes/utilities');
+  $params = array(
+    'object' => $object,
+    'page_size' => -1,
+  );
+
+  if (isset($type)) {
+    $params['model'] = "<info:fedora/$type>";
+  }
+
+  $map_results = function($o) {
+    return $o['object']['value'];
+  };
+
+  $query_info = islandora_basic_collection_get_query_info($params);
+  $results = $object->repository->ri->query($query_info['query'], $query_info['type']);
+
+  return array_map($map_results, $results);
 }

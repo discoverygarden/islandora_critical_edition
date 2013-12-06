@@ -4,10 +4,11 @@
  * This is the template file for the critical edition object
  *
  * Available variables:
- * - $anno_list_pane (html): The annotation list page, as themed by image annotation.
- * - $anno_img_pane (html): The image annotation pane, as themed by image annotation.
+ * - $anno_list_pane (html):
+ *   The annotation list page, as themed by image annotation.
+ * - $anno_img_pane (html):
+ *   The image annotation pane, as themed by image annotation.
  */
-
 ?>
 <div class="islandora-crited-wrapper">
   <div id="iframe_replacement" class=".iframe_replacement" style="height: 100%">
@@ -62,7 +63,6 @@
           <!-- Image annotation -->
           <button id="create_annotation" class="menu_button">Annotate</button>
           <div class="image-annotation-wrapper">
-        
             <!-- Persist a single player and build new interface to it -->
             <div id="canvas-body-wrapper" style="width: 100%; height: 800px;">
               <?php print $anno_img_pane; ?>
@@ -78,4 +78,3 @@
     </div>
   </div>
 </div>
-
