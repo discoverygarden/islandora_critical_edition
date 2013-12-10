@@ -199,4 +199,5 @@ function islandora_critical_edition_get_schema_pids(AbstractObject $object, $typ
   $results = $object->repository->ri->query($query_info['query'], $query_info['type']);
 
   return array_map($map_results, $results);
+
 }
