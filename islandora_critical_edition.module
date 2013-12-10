@@ -28,7 +28,7 @@ function islandora_critical_edition_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
   $items['islandora/object/%islandora_object/critical_editions'] = array(
-    'title' => 'Critical Editions',
+    'title' => 'REI-RDF',
     'page callback' => 'islandora_critical_edition_management',
     'page arguments' => array(2),
     'type' => MENU_LOCAL_TASK,
