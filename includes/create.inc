@@ -25,21 +25,21 @@ function islandora_create_edition_form(array $form, array &$form_state, Abstract
     return $form;
   }
 
-  $label = t('Critical Edition of') . " " . $object->label . ' - ' . $user->name;
+  $label = $object->label . ' - ' . $user->name;
   $form['fedora_object'] = array(
     '#type' => 'hidden',
     '#value' => $object->id,
   );
   $form['title'] = array(
-    '#title' => t('Edition Title'),
-    '#description' => t('Enter title for this critical edition'),
+    '#title' => t('Editor Title'),
+    '#description' => t('Enter title for this TEI-RDF Editor'),
     '#type' => 'textfield',
     '#default_value' => $label,
     '#id' => "edition_title",
   );
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Create Critical Edition'),
+    '#value' => t('Create TEI-RDF Editor'),
   );
   return $form;
 }
@@ -61,11 +61,8 @@ function islandora_create_edition_form_submit($form, &$form_state) {
   $book_object = islandora_object_load($book_pid);
 
   // Create Critical edition Fedora Object.
-  $content_models = array(array('pid' => 'islandora:criticalEditionCModel'));
-
   $fedora_object = islandora_critical_edition_create_object(islandora_get_namespace($book_pid),
-                                                            $form_state['values']['title'],
-                                                            $content_models);
+                                                            $form_state['values']['title']);
 
   $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF, $book_pid, RELS_TYPE_PLAIN_LITERAL);
   $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:criticalEditionCModel');

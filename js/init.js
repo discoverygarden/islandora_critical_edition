@@ -108,7 +108,6 @@ var opts = {
 
 
 function initCanvas(nCanvas) {
-  
   var w = $('#canvas-body').width();
   topinfo['origBodyWidth'] = w;
   $('#top_menu_bar').width(w-5);

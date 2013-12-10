@@ -12,7 +12,7 @@
  * @param array $form_state
  *   The form state.
  * @param AbstractObject $object
- *   The object to create a delete critical editions form for.
+ *   The object to create a delete tei-rdf form for.
  *
  * @return array
  *   The form.
@@ -58,7 +58,7 @@ function islandora_critical_edition_delete_edition_form(array $form, array &$for
   }
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Delete selected Critical Editions'),
+    '#value' => t('Delete selected TEI-RDF Editors'),
   );
 
   return $form;

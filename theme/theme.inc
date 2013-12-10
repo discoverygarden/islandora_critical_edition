@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This file contains themeing functions for islandora_critical_edition.
@@ -14,6 +15,19 @@
  * $variables['images_path']
  */
 function islandora_critical_edition_preprocess_islandora_critical_edition(&$variables) {
+  islandora_critical_edition_add_js($variables);
+}
+
+/**
+ * Abstraction of preprocessing fucntions.
+ *
+ * @global String $base_url
+ * @global User $user
+ *
+ * @param array $variables
+ *   Display variables
+ */
+function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   global $base_url;
   global $user;
 
@@ -28,18 +42,10 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   $pids = array_keys($pages);
 
   $schema_object = islandora_critical_edition_construct_schema_config_object();
-  drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'schema_object' => $schema_object,
-    ),
-    ), 'setting');
+  drupal_add_js(array('islandora_critical_edition' => array('schema_object' => $schema_object)), 'setting');
 
   $schema_pref = islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]);
-  drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'schema_pref' => $schema_pref,
-    ),
-    ), 'setting');
+  drupal_add_js(array('islandora_critical_edition' => array('schema_pref' => $schema_pref)), 'setting');
 
   // Local Critical Editions module path.
   $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
@@ -47,8 +53,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   // Get the schema for the first page.
   drupal_add_js(array(
     'islandora_critical_edition' => array(
-      'page_schema' => islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]))),
-      'setting');
+      'page_schema' => islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]))), 'setting');
 
   $validate_path = variable_get('islandora_critical_edition_validate_url', '/validator/validate.html');
   // Use the theme files from image annotation for annotation list
@@ -61,29 +66,29 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   $image_anno_images = $image_annotation_module_path . '/shared_canvas/imgs/';
   drupal_add_js(array('islandora_critical_edition' => array('image_anno_img' => $image_anno_images)), 'setting');
   drupal_add_js(array(
-      'islandora_critical_edition' => array(
-        'book_pid' => islandora_critical_edition_get_object_of_critical_edition(
+    'islandora_critical_edition' => array(
+      'book_pid' => islandora_critical_edition_get_object_of_critical_edition(
           $variables['islandora_object']))), 'setting');
 
   drupal_add_js(array(
-      'islandora_critical_edition' => array(
-        'images_path' => $variables['images_path'])), 'setting');
+    'islandora_critical_edition' => array(
+      'images_path' => $variables['images_path'])), 'setting');
   drupal_add_js(array(
-      'islandora_critical_edition' => array(
-        'base_url' => $base_url)), 'setting');
+    'islandora_critical_edition' => array(
+      'base_url' => $base_url)), 'setting');
   drupal_add_js(array(
-      'islandora_critical_edition' => array(
-        'validate_path' => $validate_path)), 'setting');
+    'islandora_critical_edition' => array(
+      'validate_path' => $validate_path)), 'setting');
   // Passing the page pid, instead of getting if from the
   // URL on the javascript side.
   drupal_add_js(array(
-      'islandora_critical_edition' => array(
-        'page_pid' => $pids[0])), 'setting');
+    'islandora_critical_edition' => array(
+      'page_pid' => $pids[0])), 'setting');
 
   // To avoid hard coded values in js, this is the best option.
   drupal_add_js(array(
-      'islandora_critical_edition' => array(
-        'module_base' => $critical_edition_module_path)), 'setting');
+    'islandora_critical_edition' => array(
+      'module_base' => $critical_edition_module_path)), 'setting');
   drupal_add_js($critical_edition_module_path . "/js/writer_backend_delegate.js");
   drupal_add_js($critical_edition_module_path . '/js/writer_wrapper.js');
 
