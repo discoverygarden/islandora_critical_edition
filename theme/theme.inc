@@ -104,9 +104,6 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_css($critical_edition_module_path . "/CWRC-Writer/src/smoothness/jquery-ui-1.10.3.custom.min.css");
   islandora_image_annotation_include_common_css();
 
-//   $crit_module_path = drupal_get_path('module', 'islandora_critical_edition_advanced');
-//   drupal_add_js("$crit_module_path/js/jstree/dist/jstree.js");
-  
   drupal_add_js($critical_edition_module_path . '/CWRC-Writer/src/js/lib/jquery/jquery.collapsiblepanel.js');
   drupal_add_css($critical_edition_module_path . '/CWRC-Writer/src/js/lib/jquery/jquery.collapsiblepanel.css');
   drupal_add_css($critical_edition_module_path . "/css/style_2.css");

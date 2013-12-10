@@ -35,7 +35,7 @@ var islandoraCWRCWriter = {
           usr_schema = new Array();
           usr_schema['name'] = "tei";
         }
-        writer.schemaId = "tei";//usr_schema['name'];
+        writer.schemaId = usr_schema['name'];
         writer.init();
         // Initilize additional UI Elements.
         init_ui();
@@ -76,7 +76,6 @@ var islandoraCWRCWriter = {
         // Calling load doc, which assigns a doc id (the page pid) and
         // calls the delegate function loadDocument().
         writer.fm.loadDocument(PID);
-        
       },
       get: function() {
         return writer.getDocument();

@@ -25,7 +25,6 @@
 
         // add page choice behavior to dropdown
         $('#page_choose').change(function(e) {
-        	alert("page choose changed");
           if (!writer.editor.isDirty()) {
             answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave page");
             if (!answer) {
