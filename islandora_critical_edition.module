@@ -28,7 +28,7 @@ function islandora_critical_edition_menu() {
     'type' => MENU_NORMAL_ITEM,
   );
   $items['islandora/object/%islandora_object/critical_editions'] = array(
-    'title' => 'Critical Editions',
+    'title' => 'REI-RDF',
     'page callback' => 'islandora_critical_edition_management',
     'page arguments' => array(2),
     'type' => MENU_LOCAL_TASK,
@@ -302,9 +302,7 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
 function islandora_critical_edition_islandora_xml_form_builder_forms() {
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
   return array(
-    'Schema MODS form' => array(
-      'form_file' => "$module_path/xml/islandora_critical_edition_schema_form_mods.xml",
-    ),
+    'Schema MODS form' => array('form_file' => "$module_path/xml/islandora_critical_edition_schema_form_mods.xml"),
   );
 }
 

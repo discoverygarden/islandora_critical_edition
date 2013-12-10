@@ -1,11 +1,11 @@
-  $('document').ready(function() {
+$('document').ready(function() {
 
     // Functionality is wrapped up in 'writer_wrapper.js.
     islandoraCWRCWriter.init_writer();
   });
 
   function init_ui() {
-	  $(this).attr("title", cwrc_params.title);
+         $(this).attr("title", cwrc_params.title);
       setHeader();
       if (cwrc_params.position == 1) {
           $('#page-prev').css('opacity', '.6').addClass('disabled');
@@ -16,7 +16,7 @@
         // build and populate page choice dropdown
         $('#page_selector').html('<select id="page_choose"></select>');
         $.each(cwrc_params.pages, function(key, value) {
-          $('#page_choose').append('<option  value="' + key + '">Seq# ' + key + '</option>');
+          $('#page_choose').append('<option value="' + key + '">Seq# ' + key + '</option>');
         });
 
         // Synchronize displayed page with dropdown.
@@ -26,7 +26,7 @@
         // add page choice behavior to dropdown
         $('#page_choose').change(function(e) {
           if (!writer.editor.isDirty()) {
-            answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave page");
+            answer = confirm("You have unsaved changes. Click Cancel to stay on page, OK to leave page");
             if (!answer) {
               selector = "#page_choose option[value='" + cwrc_params.position + "']";
               $(selector).removeAttr('selected');
@@ -64,7 +64,7 @@
         $('#page-prev').click(function(e) {
           e.preventDefault();
           if (!writer.editor.isDirty()) {
-            answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave.");
+            answer = confirm("You have unsaved changes. Click Cancel to stay on page, OK to leave.");
             if (!answer) {
               return;
             }
@@ -92,7 +92,7 @@
         $('#page-next').click(function(e) {
           e.preventDefault();
           if (!writer.editor.isDirty()) {
-            answer = confirm("You have unsaved changes.  Click Cancel to stay on page, OK to leave");
+            answer = confirm("You have unsaved changes. Click Cancel to stay on page, OK to leave");
             if (!answer) {
               return;
             }
@@ -121,9 +121,9 @@
         
         var cnt = 0;
         $('#relations').children().each(function() {
-        	if(cnt == 0) {
-        		$(this).css('height: 500px; !important');
-        	}
+                if(cnt == 0) {
+                        $(this).css('height: 500px; !important');
+                }
           $(this).css('position','relative');
           cnt++;
         });
@@ -176,8 +176,8 @@
         anno_d.dialog('close');
         
         // Initialize text/image annotations dialog.
-//        var anno_text = text_image_anno_dialog();
-//        anno_text.hide;
+// var anno_text = text_image_anno_dialog();
+// anno_text.hide;
         
         maybe_config_create_annotation();
         
@@ -191,11 +191,11 @@
     // build and populate page choice dropdown
     $('#canvas_page_selector').html('<select id="canvas_page_choose"></select>');
     $.each(islandora_canvas_params.pages, function(key, value) {
-      $('#canvas_page_choose').append('<option  value="' + key + '">Page ' + (key + 1) + '</option>');
+      $('#canvas_page_choose').append('<option value="' + key + '">Page ' + (key + 1) + '</option>');
     });
     if (islandora_canvas_params.use_dropdown == 1) {
         $('#islandora_classification').empty();
-        var sel = $('<select  id="anno_classification">').appendTo('#islandora_classification');
+        var sel = $('<select id="anno_classification">').appendTo('#islandora_classification');
         $(islandora_canvas_params.categories).each(function() {
           value = this.toString();
           sel.append($("<option>").attr('value', value).text(value));
@@ -258,11 +258,11 @@
   }
 
   // @XXX openColumn and setReturnParams may not be necessary dependent on theme
-  //   need more investigation. Noticed different results with Garland and
-  //   Bartik.
+  // need more investigation. Noticed different results with Garland and
+  // Bartik.
   /**
-   * This will set the annoation panes' sizes and separator position.
-   */
+* This will set the annoation panes' sizes and separator position.
+*/
   function openColumn() {
     $('.col3').css("display", "block");
     $('.col1').css("width", cwrc_params.text_annotation_width);
@@ -270,18 +270,18 @@
   }
 
   /**
-   * Used to preserve the width of the text annotation pane
-   * and the leftedness of the seperator.
-   */
+* Used to preserve the width of the text annotation pane
+* and the leftedness of the seperator.
+*/
   function setReturnParams() {
     cwrc_params.text_annotation_width = $('.col1').css("width");
     cwrc_params.separator_pos = $('#column-separator').css("left");
   }
 
   /**
-   * Sets clickable page header.
-   *
-   */
+* Sets clickable page header.
+*
+*/
   function setHeader() {
     var address = Drupal.settings.basePath + 'islandora/object/' + cwrc_params.pages[cwrc_params.position];
     var prolog = cwrc_params.title + ' - Seq# ';

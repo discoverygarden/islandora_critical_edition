@@ -22,7 +22,7 @@ function islandora_critical_edition_view_edition_form($editions) {
   }
 
   $links_theme_variables = array(
-    'title' => t("Critical Editions"),
+    'title' => t("TEI-RDF Editors"),
     'type' => 'ul',
     'items' => $links,
     'attributes' => array('class' => array('islandora_crited_list')),

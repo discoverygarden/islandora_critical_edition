@@ -1,7 +1,11 @@
 BUILD STATUS
 ------------
 Current build status:
+<<<<<<< HEAD
 [![Build Status](https://travis-ci.org/discoverygarden/islandora_critical_edition.png?branch=7.x)](https://travis-ci.org/discoverygarden/islandora_critical_edition)
+=======
+[![Build Status](https://travis-ci.org/discoverygarden/islandora_critical_edition_advanced.png?branch=7.x)](https://travis-ci.org/discoverygarden/islandora_critical_edition_advanced)
+>>>>>>> 16a7e083d36feaf04091ad9f4efb3be6b27488fa
 
 CONTENTS OF THIS FILE
 ---------------------
@@ -12,13 +16,19 @@ CONTENTS OF THIS FILE
 SUMMARY
 -------
 
+<<<<<<< HEAD
 A module for creating critical editions of Islandora objects.  Only supports
 books.  The CWRCWriter only supports the Firefox browser.
+=======
+A module for creating advanced critical editions of Islandora objects using the
+advanced data model
+>>>>>>> 16a7e083d36feaf04091ad9f4efb3be6b27488fa
 
 
 CONFIGURATION
 --------------
 
+<<<<<<< HEAD
 The islandora_image_annotation module needs to be configured to allow
 annotation of the Islandora Page Content Model on the JPG datastream for
 successful viewing of the shared canvas in Firefox.
@@ -56,3 +66,43 @@ ex: (Debian) edit sites-available/default add the following lines above the </Vi
   ProxyPassReverse /validator/ http://localhost:8080/validator/
 * Restart apache. The validator should now be available to test at
 {base_url}/validator/index.html
+=======
+This module requires the Islandora Critical Edition Solution Pack.
+The saxon.jar file contained in the dependencies directory must by moved or
+copied to the webapps directory of the tomcat server.
+
+This will normally be /usr/local/fedora/tomcat/webapps/
+
+INSTALL MONGO
+--------------
+
+First install Mongo, then:
+
+```bash
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/10gen.list
+sudo apt-get update
+sudo mkdir –p /data/db
+chown -R vagrant /data
+```
+
+Run from Mongo prompt:
+
+```
+db.addUser('admin', 'jabberw0cky', 'userAdminAnyDatabase')
+```
+
+Then from the command line:
+
+```bash
+sudo pecl install mongo
+```
+
+Add then following line to your php.ini file /etc/php5/apache2/:
+
+```
+extension=mongo.so
+```
+
+When finished just restart apache service.
+>>>>>>> 16a7e083d36feaf04091ad9f4efb3be6b27488fa

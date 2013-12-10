@@ -472,6 +472,7 @@ function FileManager(config) {
 	 */
 	fm.processDocument = function(doc) {
 		var rootName = doc.firstChild.nodeName;
+
 		// TODO need a better way of tying this to the schemas config
 		// grab the schema from xml-model
 		if (rootName == 'xml-model') {
@@ -527,7 +528,7 @@ function FileManager(config) {
 			w.deletedStructs = {};
 			
 			var offsets = [];
-			
+			console.log(doc)
 			var docMode;
 			var rdfs = $(doc).find('rdf\\:RDF, RDF');
 
