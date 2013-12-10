@@ -47,7 +47,7 @@ function islandora_critical_edition_regen_cwrc_datastream_submit($form, &$form_s
   if ($source) {
     // Replace the OCR content in the critical edition page source
     // with the source OCR content.
-    if($source['OCR']) {
+    if ($source['OCR']) {
       $object['OCR']->content = $source['OCR']->content;
     }
     // Update the CWRC datastream from the OCR datastream.

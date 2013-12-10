@@ -23,8 +23,9 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
  *
  * @global String $base_url
  * @global User $user
+ *
  * @param array $variables
- *  Display variables
+ *   Display variables
  */
 function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   global $base_url;
@@ -41,18 +42,10 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   $pids = array_keys($pages);
 
   $schema_object = islandora_critical_edition_construct_schema_config_object();
-  drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'schema_object' => $schema_object,
-    ),
-      ), 'setting');
+  drupal_add_js(array('islandora_critical_edition' => array('schema_object' => $schema_object)), 'setting');
 
   $schema_pref = islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]);
-  drupal_add_js(array(
-    'islandora_critical_edition' => array(
-      'schema_pref' => $schema_pref,
-    ),
-      ), 'setting');
+  drupal_add_js(array('islandora_critical_edition' => array('schema_pref' => $schema_pref)), 'setting');
 
   // Local Critical Editions module path.
   $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
