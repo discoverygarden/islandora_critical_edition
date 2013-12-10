@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Full Screen Styling */
 
 #full-window-button
@@ -76,3 +77,13 @@
 #tree.jstree li.txtimglnk {
     background-color: #7F00FF;
 }
+=======
+
+.islandora_crited_list {
+  list-style-type: none;
+}
+
+.islandora_crited_list * {
+  text-decoration: none;
+}
+>>>>>>> 16a7e083d36feaf04091ad9f4efb3be6b27488fa

@@ -100,7 +100,7 @@ function islandoraBackendDelegate(config) {
           title: 'Error',
           msg: 'An error (' + status + ') occurred and ' + PID + ' was not loaded.',
           type: 'error'
-        });
+        }); 
         writer.currentDocId = null;
       }
     });
@@ -115,7 +115,7 @@ function islandoraBackendDelegate(config) {
 
     $.ajax({
       url: window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID + '/' + writer.schemas[writer.schemaId]['pid'],
-      type: 'POST',
+      type: 'POST', 
       async: false,
       dataType: 'text',
       data: {
