@@ -127,7 +127,7 @@ function islandora_critical_edition_wrap_plain_text_in_tei($content = 'Blank Pag
   // with there TEI equivalent.
   $content = trim(preg_replace('/&£/', '£', $content));
   $content = htmlspecialchars($content);
-  $content = trim(preg_replace("\n", '<lb/>', $content));
+  $content = trim(preg_replace("/\n/", '<lb/>', $content));
   $xml->text->body->ab = $content;
   return $xml->asXML();
 }
