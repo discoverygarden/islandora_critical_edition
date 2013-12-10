@@ -4,12 +4,7 @@
  * library. With the API unfinished, i have added function stubs to be called
  * from the writers 'Delegate'.
  */
-<<<<<<< HEAD
 var islandoraCWRCWriter = {
-=======
-islandoraCWRCWriter = {
-  
->>>>>>> bca0574266d0775db62c8cfd2e8000528c82dc55
   // Initilize the writer, and get basic parameters for cwrc fedora integration.
   init_writer: function() {
     PID = Drupal.settings.islandora_critical_edition.page_pid;
