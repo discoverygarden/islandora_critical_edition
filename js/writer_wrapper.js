@@ -36,7 +36,7 @@ var islandoraCWRCWriter = {
           usr_schema = new Array();
           usr_schema['name'] = "tei";
         }
-        writer.schemaId = usr_schema['name'];
+        writer.schemaId = "tei";//usr_schema['name'];
         writer.init();
         // Initilize additional UI Elements.
         init_ui();
