@@ -30,7 +30,7 @@ function islandora_critical_edition_set_user_schema(AbstractObject $islandora_ob
  * @param int $valid
  *   An integer indicating if the schema/doc combo is valid.
  */
-function islandora_critical_edition_schema_work(AbstractObject $islandora_object, AbstractObject $schema_object, int $valid) {
+function islandora_critical_edition_schema_work(AbstractObject $islandora_object, AbstractObject $schema_object, $valid) {
   global $user;
   module_load_include('inc', 'islandora_critical_edition', 'includes/schema_table_utils');
 

@@ -636,6 +636,7 @@ function Writer(config) {
 				minSize: 35,
 				maxSize: 60,
 				resizable: true,
+				initClosed: true,
 			},
 			south: {
 				size: 34,
