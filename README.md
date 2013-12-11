@@ -1,11 +1,8 @@
 BUILD STATUS
 ------------
 Current build status:
-<<<<<<< HEAD
 [![Build Status](https://travis-ci.org/discoverygarden/islandora_critical_edition.png?branch=7.x)](https://travis-ci.org/discoverygarden/islandora_critical_edition)
-=======
-[![Build Status](https://travis-ci.org/discoverygarden/islandora_critical_edition_advanced.png?branch=7.x)](https://travis-ci.org/discoverygarden/islandora_critical_edition_advanced)
->>>>>>> 16a7e083d36feaf04091ad9f4efb3be6b27488fa
+
 
 CONTENTS OF THIS FILE
 ---------------------
@@ -16,14 +13,11 @@ CONTENTS OF THIS FILE
 SUMMARY
 -------
 
-<<<<<<< HEAD
 A module for creating critical editions of Islandora objects.  Only supports
 books.  The CWRCWriter only supports the Firefox browser.
-=======
+
 A module for creating advanced critical editions of Islandora objects using the
 advanced data model
->>>>>>> 16a7e083d36feaf04091ad9f4efb3be6b27488fa
-
 
 CONFIGURATION
 --------------
@@ -66,7 +60,7 @@ ex: (Debian) edit sites-available/default add the following lines above the </Vi
   ProxyPassReverse /validator/ http://localhost:8080/validator/
 * Restart apache. The validator should now be available to test at
 {base_url}/validator/index.html
-=======
+
 This module requires the Islandora Critical Edition Solution Pack.
 The saxon.jar file contained in the dependencies directory must by moved or
 copied to the webapps directory of the tomcat server.
@@ -105,4 +99,3 @@ extension=mongo.so
 ```
 
 When finished just restart apache service.
->>>>>>> 16a7e083d36feaf04091ad9f4efb3be6b27488fa
