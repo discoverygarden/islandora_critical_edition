@@ -71,7 +71,7 @@ function islandora_create_edition_form_submit($form, &$form_state) {
   $pages = islandora_paged_content_get_pages($book_object);
 
   $batch = array(
-    'title' => t('Creating New Critical Edition'),
+    'title' => t('Creating New TEI-RDF Editor'),
     'operations' => array(),
     'file' => drupal_get_path('module', 'islandora_critical_edition') . '/includes/create.inc',
     'progress_message' => t('@current of @total pages created.'),
