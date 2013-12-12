@@ -187,7 +187,6 @@ var islandoraCWRCWriter = {
             pos: writer.editor.contextMenuPos,
             query: query
           };
-          console.log(data);
           text_image_dialog.show(data);
         } else {
           writer.showError(result);

@@ -87,7 +87,6 @@ function text_image_anno_dialog() {
           }
           
           txt_image_anno_dialog.dialog('close');
-          console.log("save result: " + save_result);
           writer.finalizeEntity('txtimglnk', save_result);
           writer.fm.saveDocument();
           writer.removeHighlights();
@@ -145,8 +144,6 @@ function build_combo() {
 		var cmbo = '<label for="cbo_image_anno">Choose Existing</label>'+'<select id="cbo_image_anno">';
 		cmbo += '<option value="select">Select...</option>';
 		var annos = topinfo['annotations']['comment'][canvas];
-//		console.log("annos:");
-//		console.log(annos);
 		if(annos) {
 			for(var i = 0;i<annos.length;i++) {
 				var cbo_value = annos[i].id + ',' + annos[i].targets[0].partOf.id;
