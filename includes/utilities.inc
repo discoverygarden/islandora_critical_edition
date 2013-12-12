@@ -121,15 +121,37 @@ function islandora_critical_edition_generate_tei_from_ocr(AbstractObject $object
  *   The plain text to be wrapped in a TEI document.
  */
 function islandora_critical_edition_wrap_plain_text_in_tei($content = 'Blank Page') {
-  $module_path = drupal_get_path('module', 'islandora_critical_edition');
-  $xml = simplexml_load_file("$module_path/xml/cwrc_datastream_template.xml");
+  $prefix = '<?xml version="1.0" encoding="UTF-8"?>
+<TEI xml:id="struct_35" xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader xml:id="struct_530">
+    <fileDesc xml:id="struct_531">
+      <titleStmt xml:id="struct_532">
+        <title xml:id="struct_533">Sample Document Title</title>
+      </titleStmt>
+      <publicationStmt xml:id="struct_534">
+        <p xml:id="struct_535"/>
+      </publicationStmt>
+      <sourceDesc xml:id="struct_536" sameAs="http://www.cwrc.ca">
+        <p xml:id="struct_537">Created from islandora book ingest unless otherwise noted.</p>
+      </sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#"></rdf:RDF>
+  <text>
+    <body>';
+  $suffix = '
+      <ab/>
+    </body>
+  </text>
+</TEI>';
+
   // Correct common problems with the incoming text, and replace line breaks
   // with there TEI equivalent.
   $content = trim(preg_replace('/&£/', '£', $content));
   $content = htmlspecialchars($content);
   $content = trim(preg_replace("/\n/", '<lb/>', $content));
-  $xml->text->body->ab = $content;
-  return $xml->asXML();
+
+  return $prefix . $content . $suffix;
 }
 
 /**

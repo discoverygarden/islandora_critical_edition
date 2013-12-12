@@ -33,7 +33,7 @@ function islandora_critical_edition_management(AbstractObject $object) {
 
   $items['manage_book']['view'] = array(
     '#access' => user_access(ISLANDORA_CRITICAL_EDITION_VIEW_CRITICAL_EDITION) && $editions,
-    '#title' => t('View TEI-RDF Editors'),
+    '#title' => t('View TEI-RDF Objects'),
     '#type' => 'fieldset',
     'view_critical_editions' => islandora_critical_edition_view_edition_form($editions),
     '#collapsible' => TRUE,
@@ -42,7 +42,7 @@ function islandora_critical_edition_management(AbstractObject $object) {
 
   $items['manage_book']['create'] = array(
     '#access' => user_access(ISLANDORA_CRITICAL_EDITION_CREATE_CRITICAL_EDITION),
-    '#title' => t('Create TEI-RDF Editor'),
+    '#title' => t('Create TEI-RDF Object'),
     '#type' => 'fieldset',
     'form' => drupal_get_form('islandora_create_edition_form', $object),
     '#collapsible' => TRUE,
@@ -51,7 +51,7 @@ function islandora_critical_edition_management(AbstractObject $object) {
 
   $items['manage_book']['delete'] = array(
     '#access' => user_access(ISLANDORA_CRITICAL_EDITION_DELETE_CRITICAL_EDITION) && $editions,
-    '#title' => t('Delete TEI-RDF Editor'),
+    '#title' => t('Delete TEI-RDF Object'),
     '#type' => 'fieldset',
     'form' => drupal_get_form('islandora_critical_edition_delete_edition_form', $object),
     '#collapsible' => TRUE,
