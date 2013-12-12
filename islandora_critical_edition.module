@@ -272,13 +272,13 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
 
   $new_ds = $sample_schema->constructDatastream('RDF-SCHEMA', 'M');
   $new_ds->label = 'RDF-SCHEMA';
-  $new_ds->mimetype = 'text/plain';
+  $new_ds->mimetype = 'application/rdf+xml';
   $new_ds->setContentFromFile("$module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng", FALSE);
   $sample_schema->ingestDatastream($new_ds);
 
   $new_ds_css = $sample_schema->constructDatastream('RDF-CSS', 'M');
   $new_ds_css->label = 'RDF-CSS';
-  $new_ds_css->mimetype = 'text/plain';
+  $new_ds_css->mimetype = 'text/css';
   $new_ds_css->setContentFromFile("$module_path/CWRC-Writer/src/css/tei.css", FALSE);
   $sample_schema->ingestDatastream($new_ds_css);
 
