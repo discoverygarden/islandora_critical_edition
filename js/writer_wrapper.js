@@ -182,11 +182,12 @@ var islandoraCWRCWriter = {
           var query = writer.editor.currentBookmark.rng.toString();
           // create the dialog, and show it.
           var text_image_dialog = text_image_anno_dialog();
-          text_image_dialog.show({
+          var data = {
             title: writer.em.getTitle('person'),
             pos: writer.editor.contextMenuPos,
             query: query
-          });
+          };
+          text_image_dialog.show(data);
         } else {
           writer.showError(result);
         }

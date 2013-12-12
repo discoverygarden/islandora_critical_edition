@@ -9,9 +9,9 @@
       <form FORMAT_URI="info:fedora/fedora-system:FedoraRELSInt-1.0" MIME="application/rdf+xml"></form>
   </dsTypeModel>
   <dsTypeModel ID="RDF-SCHEMA">
-    <form MIME="text/plain"/>
+    <form MIME="application/rdf+xml"/>
   </dsTypeModel>
   <dsTypeModel ID="RDF-CSS">
-    <form MIME="text/plain"/>
+    <form MIME="text/css"/>
   </dsTypeModel>
 </dsCompositeModel>
