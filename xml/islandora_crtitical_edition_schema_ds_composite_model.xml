@@ -14,4 +14,7 @@
   <dsTypeModel ID="RDF-CSS">
     <form MIME="text/css"/>
   </dsTypeModel>
+  <dsTypeModel ID="RDF-XSLT" optional="true">
+    <form MIME="application/xslt+xml"/>
+  </dsTypeModel>
 </dsCompositeModel>

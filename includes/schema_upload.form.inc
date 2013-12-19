@@ -20,6 +20,7 @@ function islandora_critical_edition_schema_upload_form(array $form, array &$form
   $upload_size = min((int) ini_get('post_max_size'), (int) ini_get('upload_max_filesize'));
   $rng_extensions = array('rng');
   $css_extensions = array('css');
+  $xslt_extensions = array('xsl', 'xslt');
   $form = array();
   $form['rng_file'] = array(
     '#title' => t('RNG File'),
@@ -34,7 +35,6 @@ function islandora_critical_edition_schema_upload_form(array $form, array &$form
       'file_validate_size' => array($upload_size * 1024 * 1024),
     ),
   );
-
   $form['css_file'] = array(
     '#title' => t('RDF-CSS File'),
     '#type' => 'managed_file',
@@ -48,7 +48,18 @@ function islandora_critical_edition_schema_upload_form(array $form, array &$form
       'file_validate_size' => array($upload_size * 1024 * 1024),
     ),
   );
-
+  $form['xslt_file'] = array(
+    '#title' => t('XSLT File'),
+    '#type' => 'managed_file',
+    '#description' => t('Select file to upload.<br/>Files must be less than <b>@size MB.</b><br/>Allowed file types: <b>@ext.</b>', array('@size' => $upload_size, '@ext' => $rng_extensions[0])),
+    '#default_value' => isset($form_state['values']['files']) ? $form_state['values']['files'] : NULL,
+    '#upload_location' => 'temporary://',
+    '#upload_validators' => array(
+      'file_validate_extensions' => $xslt_extensions,
+       // Assume it's specified in MB.
+      'file_validate_size' => array($upload_size * 1024 * 1024),
+    ),
+  );
   return $form;
 }
 
@@ -87,4 +98,19 @@ function islandora_critical_edition_schema_upload_form_submit(array $form, array
   $ds->setContentFromFile($css_path, FALSE);
   $ds->label = $css_file->filename;
   $ds->mimetype = "text/css";
+
+  $xslt_file = file_load($form_state['values']['xslt_file']);
+  if ($xslt_file) {
+    if (empty($object['RDF-XSLT'])) {
+      $ds = $object->constructDatastream('RDF-XSLT', 'M');
+      $object->ingestDatastream($ds);
+    }
+    else {
+      $ds = $object['RDF-XSLT'];
+    }
+    $xslt_path = drupal_realpath($xslt_file->uri);
+    $ds->setContentFromFile($xslt_path, FALSE);
+    $ds->label = $xslt_file->filename;
+    $ds->mimetype = 'application/xslt+xml';
+  }
 }
