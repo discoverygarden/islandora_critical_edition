@@ -36,12 +36,15 @@
 					if (tag != null) {
 						var pi = t.editor.dom.create('a', {name: id, 'href' : "javascript:;", role: 'button', onmousedown : "return false;", title : title, 'class' : 'mcePath_' + (de++)}, tag);
 						var p = $('#currentPath')[0];
-						if (p.hasChildNodes()) {
-							p.insertBefore(t.editor.dom.create('span', {'aria-hidden': 'true'}, '\u00a0\u00bb '), p.firstChild);
-							p.insertBefore(pi, p.firstChild);
-						} else {
-							p.appendChild(pi);
+						if(p) {
+							if (p.hasChildNodes()) {
+								p.insertBefore(t.editor.dom.create('span', {'aria-hidden': 'true'}, '\u00a0\u00bb '), p.firstChild);
+								p.insertBefore(pi, p.firstChild);
+							} else {
+								p.appendChild(pi);
+							}
 						}
+						
 					}
 				});
 				

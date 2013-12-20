@@ -10,6 +10,10 @@
  *   The image annotation pane, as themed by image annotation.
  */
 ?>
+<script type="text/javascript">
+var del_read_only = 0;
+</script>
+
 <div class="islandora-crited-wrapper">
   <div id="iframe_replacement" class=".iframe_replacement" style="height: 100%">
     <input id="full-window-button" type="button" value="<?php print t('Full Window'); ?>" />
@@ -18,7 +22,7 @@
     <?php print "<input id='bookview_button' type='button' value='$label' />"; ?>
     <?php endif; ?>
     
-    <div id="cwrc_wrapper" class="cwrc_wrapper islandora-crited-iframe-wrapper" style="width: 100%; height:600px">
+    <div id="cwrc_wrapper" data-readonly="0" class="cwrc_wrapper islandora-crited-iframe-wrapper" style="width: 100%; height:600px">
       <div id="header" class="ui-layout-north">
         <!-- TODO: We need new full page buttons. So much going on in the header right now -->
         <div id="page_selector">Loading....</div>

@@ -895,9 +895,12 @@ function FileManager(config) {
 					
 					// update the schema for schematags.js
 					var stb = w.editor.controlManager.controls.editor_schemaTagsButton;
-					if (stb.menu) {
-						stb.parentControl.buildMenu(stb.menu, null, {disabled: false, mode: 'add'});
+					if(stb) {
+						if (stb.menu) {
+							stb.parentControl.buildMenu(stb.menu, null, {disabled: false, mode: 'add'});
+						}
 					}
+					
 					
 					if (callback) callback();
 				}
