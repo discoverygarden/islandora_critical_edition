@@ -2,7 +2,6 @@ function Writer(config) {
 	config = config || {};
 	
 	var w = this;
-	
 	w.layout = null; // jquery ui layout object
 	w.editor = null; // reference to the tinyMCE instance we're creating, set in setup
 	w.entities = {}; // entities store
@@ -636,7 +635,6 @@ function Writer(config) {
 				minSize: 35,
 				maxSize: 60,
 				resizable: true,
-				initClosed: true,
 			},
 			south: {
 				size: 34,
@@ -763,9 +761,7 @@ function Writer(config) {
 			theme: 'advanced',
 			// Updated from default pull.
 			content_css: config.cwrcRootUrl+'css/editor.css',
-			
 			width: '100%',
-			
 			contextmenu_never_use_native: true,
 			
 			doctype: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
