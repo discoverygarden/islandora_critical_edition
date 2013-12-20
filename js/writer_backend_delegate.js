@@ -6,7 +6,6 @@
  */
 function islandoraBackendDelegate(config) {
   this.writer = config.writer;
-  this.read_only = del_read_only;
   /**
    * @param params
    * @param callback
