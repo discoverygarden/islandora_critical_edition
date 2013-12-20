@@ -38,6 +38,8 @@ function islandora_critical_edition_management(AbstractObject $object) {
     'view_critical_editions' => islandora_critical_edition_view_edition_form($editions),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#attributes' => array('class' => array('islandora_crited_fieldset')),
+
   );
 
   $items['manage_book']['create'] = array(
@@ -47,6 +49,7 @@ function islandora_critical_edition_management(AbstractObject $object) {
     'form' => drupal_get_form('islandora_create_edition_form', $object),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#attributes' => array('class' => array('islandora_crited_fieldset'))
   );
 
   $items['manage_book']['delete'] = array(
@@ -56,6 +59,7 @@ function islandora_critical_edition_management(AbstractObject $object) {
     'form' => drupal_get_form('islandora_critical_edition_delete_edition_form', $object),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+    '#attributes' => array('class' => array('islandora_crited_fieldset'))
   );
   return $items;
 }
