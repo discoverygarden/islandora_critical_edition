@@ -40,8 +40,6 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   $image_annotation_module_path = drupal_get_path('module', 'islandora_image_annotation');
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);
   $pids = array_keys($pages);
-
-  // Add pretty print for advanced functionality in 
   dom_document_pretty_print_include_files();
 
   $schema_object = islandora_critical_edition_construct_schema_config_object();
