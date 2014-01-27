@@ -18,15 +18,6 @@ define('ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF', 'isCriticalEditionOf
  * Implements hook_menu().
  */
 function islandora_critical_edition_menu() {
-  $items['admin/islandora/islandora_critical_edition'] = array(
-    'title' => 'Critical Edition',
-    'description' => 'Configure the Critical Edition module.',
-    'page callback' => 'drupal_get_form',
-    'access arguments' => array('administer site configuration'),
-    'page arguments' => array('islandora_critical_edition_admin'),
-    'file' => 'includes/admin.form.inc',
-    'type' => MENU_NORMAL_ITEM,
-  );
   $items['islandora/object/%islandora_object/critical_editions'] = array(
     'title' => 'TEI-RDF',
     'page callback' => 'islandora_critical_edition_management',
