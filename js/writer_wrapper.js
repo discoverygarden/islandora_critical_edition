@@ -1,6 +1,6 @@
 /**
  * A wrapper sudo class that is ment to encapsulate islandora functionality
- * as it pertains to the CWRCWriter. This allows us to treat it more like a 
+ * as it pertains to the CWRCWriter. This allows us to treat it more like a
  * library. With the API unfinished, i have added function stubs to be called
  * from the writers 'Delegate'.
  */
@@ -28,7 +28,7 @@ var islandoraCWRCWriter = {
         config.project = data;
         writer = new Writer(config);
         writer.currentDocId = PID;
-        
+
         var usr_schema;
         if (Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1) {
           usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
