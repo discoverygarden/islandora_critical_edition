@@ -79,6 +79,9 @@ function islandora_critical_edition_get_user_selected_schema($name, $page_pid) {
       ->condition('page_pid', $page_pid, '=')
       ->execute();
   $data = $schema->fetchObject();
+  if (!$data) {
+    $data = islandora_critical_edition_get_default_schema();
+  }
   return $data;
 }
 
