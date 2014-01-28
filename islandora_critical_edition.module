@@ -305,6 +305,7 @@ function islandora_critical_edition_islandora_xml_form_builder_forms() {
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
   return array(
     'Schema MODS form' => array('form_file' => "$module_path/xml/islandora_critical_edition_schema_form_mods.xml"),
+    'Critical Edition MODS form' => array('form_file' => "$module_path/xml/islandora_critical_edition_form_mods.xml"),
   );
 }
 
@@ -313,6 +314,14 @@ function islandora_critical_edition_islandora_xml_form_builder_forms() {
  */
 function islandora_critical_edition_islandora_content_model_forms_form_associations() {
   return array(
+    'critical_edition_form_mods' => array(
+      'content_model' => 'islandora:criticalEditionCModel',
+      'form_name' => 'Islandora Critical Edition Mods Form',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'template' => FALSE,
+    ),
     'islandora_critical_edition_schema_mods_form' => array(
       'content_model' => 'islandora:criticaleditionschemaCModel',
       'form_name' => 'Schema MODS form',
