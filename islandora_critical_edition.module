@@ -305,7 +305,7 @@ function islandora_critical_edition_islandora_xml_form_builder_forms() {
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
   return array(
     'Schema MODS form' => array('form_file' => "$module_path/xml/islandora_critical_edition_schema_form_mods.xml"),
-    'Critical Edition MODS form' => array('form_file' => "$module_path/xml/islandora_critical_edition_form_mods.xml"),
+    'Islandora Critical Edition Mods Form' => array('form_file' => "$module_path/xml/islandora_critical_edition_form_mods.xml"),
   );
 }
 
