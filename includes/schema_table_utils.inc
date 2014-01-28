@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Utilitie functions for manageing collection
+ * Utility functions for managing collection
  * level locks in the islandora_object_lock_length_locks
  * table created during install.
  */
@@ -19,13 +19,13 @@
  */
 function islandora_critical_edition_add_user_selected_schema($name, $page_pid, $schema_pid, $valid) {
   db_insert('islandora_critical_edition_user_schema')
-    ->fields(array(
-      'name' => $name,
-      'page_pid' => $page_pid,
-      'schema_pid' => $schema_pid,
-      'valid' => $valid,
-    ))
-    ->execute();
+      ->fields(array(
+        'name' => $name,
+        'page_pid' => $page_pid,
+        'schema_pid' => $schema_pid,
+        'valid' => $valid,
+      ))
+      ->execute();
 }
 
 /**
@@ -40,10 +40,10 @@ function islandora_critical_edition_add_user_selected_schema($name, $page_pid, $
  */
 function islandora_critical_edition_edit_user_selected_schema($name, $page_pid, $schema_pid) {
   db_update('islandora_critical_edition_user_schema')
-  ->fields(array('schema_pid' => $schema_pid))
-  ->condition('name', $name, '=')
-  ->condition('page_pid', $page_pid, '=')
-  ->execute();
+      ->fields(array('schema_pid' => $schema_pid))
+      ->condition('name', $name, '=')
+      ->condition('page_pid', $page_pid, '=')
+      ->execute();
 }
 
 /**
@@ -56,9 +56,9 @@ function islandora_critical_edition_edit_user_selected_schema($name, $page_pid, 
  */
 function islandora_critical_edition_remove_user_selected_schema($name, $page_pid) {
   db_delete('islandora_critical_edition_user_schema')
-  ->condition('name', $name, '=')
-  ->condition('page_pid', $page_pid, '=')
-  ->execute();
+      ->condition('name', $name, '=')
+      ->condition('page_pid', $page_pid, '=')
+      ->execute();
 }
 
 /**
@@ -74,10 +74,28 @@ function islandora_critical_edition_remove_user_selected_schema($name, $page_pid
  */
 function islandora_critical_edition_get_user_selected_schema($name, $page_pid) {
   $schema = db_select('islandora_critical_edition_user_schema', 'n')
-  ->fields('n', array('name', 'page_pid', 'schema_pid', 'valid'))
-  ->condition('name', $name, '=')
-  ->condition('page_pid', $page_pid, '=')
-  ->execute();
+      ->fields('n', array('name', 'page_pid', 'schema_pid', 'valid'))
+      ->condition('name', $name, '=')
+      ->condition('page_pid', $page_pid, '=')
+      ->execute();
+  $data = $schema->fetchObject();
+  if (!$data) {
+    $data = islandora_critical_edition_get_default_schema();
+  }
+  return $data;
+}
+
+/**
+ * Returns default TEI Schema.
+ *
+ * @return object
+ *   The queried object returned.
+ */
+function islandora_critical_edition_get_default_schema() {
+  $schema = db_select('islandora_critical_edition_user_schema', 'n')
+      ->fields('n', array('name', 'page_pid', 'schema_pid', 'valid'))
+      ->condition('schema_pid', variable_get('islandora_critical_edition_default_schema', "islandora:tei_sample_schema"), '=')
+      ->execute();
   $data = $schema->fetchObject();
   return $data;
 }

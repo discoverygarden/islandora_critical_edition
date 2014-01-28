@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This module is for managing critical editions of Islandora objects.
@@ -18,6 +19,15 @@ define('ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF', 'isCriticalEditionOf
  * Implements hook_menu().
  */
 function islandora_critical_edition_menu() {
+  $items['admin/islandora/critical_edition'] = array(
+    'title' => 'Islandora Critical Edition',
+    'description' => 'Configure the Critical Edition Solution Pack.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('islandora_critical_edition_admin_settings_form'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'includes/admin.form.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
   $items['islandora/object/%islandora_object/critical_editions'] = array(
     'title' => 'TEI-RDF',
     'page callback' => 'islandora_critical_edition_management',
@@ -116,7 +126,7 @@ function islandora_critical_edition_mangement_access(AbstractObject $object = NU
   return $is_book && (user_access(ISLANDORA_CRITICAL_EDITION_CREATE_CRITICAL_EDITION) ||
       user_access(ISLANDORA_CRITICAL_EDITION_DELETE_CRITICAL_EDITION) ||
       user_access(ISLANDORA_CRITICAL_EDITION_VIEW_CRITICAL_EDITION)) &&
-    islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
+      islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
 }
 
 /**
@@ -138,6 +148,7 @@ function islandora_critical_edition_edit_cwrc_access(AbstractObject $object = NU
 
   return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access(ISLANDORA_CRITICAL_EDITION_EDIT_WITH_CWRC_WRITER);
 }
+
 /**
  * Implements hook_permission().
  */
@@ -294,6 +305,7 @@ function islandora_critical_edition_islandora_xml_form_builder_forms() {
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
   return array(
     'Schema MODS form' => array('form_file' => "$module_path/xml/islandora_critical_edition_schema_form_mods.xml"),
+    'Critical Edition MODS form' => array('form_file' => "$module_path/xml/islandora_critical_edition_form_mods.xml"),
   );
 }
 
@@ -302,6 +314,14 @@ function islandora_critical_edition_islandora_xml_form_builder_forms() {
  */
 function islandora_critical_edition_islandora_content_model_forms_form_associations() {
   return array(
+    'critical_edition_form_mods' => array(
+      'content_model' => 'islandora:criticalEditionCModel',
+      'form_name' => 'Islandora Critical Edition Mods Form',
+      'dsid' => 'MODS',
+      'title_field' => array('titleInfo', 'title'),
+      'transform' => 'mods_to_dc.xsl',
+      'template' => FALSE,
+    ),
     'islandora_critical_edition_schema_mods_form' => array(
       'content_model' => 'islandora:criticaleditionschemaCModel',
       'form_name' => 'Schema MODS form',

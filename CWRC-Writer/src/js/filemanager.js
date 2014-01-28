@@ -2,9 +2,9 @@
  * Contains the load and save dialogs, as well as file related functions.
  */
 function FileManager(config) {
-	
+
 	var w = config.writer;
-	
+
 	$(document.body).append(''+
 		'<div id="entitiesConverter"></div>'+
 		'<div id="editSourceDialog">'+
@@ -12,7 +12,7 @@ function FileManager(config) {
 		'</div>'
 		//'<iframe id="editDocLoader" style="display: none;"></iframe>'
 	);
-	
+
 	var edit = $('#editSourceDialog');
 	edit.dialog({
 		title: 'Edit Source',
@@ -34,9 +34,9 @@ function FileManager(config) {
 			}
 		}
 	});
-	
+
 	var fm = {};
-	
+
 	/**
 	 * @memberOf fm
 	 */
@@ -47,7 +47,7 @@ function FileManager(config) {
 			window.location = 'index.htm';
 		}
 	};
-	
+
 	fm.saveDocument = function() {
 		if (w.currentDocId == null) {
 			w.dialogs.filemanager.showSaver();
@@ -71,14 +71,14 @@ function FileManager(config) {
 			});
 		}
 	};
-	
+
 	// gets any metadata info for the node and adds as attributes
 	// returns an array of 2 strings: opening and closing tags
 	function _nodeToStringArray(node) {
 		var array = [];
 		var id = node.attr('id');
 		var tag = node.attr('_tag') || node.attr('_type');
-		
+
 		var structEntry = w.structs[id];
 		var entityEntry = w.entities[id];
 		if (structEntry) {
@@ -99,10 +99,10 @@ function FileManager(config) {
 			// not a valid tag so return empty strings
 			array = ['', ''];
 		}
-		
+
 		return array;
 	}
-	
+
 	// converts the opening and closing entity tag pairs to a matched set of opening and closing tags
 	function convertEntitiesToTags() {
 		for (var id in w.entities) {
@@ -116,13 +116,13 @@ function FileManager(config) {
 				currentNode = currentNode.nextSibling;
 				nodes.push(currentNode);
 			}
-			
+
 			var entString = '<entity id="'+id+'" _type="'+w.entities[id].props.type+'" />';
-			w.editor.$(nodes).wrapAll(entString);			
+			w.editor.$(nodes).wrapAll(entString);
 			w.editor.$(markers).remove();
 		}
 	}
-	
+
 	/**
 	 * Converts the editor node and its contents into an XML string suitable for export.
 	 * @param node A jQuery node.
@@ -130,7 +130,7 @@ function FileManager(config) {
 	 */
 	fm.buildXMLString = function(node) {
 		var xmlString = '';
-		
+
 		function doBuild(currentNode) {
 			var tags = _nodeToStringArray(currentNode);
 			xmlString += tags[0];
@@ -143,11 +143,11 @@ function FileManager(config) {
 			});
 			xmlString += tags[1];
 		}
-		
+
 		doBuild(node);
 		return xmlString;
 	};
-	
+
 	/**
 	 * Gets the content of the document, converted from internal format to the schema format
 	 * @param includeRDF True to include RDF in the header
@@ -156,25 +156,25 @@ function FileManager(config) {
 	fm.getDocumentContent = function(includeRDF) {
 		// remove highlights
 		w.highlightEntity();
-		
+
 		var xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n';
-		
+
 		var body = $(w.editor.getBody());
 		var clone = body.clone(false, true); // make a copy, don't clone body events, but clone child events
 		_entitiesToUnicode(body);
-		
+
 		// rdf
 		var rdfString = '';
 		if (w.mode == w.XMLRDF && includeRDF) {
 			rdfString = '\n<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#">';
-			
+
 			// xml mode
 			var uri = w.baseUrl+'editor/documents/'+w.currentDocId;
 			rdfString += '\n<rdf:Description rdf:about="'+uri+'">\n\t<w:mode>'+w.mode+'</w:mode>\n</rdf:Description>';
-			
+
 			var offsets = _getNodeOffsetsFromRoot(body);
 			var relationships = _determineOffsetRelationships(offsets);
-			
+
 			// entity and struct listings
 			var includeStructRDF = false;
 			for (var i = 0; i < offsets.length; i++) {
@@ -192,7 +192,7 @@ function FileManager(config) {
 						for (key in entry.info) {
 							rdfString += '\n\t<w:'+key+' type="info">'+entry.info[key]+'</w:'+key+'>';
 						}
-						
+
 						var r = relationships[o.id];
 						for (var j = 0; j < r.contains.length; j++) {
 							rdfString += '\n\t<w:contains>'+r.contains[j]+'</w:contains>';
@@ -204,7 +204,7 @@ function FileManager(config) {
 					rdfString += '\n</rdf:Description>';
 				}
 			}
-			
+
 			// triples
 			for (var i = 0; i < w.triples.length; i++) {
 				var t = w.triples[i];
@@ -214,17 +214,17 @@ function FileManager(config) {
 				'\n\t</w:'+t.predicate.name+'>'+
 				'\n</rdf:Description>';
 			}
-			
+
 			rdfString += '\n</rdf:RDF>\n';
 		}
-		
+
 		if (w.mode == w.XMLRDF) {
 			// remove the entity tags since they'll be in the rdf
 			body.find('[_entity]').remove();
 		} else {
 			convertEntitiesToTags();
 		}
-		
+
 		var root = body.children('[_tag='+w.root+']');
 		// make sure TEI has the right namespace for validation purposes
 		if (w.root == 'TEI') {
@@ -232,7 +232,7 @@ function FileManager(config) {
 		}
 		var tags = _nodeToStringArray(root);
 		xmlString += tags[0];
-		
+
 		var bodyString = '';
 		root.contents().each(function(index, el) {
 			if (el.nodeType == 1) {
@@ -242,14 +242,14 @@ function FileManager(config) {
 			}
 		});
 		bodyString = bodyString.replace(/\uFEFF/g, ''); // remove characters inserted by node selecting
-		
+
 		xmlString += rdfString + bodyString;
-		
+
 		xmlString += tags[1];
 		body.replaceWith(clone);
 		return xmlString;
 	};
-	
+
 	/**
 	 * Converts entities to unicode, while preserving those that must be escaped as entities.
 	 */
@@ -269,7 +269,7 @@ function FileManager(config) {
 			}
 		});
 	};
-	
+
 	/**
 	 * For debug
 	 */
@@ -285,7 +285,7 @@ function FileManager(config) {
 		}
 		return ents;
 	};
-	
+
 	function _getNodeOffsetsFromRoot(root) {
 		var currentOffset = 0;
 		var offsets = [];
@@ -313,11 +313,11 @@ function FileManager(config) {
 				}
 			});
 		}
-		
+
 		getOffsets(root);
 		return offsets;
 	};
-	
+
 	function _determineOffsetRelationships(offsets) {
 		var relationships = {};
 		var entityOffsets = [];
@@ -331,7 +331,7 @@ function FileManager(config) {
 				};
 			}
 		}
-		
+
 		var ol = entityOffsets.length;
 		for (var i = 0; i < ol; i++) {
 			var o1 = entityOffsets[i];
@@ -351,22 +351,22 @@ function FileManager(config) {
 				}
 			}
 		}
-		
+
 		return relationships;
 	};
-	
+
 	fm.loadDocument = function(docName) {
 		w.currentDocId = docName;
 		w.delegator.loadDocument(fm.processDocument);
 	};
-	
+
 	/**
 	 * Loads a document into the editor
 	 * @param docUrl An URL pointing to an XML document
 	 */
 	fm.loadDocumentFromUrl = function(docUrl) {
 		w.currentDocId = docUrl;
-		
+
 		$.ajax({
 			url: docUrl,
 			type: 'GET',
@@ -385,7 +385,7 @@ function FileManager(config) {
 			dataType: 'xml'
 		});
 	};
-	
+
 	/**
 	 * Loads a document into the editor.
 	 * @param docXml An XML DOM
@@ -394,12 +394,12 @@ function FileManager(config) {
 		window.location.hash = '';
 		fm.processDocument(docXml);
 	};
-	
+
 	/**
 	 * Takes a document node and returns a string representation of its
 	 * contents, compatible with the editor. Additionally creates w.structs
 	 * entries.
-	 * 
+	 *
 	 * @param node
 	 *            An (X)HTML element
 	 * @returns {String}
@@ -409,7 +409,7 @@ function FileManager(config) {
 		function doBuild(currentNode, forceInline) {
 			var tag = currentNode.nodeName;
 			var jQNode = $(currentNode);
-			
+
 			// TODO ensure that block level elements aren't inside inline level elements, the inline parent will be removed by the browser
 			// temp fix: force inline level for children if parent is inline
 			var tagName;
@@ -418,9 +418,9 @@ function FileManager(config) {
 			} else {
 				tagName = w.u.getTagForEditor(tag);
 			}
-			
+
 			editorString += '<'+tagName+' _tag="'+tag+'"';
-			
+
 			// create structs entries while we build the string
 			var id = jQNode.attr(w.idName);
 			if (id == null) {
@@ -429,11 +429,11 @@ function FileManager(config) {
 			}
 			var idNum = parseInt(id.split('_')[1]);
 			if (idNum >= tinymce.DOM.counter) tinymce.DOM.counter = idNum+1;
-			
+
 			var canContainText = w.u.canTagContainText(tag);
 			// TODO find non-intensive way to check if tags can possess attributes
 			editorString += ' _textallowed="'+canContainText+'"';
-			
+
 			w.structs[id] = {
 				id: id,
 				_tag: tag,
@@ -448,9 +448,9 @@ function FileManager(config) {
 				}
 			});
 			editorString += '>';
-			
+
 			var isInline = forceInline || !w.u.isTagBlockLevel(tag);
-			
+
 			jQNode.contents().each(function(index, el) {
 				if (el.nodeType == 1) {
 					doBuild(el, isInline);
@@ -458,14 +458,14 @@ function FileManager(config) {
 					editorString += el.data;
 				}
 			});
-			
+
 			editorString += '</'+tagName+'>';
 		}
-		
+
 		doBuild(node, false);
 		return editorString;
 	};
-	
+
 	/**
 	 * Processes a document and loads it into the editor.
 	 * @param doc An XML DOM
@@ -518,7 +518,7 @@ function FileManager(config) {
 				doProcessing();
 			}
 		}
-		
+
 		function doProcessing() {
 			// reset the stores
 			w.entities = {};
@@ -526,9 +526,8 @@ function FileManager(config) {
 			w.triples = [];
 			w.deletedEntities = {};
 			w.deletedStructs = {};
-			
+
 			var offsets = [];
-			console.log(doc)
 			var docMode;
 			var rdfs = $(doc).find('rdf\\:RDF, RDF');
 
@@ -542,7 +541,7 @@ function FileManager(config) {
 			} else {
 				docMode = w.XML;
 			}
-			
+
 			if (w.mode != docMode) {
 				var editorModeStr = w.mode == w.XML ? 'XML only' : 'XML & RDF';
 				var docModeStr = docMode == w.XML ? 'XML only' : 'XML & RDF';
@@ -552,23 +551,23 @@ function FileManager(config) {
 					msg: 'The Editor Mode ('+editorModeStr+') has been changed to match the Document Mode ('+docModeStr+').',
 					type: 'info'
 				});
-				
+
 				w.mode = docMode;
 			}
-			
+
 			if (docMode == w.XMLRDF) {
 				rdfs.children().each(function(i1, el1) {
 					var rdf = $(this);
 
 					if (rdf.attr('rdf:ID')) {
 						var id = rdf.find('w\\:id, id').text();
-						
+
 						var entity = rdf.find('w\\:entity, entity').text();
 						// entity
 						if (entity != '') {
 							var idNum = parseInt(id.split('_')[1]);
 							if (idNum >= tinymce.DOM.counter) tinymce.DOM.counter = idNum+1;
-							
+
 							offsets.push({
 								id: id,
 								parent: rdf.find('w\\:parent, parent').text(),
@@ -597,7 +596,7 @@ function FileManager(config) {
 						} else {
 							// struct
 						}
-						
+
 					// triple
 					} else if (rdf.attr('rdf:about')){
 						var subject = $(this);
@@ -605,7 +604,7 @@ function FileManager(config) {
 						var predicate = rdf.children().first();
 						var object = rdf.find('rdf\\:Description, Description');
 						var objectUri = object.attr('rdf:about');
-						
+
 						if (w.entities[subjectUri] != null && w.entities[objectUri] != null) {
 							var triple = {
 								subject: {
@@ -647,7 +646,7 @@ function FileManager(config) {
 								offset: currentOffset,
 								length: ent.text().length
 							});
-							
+
 							var content = ent.text();
 							w.entities[id] = {
 								props: {
@@ -661,9 +660,9 @@ function FileManager(config) {
 							$(this.attributes).each(function(index, att) {
 								w.entities[id].info[att.name] = att.value;
 							});
-							
+
 							ent.contents().unwrap();
-							
+
 							currentOffset += content.length;
 						} else {
 							processEntities($(this), offsets);
@@ -676,10 +675,10 @@ function FileManager(config) {
 			var root = $(w.root+', '+w.root.toLowerCase(), doc)[0];
 			var editorString = fm.buildEditorString(root);
 			w.editor.setContent(editorString);
-			
+
 			// editor needs focus in order for entities to be properly inserted
 			w.editor.focus();
-			
+
 			// insert entities
 			var id, o, parent, contents, lengthCount, match, startOffset, endOffset, startNode, endNode;
 			for (var i = 0; i < offsets.length; i++) {
@@ -687,17 +686,17 @@ function FileManager(config) {
 				endNode = null;
 				startOffset = 0;
 				endOffset = 0;
-				
+
 				o = offsets[i];
 				id = o.id;
 				if (o.parent != '') {
 					parent = w.editor.$('#'+o.parent);
-					
+
 					// get all text nodes
 					contents = parent.contents().filter(function() {
 						return this.nodeType == Node.TEXT_NODE;
 					});
-					
+
 					startOffset = o.offset;
 					lengthCount = 0;
 					match = false;
@@ -713,7 +712,7 @@ function FileManager(config) {
 						}
 						return false;
 					})[0];
-					
+
 					endOffset = o.offset+o.length;
 					lengthCount = 0;
 					match = false;
@@ -740,7 +739,7 @@ function FileManager(config) {
 									startNode = this;
 									startOffset = o.offset - (currentOffset - this.length);
 								}
-								
+
 								if (currentOffset >= o.offset + o.length && endNode == null) {
 									endNode = this;
 									endOffset = startOffset + o.length;
@@ -753,10 +752,10 @@ function FileManager(config) {
 							}
 						});
 					}
-					
+
 					getNodes(parent);
 				}
-				
+
 				if (startNode != null && endNode != null) {
 					var range = w.editor.selection.getRng(true);
 					try {
@@ -764,16 +763,16 @@ function FileManager(config) {
 						range.setEnd(endNode, endOffset);
 						w.tagger.insertBoundaryTags(id, w.entities[id].props.type, range);
 					} catch (e) {
-						
+
 					}
 				}
 			}
-			
+
 			w.entitiesList.update();
 			w.tree.update(true);
 			w.relations.update();
 			w.validation.clearResult();
-			
+
 			// try putting the cursor in the body
 			window.setTimeout(function() {
 				var bodyTag = $('[_tag='+w.header+']', w.editor.getBody()).next()[0];
@@ -783,13 +782,13 @@ function FileManager(config) {
 					w._fireNodeChange(bodyTag);
 				}
 			}, 50);
-			
+
 			// reset the undo manager
 			w.editor.undoManager.clear();
-			
+
 		} // end doProcessing
 	};
-	
+
 	fm.editSource = function() {
 		w.dialogs.confirm({
 			title: 'Edit Source',
@@ -803,7 +802,7 @@ function FileManager(config) {
 			}
 		});
 	};
-	
+
 	/**
 	 * Load a new schema.
 	 * @param {String} schemaId The ID of the schema to load (from the config)
@@ -814,7 +813,7 @@ function FileManager(config) {
 		var baseUrl = ''; //w.project == null ? '' : w.baseUrl; // handling difference between local and server urls
 		w.schemaId = schemaId;
 		var schemaUrl = w.schemas[w.schemaId].url;
-		
+
 		$.ajax({
 			url: schemaUrl,
 			dataType: 'xml',
@@ -827,17 +826,17 @@ function FileManager(config) {
 //				w.editor.settings.forced_root_block = w.root;
 //				w.editor.schema.addCustomElements(w.root);
 //			    w.editor.schema.addCustomElements(w.root.toLowerCase());
-				
+
 				var additionalBlockElements;
 			    if (w.root == 'TEI') {
 			    	additionalBlockElements = ['argument', 'back', 'bibl', 'biblFull', 'biblScope', 'body', 'byline', 'category', 'change', 'cit', 'classCode', 'elementSpec', 'macroSpec', 'classSpec', 'closer', 'creation', 'date', 'distributor', 'div', 'div1', 'div2', 'div3', 'div4', 'div5', 'div6', 'div7', 'docAuthor', 'edition', 'editionStmt', 'editor', 'eg', 'epigraph', 'extent', 'figure', 'front', 'funder', 'group', 'head', 'dateline', 'idno', 'item', 'keywords', 'l', 'label', 'langUsage', 'lb', 'lg', 'list', 'listBibl', 'note', 'noteStmt', 'opener', 'p', 'principal', 'publicationStmt', 'publisher', 'pubPlace', 'q', 'rendition', 'resp', 'respStmt', 'salute', 'samplingDecl', 'seriesStmt', 'signed', 'sp', 'sponsor', 'tagUsage', 'taxonomy', 'textClass', 'titlePage', 'titlePart', 'trailer', 'TEI', 'teiHeader', 'text', 'authority', 'availability', 'fileDesc', 'sourceDesc', 'revisionDesc', 'catDesc', 'encodingDesc', 'profileDesc', 'projectDesc', 'docDate', 'docEdition', 'docImprint', 'docTitle'];
-			    	
+
 			    	w.header = 'teiHeader';
 			    	// FIXME temp fix for doc structure
 			    	w.idName = 'xml:id';
-			    } else {					
+			    } else {
 			    	additionalBlockElements = ['DIV0', 'DIV1', 'EVENTS', 'ORLANDOHEADER', 'DOCAUTHOR', 'DOCEDITOR', 'DOCEXTENT', 'PUBLICATIONSTMT', 'TITLESTMT', 'PUBPLACE', 'L', 'P', 'HEADING', 'CHRONEVENT', 'CHRONSTRUCT'];
-					
+
 					w.header = 'ORLANDOHEADER';
 					w.idName = 'ID';
 			    }
@@ -845,20 +844,20 @@ function FileManager(config) {
 			    for (var i = 0; i < additionalBlockElements.length; i++) {
 		    		blockElements[additionalBlockElements[i]] = {};
 		    	}
-				
+
 				function processSchema() {
 					// remove old schema elements
 				    $('#schemaTags', w.editor.dom.doc).remove();
 				    $('#schemaRules', w.editor.dom.doc).remove();
-				    
+
 				    var cssUrl = w.schemas[w.schemaId].cssUrl;
 				    if (cssUrl) {
 				    	fm.loadSchemaCSS(cssUrl);
 				    }
-				    
+
 				    // create css to display schema tags
 					$('head', w.editor.getDoc()).append('<style id="schemaTags" type="text/css" />');
-					
+
 					var schemaTags = '';
 					var elements = [];
 					$('element', w.schemaXML).each(function(index, el) {
@@ -871,28 +870,28 @@ function FileManager(config) {
 						}
 					});
 					elements.sort();
-					
+
 					// hide the header
 					var tagName = w.u.getTagForEditor(w.header);
 					schemaTags += tagName+'[_tag='+w.header+'] { display: none !important; }';
-					
+
 					$('#schemaTags', w.editor.getDoc()).text(schemaTags);
-				    
+
 					w.schema.elements = elements;
-					
+
 					if (callback == null) {
 						var text = '';
 						if (startText) text = 'Paste or type your text here.';
 						var tag = w.u.getTagForEditor(w.root);
 						w.editor.setContent('<'+tag+' _tag="'+w.root+'">'+text+'</'+tag+'>');
 					}
-					
+
 					w.entitiesList.update();
 					w.tree.update(true);
 					w.relations.update();
-					
+
 					w.schemaJSON = w.u.xmlToJSON($('grammar', w.schemaXML)[0]);
-					
+
 					// update the schema for schematags.js
 					var stb = w.editor.controlManager.controls.editor_schemaTagsButton;
 					if(stb) {
@@ -900,11 +899,11 @@ function FileManager(config) {
 							stb.parentControl.buildMenu(stb.menu, null, {disabled: false, mode: 'add'});
 						}
 					}
-					
-					
+
+
 					if (callback) callback();
 				}
-			    
+
 				// handle includes
 				var include = $('include:first', w.schemaXML); // TODO add handling for multiple includes
 				if (include.length == 1) {
@@ -922,7 +921,7 @@ function FileManager(config) {
 					} else {
 						url = baseUrl + 'schema/'+schemaFile;
 					}
-					
+
 					$.ajax({
 						url: url,
 						dataType: 'xml',
@@ -941,9 +940,9 @@ function FileManager(config) {
 									}
 								}
 							});
-							
+
 							include.replaceWith($('grammar', data).children());
-							
+
 							processSchema();
 						}
 					});
@@ -956,7 +955,7 @@ function FileManager(config) {
 			}
 		});
 	};
-	
+
 	fm.loadSchemaCSS = function(url) {
 		w.editor.dom.loadCSS(url);
 		if (url.match('converted') != null) {
@@ -980,7 +979,7 @@ function FileManager(config) {
 			if (stylesheet) {
 				try {
 					$('#schemaRules', w.editor.dom.doc).remove();
-					
+
 					var rules = stylesheet.cssRules;
 					var newRules = '';
 					// adapt the rules to our format, should only modify element names in selectors
@@ -1017,7 +1016,7 @@ function FileManager(config) {
 			}, 25);
 		}
 	};
-	
+
 	fm.loadInitialDocument = function(start) {
 		if (start.match('load')) {
 			w.dialogs.filemanager.showLoader();
@@ -1028,10 +1027,10 @@ function FileManager(config) {
 			w.fm.loadDocument(start.substr(1));
 		}
 	};
-	
+
 	function _loadTemplate(url, hashName) {
 		w.currentDocId = null;
-		
+
 		$.ajax({
 			url: Drupal.settings.basePath +
 			  Drupal.settings.islandora_critical_edition.module_base +
@@ -1056,7 +1055,7 @@ function FileManager(config) {
 			}
 		});
 	};
-	
+
 	return fm;
 };
 
