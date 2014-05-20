@@ -103,7 +103,7 @@ function islandora_critical_edition_cwrc_access(AbstractObject $object = NULL) {
 
   $is_page = in_array('islandora:criticalEditionCModelPage', $object->models);
 
-  return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access(ISLANDORA_CRITICAL_EDITION_USE_CWRC_WRITER);
+  return $is_page && islandora_object_access_callback(ISLANDORA_VIEW_OBJECTS, $object) && user_access(ISLANDORA_CRITICAL_EDITION_USE_CWRC_WRITER);
 }
 
 /**
@@ -126,7 +126,7 @@ function islandora_critical_edition_mangement_access(AbstractObject $object = NU
   return $is_book && (user_access(ISLANDORA_CRITICAL_EDITION_CREATE_CRITICAL_EDITION) ||
       user_access(ISLANDORA_CRITICAL_EDITION_DELETE_CRITICAL_EDITION) ||
       user_access(ISLANDORA_CRITICAL_EDITION_VIEW_CRITICAL_EDITION)) &&
-      islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object);
+      islandora_object_access_callback(ISLANDORA_VIEW_OBJECTS, $object);
 }
 
 /**
@@ -146,7 +146,7 @@ function islandora_critical_edition_edit_cwrc_access(AbstractObject $object = NU
 
   $is_page = in_array('islandora:criticalEditionCModelPage', $object->models);
 
-  return $is_page && islandora_object_access_callback(FEDORA_VIEW_OBJECTS, $object) && user_access(ISLANDORA_CRITICAL_EDITION_EDIT_WITH_CWRC_WRITER);
+  return $is_page && islandora_object_access_callback(ISLANDORA_VIEW_OBJECTS, $object) && user_access(ISLANDORA_CRITICAL_EDITION_EDIT_WITH_CWRC_WRITER);
 }
 
 /**
