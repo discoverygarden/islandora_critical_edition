@@ -51,7 +51,6 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   $schema_object = islandora_critical_edition_construct_schema_config_object();
   $schema_pref = islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]);
 
-  dsm($schema_object, "schema object");
   dom_document_pretty_print_include_files();
   // Local Critical Editions module path.
   $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
@@ -97,7 +96,4 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
 
   drupal_add_css($critical_edition_module_path . "/css/islandora_critical_edition_editor.css");
   drupal_add_css($critical_edition_module_path . "/css/islandora_critical_edition.css");
-  //drupal_add_css($critical_edition_module_path . "/css/image_local.css");
-
-    dsm(array(), "living proof");
 }
