@@ -6,5 +6,6 @@ dependencies[] = islandora_book
 dependencies[] = islandora_ocr
 dependencies[] = islandora_image_annotation
 dependencies[] = islandora_entities
+dependencies[] = islandora_markup_editor
 version = 7.x-dev
 core = 7.x
