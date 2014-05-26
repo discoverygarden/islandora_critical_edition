@@ -1,5 +1,5 @@
 (function(tinymce) {
-	
+
 	tinymce.create('tinymce.plugins.SchemaTags', {
 		init: function(ed, url) {
 			var t = this;
@@ -9,31 +9,31 @@
 			t.editor = ed;
 			t.currentKey = null;
 			t.action = null;
-			
+
 			t.ADD = 0;
 			t.EDIT = 1;
 			t.mode = null;
-			
+
 			t.isDirty = false;
-			
+
 			t.schemaDialog = null;
 			t.dialogOpenTimestamp = null; // tracks when the dialog was opened
-			
+
 			t.tag = null;
-			
+
 			t.editor.addCommand('createSchemaTagsControl', function(config) {
 				var menu = config.menu;
 				var mode = config.mode || 'add';
 				var node;
-				
+
 				menu.beforeShowMenu.add(function(m) {
 					var parentContainer = $(m.element.getParent());
 					if (parentContainer.parent('.cwrc').length == 0) {
 						parentContainer.wrap('<div class="cwrc" />');
 					}
-					
+
 					t.editor.writer.tree.disableHotkeys();
-					
+
 					var filterKey;
 					// get the node from currentBookmark if available, otherwise use currentNode
 					if (t.editor.currentBookmark != null) {
@@ -47,13 +47,13 @@
 					if (node.nodeType == 9) {
 						node = $('body > [_tag]', node)[0]; // we're at the document level so select the root instead
 					}
-					
+
 					filterKey = node.getAttribute('_tag');
-					
+
 					if (mode == 'change') {
 						filterKey = $(node).parent().attr('_tag');
 					}
-					
+
 					var validKeys = [];
 					if (filterKey != t.editor.writer.header) {
 						validKeys = t.editor.writer.u.getChildrenForTag({tag: filterKey, returnType: 'names'});
@@ -76,16 +76,16 @@
 						m.items['no_tags_'+m.id].setDisabled(false);
 					}
 				});
-				
+
 				menu.onHideMenu.add(function(m) {
 					t.editor.writer.tree.enableHotkeys();
 				});
-				
+
 				t.buildMenu(menu, node, config);
-				
+
 				return menu;
 			});
-			
+
 			t.editor.addCommand('addSchemaTag', function(params) {
 				var key = params.key;
 				var pos = params.pos;
@@ -95,22 +95,22 @@
 					t.editor.writer.d.show('header');
 					return;
 				}
-				
+
 				var tagId = t.editor.currentBookmark.tagId;
 				t.editor.selection.moveToBookmark(t.editor.currentBookmark);
-				
+
 				var valid = t.editor.execCommand('isSelectionValid', true, t.action);
 				if (valid != 2) {
 					t.editor.execCommand('showError', valid);
 					return;
 				}
-				
+
 				// reset bookmark after possible modification by isSelectionValid
 				t.editor.currentBookmark = t.editor.selection.getBookmark(1);
 				if (tagId != null) {
 					t.editor.currentBookmark.tagId = tagId;
 				}
-				
+
 				// isSelectionValid should perform this function
 //				var sel = t.editor.selection;
 //				var content = sel.getContent();
@@ -121,12 +121,12 @@
 //					range.setStart(range.startContainer, range.startOffset+leftTrimAmount);
 //					range.setEnd(range.endContainer, range.endOffset-rightTrimAmount);
 //					sel.setRng(range);
-//				}				
-				
+//				}
+
 				t.mode = t.ADD;
 				t.showDialog(key, pos);
 			});
-			
+
 			t.editor.addCommand('editSchemaTag', function(tag, pos) {
 				var key = tag.attr('_tag');
 				if (key == t.editor.writer.header) {
@@ -138,14 +138,14 @@
 				t.mode = t.EDIT;
 				t.showDialog(key, pos);
 			});
-			
+
 			t.editor.addCommand('changeSchemaTag', function(params) {
 				t.currentKey = params.key;
 				t.tag = params.tag;
 				t.mode = t.EDIT;
 				t.showDialog(params.key, params.pos);
 			});
-			
+
 			$(document.body).append(''+
 				'<div id="schemaDialog" class="attributeWidget">'+
 					'<div class="attributeSelector"><h2>Attributes</h2><ul></ul></div>'+
@@ -157,7 +157,7 @@
 					'<div class="schemaHelp"></div>'+
 				'</div>'
 			);
-			
+
 			t.schemaDialog = $('#schemaDialog').dialog({
 				modal: true,
 				resizable: true,
@@ -191,13 +191,13 @@
 				}]
 			});
 		},
-		
+
 		buildMenu: function(menu, node, config) {
 			var t = this;
 			var disabled = config.disabled;
 			var pos = config.pos;
 			var mode = config.mode;
-			
+
 			// remove old menu items
 			for (var key in menu.items) {
 				var item = menu.items[key];
@@ -205,7 +205,7 @@
 				$('#'+item.id).remove();
 				delete menu.items[key];
 			}
-			
+
 			var schema = t.editor.execCommand('getSchema');
 			for (var i = 0; i < schema.elements.length; i++) {
 				var key = schema.elements[i];
@@ -232,36 +232,36 @@
 			});
 			menuitem.setDisabled(true);
 		},
-		
+
 		showDialog: function(key, pos) {
 			var t = this;
 			var w = t.editor.writer;
-			
+
 			t.editor.getBody().blur(); // lose keyboard focus in editor
 			w.tree.disableHotkeys();
-			
+
 			var structsEntry = null;
 			if (t.mode == t.EDIT) {
 				structsEntry = w.structs[$(t.tag).attr('id')];
 			}
-			
+
 			t.currentKey = key;
-			
+
 			t.isDirty = false;
-			
+
 			var parent = $('#schemaDialog');
-			
+
 			$('.attributeSelector ul, .level1Atts, .highLevelAtts, .schemaHelp', parent).empty();
-			
+
 			var helpText = this.editor.execCommand('getDocumentationForTag', key);
 			if (helpText != '') {
 				$('.schemaHelp', parent).html('<h3>'+key+' Documentation</h3><p>'+helpText+'</p>');
 			}
-			
+
 			var atts = t.editor.writer.u.getChildrenForTag({tag: key, type: 'attribute', returnType: 'array'});
-			
+
 			var canTagContainAttributes = atts.length != 0;
-			
+
 			$('input[name="attsAllowed"]', parent).val(canTagContainAttributes);
 			// build atts
 			var level1Atts = '';
@@ -277,7 +277,7 @@
 				} else {
 					isLevel1 = false;
 				}
-				
+
 				if (att.name.toLowerCase() != 'id' && att.name.toLowerCase() != 'xml:id') {
 					var display = 'block';
 					var requiredClass = att.required ? ' required' : '';
@@ -314,7 +314,7 @@
 					}
 					if (att.required) currAttString += ' <span class="required">*</span>';
 					currAttString += '</div>';
-					
+
 					if (isLevel1) {
 						level1Atts += currAttString;
 					} else {
@@ -322,14 +322,14 @@
 					}
 				}
 			}
-			
+
 			$('.attributeSelector ul', parent).html(attributeSelector);
 			$('.level1Atts', parent).html(level1Atts);
 			$('.highLevelAtts', parent).html(highLevelAtts);
-			
+
 			$('.attributeSelector li', parent).click(function() {
 				if ($(this).hasClass('required')) return;
-				
+
 				var name = $(this).attr('id').split('select_')[1].replace(/:/g, '\\:');
 				var div = $('#form_'+name);
 				$(this).toggleClass('selected');
@@ -339,25 +339,25 @@
 					div.hide();
 				}
 			});
-			
+
 			$('ins', parent).tooltip({
 				tooltipClass: 'cwrc-tooltip'
 			});
-			
+
 			$('input, select, option', parent).change(function(event) {
 				t.isDirty = true;
 			}).keyup(function(event) {
 				if (event.keyCode == '13') {
 					event.preventDefault();
 					if (t.isDirty) t.result();
-					else t.cancel(); 
+					else t.cancel();
 				}
 			});
-			
+
 			$('select, option', parent).click(function(event) {
 				t.isDirty = true;
 			});
-			
+
 			t.schemaDialog.dialog('option', 'title', key);
 			if (pos) {
 				t.schemaDialog.dialog('option', 'position', [pos.x, pos.y]);
@@ -365,15 +365,15 @@
 				t.schemaDialog.dialog('option', 'position', 'center');
 			}
 			t.schemaDialog.dialog('open');
-			
+
 			$('#schemaOkButton').focus();
 			$('input, select', parent).first().focus();
 		},
-		
+
 		result: function() {
 			var t = this;
 			var parent = $('#schemaDialog');
-			
+
 			// collect values then close dialog
 			var attributes = {};
 			$('.attsContainer > div > div:visible', parent).children('input[type!="hidden"], select').each(function(index, el) {
@@ -382,7 +382,7 @@
 					attributes[$(this).attr('name')] = val;
 				}
 			});
-			
+
 			// validation
 			var invalid = [];
 			$('.attsContainer span.required', parent).parent().children('label').each(function(index, el) {
@@ -399,11 +399,11 @@
 				}
 				return;
 			}
-			
-			
+
+
 			attributes._attsallowed = $('input[name="attsAllowed"]', parent).val() != 'false';
 			attributes._tag = t.currentKey;
-			
+
 			t.schemaDialog.dialog('close');
 			// check if beforeClose cancelled or not
 			if (t.schemaDialog.is(':hidden')) {
@@ -412,9 +412,9 @@
 				} catch (e) {
 					if (console) console.log('error destroying tooltip');
 				}
-				
+
 				t.editor.writer.tree.enableHotkeys();
-				
+
 				switch (t.mode) {
 					case t.ADD:
 						t.editor.execCommand('addStructureTag', {bookmark: t.editor.currentBookmark, attributes: attributes, action: t.action});
@@ -425,7 +425,7 @@
 				}
 			}
 		},
-		
+
 		cancel: function() {
 			var t = this;
 			t.schemaDialog.dialog('close');
@@ -440,11 +440,11 @@
 				}
 			}
 		},
-		
+
 		createControl: function(n, cm) {
 			if (n == 'schematags') {
 				var t = this;
-				
+
 				var url = t.url+'/../../img/';
 				t.menuButton = cm.createMenuButton('schemaTagsButton', {
 					title: 'Tags',
@@ -460,18 +460,18 @@
 					// link menu to the button
 					t.menuButton.menu = m;
 				});
-				
+
 				// link schemaTags to the button
 				t.menuButton.parentControl = t;
-				
+
 				// FIXME both the above links are made so that filemanager can remotely call buildMenu with the appropriate params
-				
+
 				return t.menuButton;
 			}
-	
+
 			return null;
 		}
 	});
-	
+
 	tinymce.PluginManager.add('schematags', tinymce.plugins.SchemaTags);
 })(tinymce);
