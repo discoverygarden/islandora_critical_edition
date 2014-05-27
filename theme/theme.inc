@@ -13,6 +13,7 @@
  * $variables['anno_list_pane']
  * $variables['anno_img_pane']
  * $variables['images_path']
+ * $variables['custom_js']
  */
 function islandora_critical_edition_preprocess_islandora_critical_edition(&$variables) {
   // To the markup editor!!!

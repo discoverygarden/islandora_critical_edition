@@ -215,6 +215,7 @@ function islandora_critical_edition_islandora_criticalEditionCModel_islandora_vi
  */
 function islandora_critical_edition_islandora_required_objects(IslandoraTuque $connection) {
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
+  $markup_module_path = drupal_get_path('module', 'islandora_markup_editor');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
   // Page Content Model.
   $critical_edition_page_content_model = $connection->repository->constructObject('islandora:criticalEditionCModelPage');
@@ -275,13 +276,13 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
   $new_ds = $sample_schema->constructDatastream('RDF-SCHEMA', 'M');
   $new_ds->label = 'RDF-SCHEMA';
   $new_ds->mimetype = 'application/rdf+xml';
-  $new_ds->setContentFromFile("$module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng", FALSE);
+  $new_ds->setContentFromFile("$markup_module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng", FALSE);
   $sample_schema->ingestDatastream($new_ds);
 
   $new_ds_css = $sample_schema->constructDatastream('RDF-CSS', 'M');
   $new_ds_css->label = 'RDF-CSS';
   $new_ds_css->mimetype = 'text/css';
-  $new_ds_css->setContentFromFile("$module_path/CWRC-Writer/src/css/tei.css", FALSE);
+  $new_ds_css->setContentFromFile("$markup_module_path/CWRC-Writer/src/css/tei.css", FALSE);
   $sample_schema->ingestDatastream($new_ds_css);
 
   return array(
