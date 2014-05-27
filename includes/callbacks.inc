@@ -96,19 +96,26 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
  * @param AbstractObject $fedora_object
  *   The fedora object to upload the CWRC datastream to.
  */
-function islandora_critical_edition_savedata(AbstractObject $fedora_object, AbstractObject $schema_object) {
+function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
+  module_load_include('inc', 'islandora_markup_editor', 'includes/utilities');
+
+  // Grab our persistent data.
   $data = html_entity_decode(stripslashes($_POST['text']), ENT_QUOTES, 'UTF-8');
+  $valid = html_entity_decode(stripslashes($_POST['valid']), ENT_QUOTES, 'UTF-8');
+  $schema = html_entity_decode(stripslashes($_POST['schema']), ENT_QUOTES, 'UTF-8');
+
   // @codingStandardsIgnoreStart
   $cwrc = str_replace('<br>', '<br />', $data);
   // @codingStandardsIgnoreEnd
+
   $cwrc = str_replace('&', '&amp;', $cwrc);
 
   $fedora_object["CWRC"]->content = $cwrc;
 
-  $valid = html_entity_decode(stripslashes($_POST['valid']), ENT_QUOTES, 'UTF-8');
-  // Save the user selection for the schema as default.
-  islandora_critical_edition_schema_work($fedora_object, $schema_object, $valid);
+  // The TEI Doc looses the xml-model processor, so we need to save it again.... boo..
+  islandora_markup_editor_add_tei_processing_instruction($fedora_object, $schema, "CWRC");
 
+  $cwrc = $fedora_object["CWRC"]->content;
   echo $cwrc;
 }
 

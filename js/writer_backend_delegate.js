@@ -50,7 +50,7 @@ function islandoraBackendDelegate(config) {
       type: 'POST',
       dataType: 'XML',
       data: {
-        sch: window.location.protocol + '//' + window.location.host + schemaUrl,
+        sch: schemaUrl,
         type: 'RNG_XML',
         content: docText
       },
@@ -91,14 +91,13 @@ function islandoraBackendDelegate(config) {
         if (typeof Drupal.settings.islandora_critical_edition.source_type != 'string') {
           islandoraCWRCWriter.Writer.Extensions.text_image_linking();
         }
-
       },
       error: function(xhr, status, error) {
         writer.dialogs.show('message', {
           title: 'Error',
           msg: 'An error (' + status + ') occurred and ' + PID + ' was not loaded.',
           type: 'error'
-        }); 
+        });
         writer.currentDocId = null;
       }
     });
@@ -110,15 +109,18 @@ function islandoraBackendDelegate(config) {
   this.saveDocument = function(callback) {
     writer.mode == writer.XMLRDF;
     var docText = writer.fm.getDocumentContent(true);
-
+    // The schema is missing from the docs processor instruction, send it
+    // so we can add it back when we save. Barf..
+    console.log(docText);
     $.ajax({
-      url: window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID + '/' + writer.schemas[writer.schemaId]['pid'],
+      url: window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
       type: 'POST', 
       async: false,
       dataType: 'text',
       data: {
         "text": docText,
         "valid": islandoraCWRCWriter.Writer.get_is_doc_valid(1),
+        "schema": writer.schemas['tei']['url']
       },
       success: function(data, status, xhr) {
         writer.editor.isNotDirty = 1; // force clean state
