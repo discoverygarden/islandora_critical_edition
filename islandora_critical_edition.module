@@ -269,7 +269,7 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
   // Ingest the basic schema types.
   $sample_schema = $connection->repository->constructObject('islandora:tei_sample_schema');
   $sample_schema->owner = 'fedoraAdmin';
-  $sample_schema->label = 'CWRC-TEIBasicSchema';
+  $sample_schema->label = 'CWRC_EMiC_TEI';
   $sample_schema->models = 'islandora:criticaleditionschemaCModel';
   $sample_schema->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:tei_schema_collection');
 

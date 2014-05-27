@@ -40,16 +40,30 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   global $user;
 
   module_load_include('inc', 'islandora_paged_content', 'includes/utilities');
+  module_load_include('inc', 'islandora_markup_editor', 'includes/utilities');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
   module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
   module_load_include('inc', 'islandora_critical_edition', 'includes/schema_table_utils');
   module_load_include('inc', 'php_lib', 'DOMHelpers');
   // Islandora Image Annotation base path, required module.
   $image_annotation_module_path = drupal_get_path('module', 'islandora_image_annotation');
+  $islandora_markup_editor_module_path = drupal_get_path('module', 'islandora_markup_editor');
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);
   $pids = array_keys($pages);
 
   $schema_object = islandora_critical_edition_construct_schema_config_object();
+  $page_obj = islandora_object_load($pids[0]);
+  $doc_process_instructions = islandora_markup_editor_fetch_tei_processing_instruction($page_obj, 'CWRC');
+
+  // Supports legacy tei datastreams.
+  $schema = file_create_url("$islandora_markup_editor_module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng");
+  $schema_url = isset($doc_process_instructions['href']) ? $doc_process_instructions['href'] : $schema;
+  // This is silly. We need to override the default tei schema with our own.
+  $schema_object['schemas']['tei'] = array(
+    'cssUrl' => file_create_url("$islandora_markup_editor_module_path/CWRC-Writer/src/css/tei_converted.css"),
+    'name' => 'tei',
+    'url' => $schema_url,
+  );
   $schema_pref = islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]);
 
   dom_document_pretty_print_include_files();

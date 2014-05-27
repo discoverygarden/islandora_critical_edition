@@ -28,7 +28,7 @@ var islandoraCWRCWriter = {
         config.project = data;
         writer = new Writer(config);
         writer.currentDocId = PID;
-
+        
         var usr_schema;
         if (Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1) {
           usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
@@ -36,7 +36,7 @@ var islandoraCWRCWriter = {
           usr_schema = new Array();
           usr_schema['name'] = "tei";
         }
-        writer.schemaId = "tei";//usr_schema['name'];
+        writer.schemaId = "tei";
         writer.init();
         // Initilize additional UI Elements.
         init_ui();
