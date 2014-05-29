@@ -35,18 +35,18 @@ $('document').ready(function() {
               return;
             }
           }
-          
+
           selector = "#page_choose option[value='" + cwrc_params.position + "']";
-          
+
           setReturnParams();
           cwrc_params.position = $('#page_choose :selected').attr('value');
           openColumn();
           PID = cwrc_params.pages[ cwrc_params.position];
-          
+
           islandoraCWRCWriter.Writer.load_next_anno_page();
-          
+
           setHeader();
-          
+
           $('#page-prev').css('opacity', '1').removeClass('disabled');
           $('#page-next').css('opacity', '1').removeClass('disabled');
 
@@ -58,7 +58,7 @@ $('document').ready(function() {
           }
           selector = "#page_choose option[value='" + cwrc_params.position + "']";
           $(selector).attr('selected', 'selected');
-          
+
         });
 
         $('#page-prev').click(function(e) {
@@ -71,14 +71,14 @@ $('document').ready(function() {
           }
           if (cwrc_params.position > 1) {
             $('#page-next').css('opacity', '1').removeClass('disabled');
-            
+
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).removeAttr('selected');
             cwrc_params.position--;
             setReturnParams();
-            
+
             openColumn();
-            
+
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
@@ -100,14 +100,14 @@ $('document').ready(function() {
 
           if (cwrc_params.position < cwrc_params.page_count) {
             $('#page-prev').css('opacity', '1').removeClass('disabled');
-            
+
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).removeAttr('selected');
             cwrc_params.position++;
             setReturnParams();
-            
+
             openColumn();
-            
+
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
@@ -118,7 +118,7 @@ $('document').ready(function() {
             }
           }
         });
-        
+
         var cnt = 0;
         $('#relations').children().each(function() {
                 if(cnt == 0) {
@@ -174,13 +174,13 @@ $('document').ready(function() {
         // Initialize image annotation dialog.
         var anno_d = annotation_dialog();
         anno_d.dialog('close');
-        
+
         // Initialize text/image annotations dialog.
 // var anno_text = text_image_anno_dialog();
 // anno_text.hide;
-        
+
         maybe_config_create_annotation();
-        
+
   }
 
   var init_canvas_div = function(islandora_canvas_params) {
@@ -209,7 +209,7 @@ $('document').ready(function() {
     // RDF Initializationc
     var rdfbase = $.rdf(opts);
     topinfo['query'] = rdfbase;
-    
+
     var l = $(location).attr('hash');
     var uriparams = {};
     var nCanvas = 1;
@@ -254,7 +254,7 @@ $('document').ready(function() {
     $('#stroke_width').append(s_options);
     $('#shared-canvas-logo-img').attr('src',Drupal.settings.basePath +
       Drupal.settings.islandora_critical_edition.image_anno_img + 'small-logo.png')
-      
+
   }
 
   // @XXX openColumn and setReturnParams may not be necessary dependent on theme

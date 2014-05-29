@@ -87,6 +87,9 @@
 			ed.onPaste.add(resize);
 			ed.onKeyUp.add(resize);
 			ed.onPostRender.add(resize);
+            ed.onKeyUp.add(function() {
+      console.debug('Changed!');
+       });
 
 			if (ed.getParam('autoresize_on_init', true)) {
 				ed.onLoad.add(resize);

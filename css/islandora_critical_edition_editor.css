@@ -49,7 +49,7 @@ body .ui-widget{
 }
 
 #entityHighlight.org {
-	background-color: #3914AF; 
+	background-color: #3914AF;
 }
 
 #entityHighlight.citation {
@@ -93,7 +93,7 @@ body .ui-widget{
 }
 
 .showEntityBrackets .org {
-	border-color: #3914AF; 
+	border-color: #3914AF;
 }
 
 .showEntityBrackets .citation {
@@ -155,4 +155,7 @@ span[data-mce-bogus] {
 
 .emphTag {
 	font-style: italic;
+}
+.cwrc * #settingsDialog {
+  height:auto !important;
 }

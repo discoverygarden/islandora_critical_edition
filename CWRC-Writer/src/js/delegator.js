@@ -1,8 +1,8 @@
 function Delegator(config) {
 	var w = config.writer;
-	
+
 	var del = {};
-	
+
 	/**
 	 * @memberOf del
 	 * @param params
@@ -12,7 +12,7 @@ function Delegator(config) {
 		var type = params.type;
 		var query = params.query;
 		var lookupService = params.lookupService;
-		
+
 		if (lookupService == 'project') {
 			$.ajax({
 				url: cwrc_params.authority_url + type + '/' + query,
@@ -106,11 +106,11 @@ function Delegator(config) {
 			});
 		}
 	};
-	
+
 	del.validate = function(callback) {
 		var docText = w.fm.getDocumentContent(false);
 		var schemaUrl = w.schemas[w.schemaId].url;
-		
+
 		$.ajax({
 			url: w.baseUrl+'services/validator/validate.html',
 			type: 'POST',
@@ -139,7 +139,7 @@ function Delegator(config) {
 //							w.validation.showValidationResult(data, docText);
 //						}
 //					}
-//				}); 
+//				});
 				w.dialogs.show('message', {
 					title: 'Error',
 					msg: 'An error occurred while trying to validate the document.',
@@ -148,7 +148,7 @@ function Delegator(config) {
 			}
 		});
 	};
-	
+
 	/**
 	 * Loads a document based on the currentDocId
 	 * TODO Move currentDocId system out of CWRCWriter
@@ -173,7 +173,7 @@ function Delegator(config) {
 			dataType: 'xml'
 		});
 	};
-	
+
 	/**
 	 * Performs the server call to save the document.
 	 * @param callback Called with one boolean parameter: true for successful save, false otherwise
@@ -208,11 +208,11 @@ function Delegator(config) {
 			}
 		});
 	};
-	
+
 	del.getHelp = function(tagName) {
 		return w.u.getDocumentationForTag(tagName);
 	};
-	
+
 	/**
 	 * Editor based event system.
 	 * @param name: The name of the editor event. Possible values
@@ -225,18 +225,18 @@ function Delegator(config) {
 		switch (name) {
 			case 'highlightEntity_looseFocus':
 				if($(data).hasClass('person')) {
-					
+
 				}
 				break;
 			case 'highlightEntity_gainFocus':
 				if($(data).hasClass('place')) {
-					
+
 				}
 				break;
 			case 'editor_settingsChanged' :
 				break;
 			}
 	};
-	
+
 	return del;
 }
