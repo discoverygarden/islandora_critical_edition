@@ -157,5 +157,5 @@ span[data-mce-bogus] {
 	font-style: italic;
 }
 .cwrc * #settingsDialog {
-  height:400px !important;
+  height:auto !important;
 }
