@@ -52,12 +52,3 @@ function islandora_critical_edition_schema() {
   );
   return $schema;
 }
-
-/**
- * Implements hook_update_N().
- */
-function islandora_critical_edition_update_7001(&$sandbox) {
-  drupal_install_schema('islandora_critical_edition');
-  $t = get_t();
-  return $t("Islandora critical edition database updates complete");
-}
