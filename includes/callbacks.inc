@@ -36,9 +36,9 @@ function islandora_critical_edition_schema_work(AbstractObject $islandora_object
 
   // Check for an existing schema for this user and this page pid.
   $save = islandora_critical_edition_get_user_selected_schema($user->name, $islandora_object->id);
-  if ($save) {
+  if ($save->name == $user->name) {
     // Remove that entry if it exists.
-    islandora_critical_edition_remove_user_selected_schema($user->name, $islandora_object->id);
+    islandora_critical_edition_remove_user_selected_schema($save->lid);
   }
   // Set it to the currently selected schema.
   islandora_critical_edition_add_user_selected_schema($user->name, $islandora_object->id, $schema_object->id, $valid);

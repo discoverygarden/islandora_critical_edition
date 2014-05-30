@@ -54,10 +54,9 @@ function islandora_critical_edition_edit_user_selected_schema($name, $page_pid, 
  * @param string $page_pid
  *   The pid of the page.
  */
-function islandora_critical_edition_remove_user_selected_schema($name, $page_pid) {
+function islandora_critical_edition_remove_user_selected_schema($lid) {
   db_delete('islandora_critical_edition_user_schema')
-      ->condition('name', $name, '=')
-      ->condition('page_pid', $page_pid, '=')
+      ->condition('lid', $lid, '=')
       ->execute();
 }
 
@@ -74,7 +73,7 @@ function islandora_critical_edition_remove_user_selected_schema($name, $page_pid
  */
 function islandora_critical_edition_get_user_selected_schema($name, $page_pid) {
   $schema = db_select('islandora_critical_edition_user_schema', 'n')
-      ->fields('n', array('name', 'page_pid', 'schema_pid', 'valid'))
+      ->fields('n', array('lid', 'name', 'page_pid', 'schema_pid', 'valid'))
       ->condition('name', $name, '=')
       ->condition('page_pid', $page_pid, '=')
       ->execute();

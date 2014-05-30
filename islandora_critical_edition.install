@@ -21,6 +21,12 @@ function islandora_critical_edition_schema() {
   $schema['islandora_critical_edition_user_schema'] = array(
     'description' => 'Table that stores user prefered schemas, referenced to a cwrc datastream.',
     'fields' => array(
+      'lid' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'The UID for schemas.',
+      ),
       'name' => array(
         'type' => 'varchar',
         'length' => 255,
@@ -37,14 +43,21 @@ function islandora_critical_edition_schema() {
         'description' => 'The pid of the schema to apply. May also hold one of the default pids.',
       ),
       'valid' => array(
-        'type' => 'int',
-        'unsigned' => TRUE,
-        'not null' => TRUE,
-        'default' => 0,
+        'type' => 'varchar',
+        'length' => 255,
         'description' => '1 if the cwrc stream is valid for this schema, 0 if it is not.',
       ),
     ),
-    'primary key' => array('name'),
+    'primary key' => array('lid'),
   );
   return $schema;
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function islandora_critical_edition_update_7001(&$sandbox) {
+  drupal_install_schema('islandora_critical_edition');
+  $t = get_t();
+  return $t("Islandora critical edition database updates complete");
 }
