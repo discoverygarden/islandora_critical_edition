@@ -60,7 +60,7 @@ function FileManager(config) {
 					if (doc == null) doc = 'The current document';
 					w.dialogs.confirm({
 						title: 'Document Invalid',
-						msg: doc+' is not valid. <b>Save anyways?</b>',
+						msg: 'The Document is not valid. Would you like to <b>Save anyways?</b>',
 						callback: function(yes) {
 							if (yes) {
 								w.delegator.saveDocument();
