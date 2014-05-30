@@ -268,14 +268,14 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
   // Ingest the basic schema types.
   $sample_schema = $connection->repository->constructObject('islandora:tei_sample_schema');
   $sample_schema->owner = 'fedoraAdmin';
-  $sample_schema->label = 'CWRC-TEIBasicSchema';
+  $sample_schema->label = 'CWRC_EMiC_TEI_Schema';
   $sample_schema->models = 'islandora:criticaleditionschemaCModel';
   $sample_schema->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:tei_schema_collection');
 
   $new_ds = $sample_schema->constructDatastream('RDF-SCHEMA', 'M');
   $new_ds->label = 'RDF-SCHEMA';
   $new_ds->mimetype = 'application/rdf+xml';
-  $new_ds->setContentFromFile("$module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng", FALSE);
+  $new_ds->setContentFromFile("$module_path/CWRC-Writer/src/schema/CWRC_EMiC_TEI.rng", FALSE);
   $sample_schema->ingestDatastream($new_ds);
 
   $new_ds_css = $sample_schema->constructDatastream('RDF-CSS', 'M');
