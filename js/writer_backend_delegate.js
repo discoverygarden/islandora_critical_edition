@@ -45,7 +45,6 @@ function islandoraBackendDelegate(config) {
   this.validate = function(callback) {
     var docText = writer.fm.getDocumentContent(false);
     var usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
-    console.log(Drupal.settings.islandora_critical_edition.schema_object['schemas']['tei']['url'])
     // Always validate against the prefered schema.
     var schemaUrl = Drupal.settings.islandora_critical_edition.schema_object['schemas'][writer.schemaId]['url'];
     $.ajax({
