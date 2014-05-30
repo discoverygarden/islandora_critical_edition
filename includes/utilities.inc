@@ -186,7 +186,7 @@ function islandora_critical_edition_construct_schema_config_object() {
   // Add all the sample schemas.
   $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
   $config_sample['schemas']['tei'] = array(
-    "name" => 'CWRC Basic TEI Schema',
+    "name" => 'CWRC EMiC TEI',
     "url" => url($critical_edition_module_path . "/CWRC-Writer/src/schema/CWRC_EMiC_TEI.rng"),
     "cssUrl" => url($critical_edition_module_path . "/CWRC-Writer/src/css/tei_converted.css"),
     "pid" => $schema_pid,
