@@ -4,8 +4,6 @@ function cwrcWriterInit(Writer, Delegator) {
 	
 	writer = null;
 	function doInit() {
-		console.log("doInit");
-		console.log($);
 		writer = new Writer(config);
 		writer.event('writerInitialized').subscribe(function(writer) {
 			// load modules then do the setup
@@ -28,7 +26,6 @@ function cwrcWriterInit(Writer, Delegator) {
 	window.location.hash = '#' + PID;
 	moduleUrl = Drupal.settings.basePath +
       Drupal.settings.islandora_markup_editor.module_edit_base;
-	console.log(Drupal.settings.islandora_markup_editor.module_edit_base);
 	Delegator = CustomDelegator;
 	var config = {
 	  id: 'editor',
@@ -37,7 +34,6 @@ function cwrcWriterInit(Writer, Delegator) {
 	  buttons1: 'schematags,|,addperson,addplace,adddate,addevent,addorg,addcitation,addtitle,addcorrection,addkeyword,addlink,|,editTag,removeTag,|,addtriple,|,viewsource,editsource,|,validate,savebutton,loadbutton',
 	  schemas: Drupal.settings.islandora_critical_edition.schema_object['schemas']
 	};
-	console.log($);
 	
 	$.ajax({
 		url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
@@ -45,13 +41,9 @@ function cwrcWriterInit(Writer, Delegator) {
 		timeout: 3000,
 		success: function(data, status, xhr) {
 		        cwrc_params = data;
-		        console.log("cwrcy");
-		        console.log(cwrc_params);
-		        console.log($);
 		        var usr_schema;
 		        config.project = data;
 		        doInit();
-		        console.log(Drupal.settings.islandora_critical_edition.schema_pref);
 		        if (Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1) {
 		          usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid'], writer);
 		        } else {
@@ -59,11 +51,8 @@ function cwrcWriterInit(Writer, Delegator) {
 		          usr_schema['name'] = "tei";
 		        }
 		        // Initilize additional UI Elements.
-		        console.log("init_ui");
-				console.log($);
 		        init_ui();
 		        resizeCanvas();
-				console.log("resize canvas");
 		        islandoraCWRCWriter.Writer.setup_canvas(PID, init_canvas_div);
 				$(window).on('resize', doResize);
 				
@@ -348,12 +337,7 @@ function cwrcWriterInit(Writer, Delegator) {
     $('#stroke-width-wrapper').append('<select id="stroke_width" />');
     $('#stroke_width').append(s_options);
     $('#shared-canvas-logo-img').attr('src',Drupal.settings.basePath +
-<<<<<<< HEAD
       Drupal.settings.islandora_critical_edition.image_anno_img + 'small-logo.png');
-=======
-      Drupal.settings.islandora_critical_edition.image_anno_img + 'small-logo.png')
-
->>>>>>> cf18451a052d98997ed62544e77397ff2fce9a1e
   }
 
   // @XXX openColumn and setReturnParams may not be necessary dependent on theme
