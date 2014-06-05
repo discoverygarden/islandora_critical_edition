@@ -1,6 +1,6 @@
 /**
  * Our implementation of the CWRC-Writer
- * Delegator class. 
+ * Delegator class.
  * @param config
  * @returns {___anonymous83_84}
  */
@@ -113,8 +113,13 @@ function islandoraBackendDelegate(config) {
     // so we can add it back when we save. Barf..
     console.log(docText);
     $.ajax({
+<<<<<<< HEAD
       url: window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID,
       type: 'POST', 
+=======
+      url: window.parent.Drupal.settings.basePath + 'islandora/cwrcwriter/save_data/' + PID + '/' + writer.schemas[writer.schemaId]['pid'],
+      type: 'POST',
+>>>>>>> cf18451a052d98997ed62544e77397ff2fce9a1e
       async: false,
       dataType: 'text',
       data: {

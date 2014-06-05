@@ -131,18 +131,18 @@ function cwrcWriterInit(Writer, Delegator) {
               return;
             }
           }
-          
+
           selector = "#page_choose option[value='" + cwrc_params.position + "']";
-          
+
           setReturnParams();
           cwrc_params.position = $('#page_choose :selected').attr('value');
           openColumn();
           PID = cwrc_params.pages[ cwrc_params.position];
-          
+
           islandoraCWRCWriter.Writer.load_next_anno_page();
-          
+
           setHeader();
-          
+
           $('#page-prev').css('opacity', '1').removeClass('disabled');
           $('#page-next').css('opacity', '1').removeClass('disabled');
 
@@ -154,7 +154,7 @@ function cwrcWriterInit(Writer, Delegator) {
           }
           selector = "#page_choose option[value='" + cwrc_params.position + "']";
           $(selector).attr('selected', 'selected');
-          
+
         });
 
         $('#page-prev').click(function(e) {
@@ -167,14 +167,14 @@ function cwrcWriterInit(Writer, Delegator) {
           }
           if (cwrc_params.position > 1) {
             $('#page-next').css('opacity', '1').removeClass('disabled');
-            
+
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).removeAttr('selected');
             cwrc_params.position--;
             setReturnParams();
-            
+
             openColumn();
-            
+
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
@@ -196,14 +196,14 @@ function cwrcWriterInit(Writer, Delegator) {
 
           if (cwrc_params.position < cwrc_params.page_count) {
             $('#page-prev').css('opacity', '1').removeClass('disabled');
-            
+
             var selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).removeAttr('selected');
             cwrc_params.position++;
             setReturnParams();
-            
+
             openColumn();
-            
+
             selector = "#page_choose option[value='" + cwrc_params.position + "']";
             $(selector).attr('selected', 'selected');
             PID = cwrc_params.pages[ cwrc_params.position];
@@ -214,7 +214,7 @@ function cwrcWriterInit(Writer, Delegator) {
             }
           }
         });
-        
+
         var cnt = 0;
         $('#relations').children().each(function() {
                 if(cnt == 0) {
@@ -268,11 +268,10 @@ function cwrcWriterInit(Writer, Delegator) {
         });
         var anno_d = annotation_dialog();
         anno_d.dialog('close');
-        
+
         // Initialize text/image annotations dialog.
 // var anno_text = text_image_anno_dialog();
 // anno_text.hide;
-       
         maybe_config_create_annotation();
   }
 
@@ -303,7 +302,7 @@ function cwrcWriterInit(Writer, Delegator) {
     // RDF Initializationc
     var rdfbase = $.rdf(opts);
     topinfo['query'] = rdfbase;
-    
+
     var l = $(location).attr('hash');
     var uriparams = {};
     var nCanvas = 1;
@@ -349,7 +348,12 @@ function cwrcWriterInit(Writer, Delegator) {
     $('#stroke-width-wrapper').append('<select id="stroke_width" />');
     $('#stroke_width').append(s_options);
     $('#shared-canvas-logo-img').attr('src',Drupal.settings.basePath +
+<<<<<<< HEAD
       Drupal.settings.islandora_critical_edition.image_anno_img + 'small-logo.png');
+=======
+      Drupal.settings.islandora_critical_edition.image_anno_img + 'small-logo.png')
+
+>>>>>>> cf18451a052d98997ed62544e77397ff2fce9a1e
   }
 
   // @XXX openColumn and setReturnParams may not be necessary dependent on theme
