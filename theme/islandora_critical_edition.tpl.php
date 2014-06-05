@@ -17,7 +17,7 @@
     <?php $label = t('Return to Book View'); ?>
     <?php print "<input id='bookview_button' type='button' value='$label' />"; ?>
     <?php endif; ?>
-    
+
     <div id="cwrc_wrapper" class="cwrc_wrapper islandora-crited-iframe-wrapper" style="width: 100%; height:600px">
       <div id="header" class="ui-layout-north">
         <!-- TODO: We need new full page buttons. So much going on in the header right now -->

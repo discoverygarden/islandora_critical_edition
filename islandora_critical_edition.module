@@ -190,12 +190,12 @@ function islandora_critical_edition_theme($existing, $type, $theme, $path) {
       'pattern' => 'islandora_critical_edition__',
       'variables' => array('islandora_object' => NULL),
     ),
-    'islandora_anno_list_pane' => array(
-      'template' => drupal_get_path('module', 'islandora_image_annotation') . 'theme/islandora-list-pane',
-    ),
-    'islandora_anno_image_pane' => array(
-      'template' => drupal_get_path('module', 'islandora_image_annotation') . 'theme/islandora-img-pane',
-    ),
+//     'islandora_anno_list_pane' => array(
+//       'template' => drupal_get_path('module', 'islandora_image_annotation') . 'theme/islandora-list-pane',
+//     ),
+//     'islandora_anno_image_pane' => array(
+//       'template' => drupal_get_path('module', 'islandora_image_annotation') . 'theme/islandora-img-pane',
+//     ),
     'islandora_schema' => array(
       'template' => drupal_get_path('module', 'islandora_critical_edition') . 'theme/islandora-img-pane',
     ),
@@ -206,6 +206,7 @@ function islandora_critical_edition_theme($existing, $type, $theme, $path) {
  * Implements hook_CMODEL_PID_islandora_view_object().
  */
 function islandora_critical_edition_islandora_criticalEditionCModel_islandora_view_object($object, $page_number, $page_size) {
+  dsm(array(), "view hook");
   $output = theme('islandora_critical_edition', array('islandora_object' => $object));
   return array('' => $output);
 }

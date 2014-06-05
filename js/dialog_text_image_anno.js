@@ -5,11 +5,13 @@
  * edition module.
  * @returns DialogBox(jQuery)
  */
-function text_image_anno_dialog() {
+function text_image_anno_dialog(data) {
+	console.log("a");
   var img_base_path = Drupal.settings.islandora_image_annotation.images_path;
-  var config_data;
+  var config_data = data;
   var anno_type = "create";
   var combo_value_array = new Array();
+  console.log("b");
   var html_text = ''+
  '<div id="create_annotation_text_box">'+
  '<div id="hidden_annotation_type" type="hidden"></div>'+
@@ -45,8 +47,9 @@ function text_image_anno_dialog() {
     '</div>'+
   '</div>';
   var txt_image_anno_dialog;
-  
+  console.log("c");
   if(document.getElementById('create_annotation_text_box') == null) {
+	  console.log("d");
     $(document.body).append(html_text);
     $('#islandora_classification').addClass("dialog-entity-group");
     txt_image_anno_dialog = $('#create_annotation_text_box');
@@ -58,6 +61,21 @@ function text_image_anno_dialog() {
           return;
         }
         init_for_create();
+        
+        console.log("pre combo build");
+        build_combo();
+        console.log("building combo complete");
+        //config_data = config;
+        $('#anno_text1').val(config_data.query);
+        $('#anno_title1').val("Text image annotation");
+        $('#anno_classification1').val("TextImageLink");
+        
+        $('#img_anno_text').hide();
+        $('#img_anno_title').hide();
+        
+        //txt_image_anno_dialog.dialog();
+        $("#text_image_accordion").accordion('activate', 0 );
+        
       },
       title: 'Image/Text Annotation',
       resizable: false,
@@ -101,20 +119,27 @@ function text_image_anno_dialog() {
       }
     });
   } else {
+	  console.log("e");
     txt_image_anno_dialog = $('#create_annotation_text_box');
   }
-
+  
+  console.log("pre combo build");
+  build_combo();
+   
   return {
-    show: function(config) {
+    show: function() {
+      console.log("pre combo build");
       build_combo();
-      config_data = config;
+      console.log("building combo complete");
+      //config_data = config;
       $('#anno_text1').val(config.query);
       $('#anno_title1').val("Text image annotation");
       $('#anno_classification1').val("TextImageLink");
       
       $('#img_anno_text').hide();
       $('#img_anno_title').hide();
-      txt_image_anno_dialog.dialog();
+      
+      //txt_image_anno_dialog.dialog();
       $("#text_image_accordion").accordion('activate', 0 );
     },
     hide: function() {
@@ -125,6 +150,7 @@ function text_image_anno_dialog() {
 };
 
 function build_combo() {
+	console.log("build combo");
 	if($('#cbo_image_anno').length == 0) {
 		$("#text_image_accordion").accordion();
 		
@@ -183,14 +209,19 @@ function build_combo() {
 };
 
 function init_for_create(){
+	console.log("e");
 	 $('#saveAnno').html('<span class="ui-button-text">Save</span>');
      $('#create_annotation').css({
          color:'#808080'
      });
+     console.log("f");
      $('#create_annotation').empty().append('Annotating');
+     console.log("g");
      $('.ui-widget-overlay').remove();
+     console.log("h");
      $('#canvases .canvas').each(function() {
        var cnv = $(this).attr('canvas');
+       console.log('in each loop');
        initForCreate(cnv);
      });
 };

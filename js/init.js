@@ -37,9 +37,10 @@
       }
     }
   });
+  
+      // call resize function
 })(jQuery);
 //adapted from sc_init
-
 var toid = null;
 var startDate = 0;
 
@@ -191,8 +192,8 @@ function maybeResize() {
       }
     }
   }
-//Refresh Canvas if browser is resized
+////Refresh Canvas if browser is resized
 $(window).resize(function() {
     // call resize function
     resizeCanvas();
-  });
+});

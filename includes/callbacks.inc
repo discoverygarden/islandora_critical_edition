@@ -98,25 +98,27 @@ function islandora_critical_edition_setup(AbstractObject $fedora_object) {
  */
 function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
   module_load_include('inc', 'islandora_markup_editor', 'includes/utilities');
-
-  // Grab our persistent data.
-  $data = html_entity_decode(stripslashes($_POST['text']), ENT_QUOTES, 'UTF-8');
-  $valid = html_entity_decode(stripslashes($_POST['valid']), ENT_QUOTES, 'UTF-8');
-  $schema = html_entity_decode(stripslashes($_POST['schema']), ENT_QUOTES, 'UTF-8');
-
+  parse_str(file_get_contents('php://input'), $_PUT);
   // @codingStandardsIgnoreStart
+  $data = $_PUT['text'];
   $cwrc = str_replace('<br>', '<br />', $data);
   // @codingStandardsIgnoreEnd
-
   $cwrc = str_replace('&', '&amp;', $cwrc);
+  // Update ds.
+  if (!isset($fedora_object["CWRC"])) {
+    $obj_ds = $fedora_object->constructDatastream('CWRC', 'M');
+    $fedora_object->ingestDatastream($obj_ds);
+  }
+  else {
+    $obj_ds = $fedora_object["CWRC"];
+  }
+  $obj_ds->setContentFromString($cwrc);
 
-  $fedora_object["CWRC"]->content = $cwrc;
-
-  // The TEI Doc looses the xml-model processor, so we need to save it again.... boo..
+  // Sanitize the schema URL, incase it gets managled during transport.
+  $schema = html_entity_decode(stripslashes(check_plain($_PUT['schema'])), ENT_QUOTES, 'UTF-8');
   islandora_markup_editor_add_tei_processing_instruction($fedora_object, $schema, "CWRC");
 
-  $cwrc = $fedora_object["CWRC"]->content;
-  echo $cwrc;
+  drupal_json_output($cwrc);
 }
 
 /**

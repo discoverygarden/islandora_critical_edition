@@ -1,10 +1,108 @@
-$('document').ready(function() {
+var cwrc_params = {};
 
-    // Functionality is wrapped up in 'writer_wrapper.js.
-    islandoraCWRCWriter.init_writer();
-  });
-
+function cwrcWriterInit(Writer, Delegator) {
+	
+	writer = null;
+	function doInit() {
+		console.log("doInit");
+		console.log($);
+		writer = new Writer(config);
+		writer.event('writerInitialized').subscribe(function(writer) {
+			// load modules then do the setup
+			require(['modules/entitiesList', 'modules/relations',
+			         'modules/selection', 'modules/structureTree', 'modules/validation'
+			], function(EntitiesList, Relations, Selection, StructureTree, Validation) {
+				setupLayoutAndModules(writer, EntitiesList, Relations, Selection, StructureTree, Validation);
+				writer.fileManager.loadInitialDocument(window.location.hash);
+			});
+		});
+	}
+	function doResize() {
+		var uiHeight = $('#'+writer.editor.id+'_tbl tr.mceFirst').outerHeight() + 2;
+		writer.editor.theme.resizeTo($(window).width(), $(window).height() - uiHeight);
+		// Call out to our 'init.js' script, fixes image annotation size.
+		resizeCanvas();
+	}
+	PID = Drupal.settings.islandora_critical_edition.page_pid;
+	//cwrc_params = {};
+	window.location.hash = '#' + PID;
+	moduleUrl = Drupal.settings.basePath +
+      Drupal.settings.islandora_markup_editor.module_edit_base;
+	console.log(Drupal.settings.islandora_markup_editor.module_edit_base);
+	Delegator = CustomDelegator;
+	var config = {
+	  id: 'editor',
+	  delegator: Delegator,
+	  cwrcRootUrl: moduleUrl + '/CWRC-Writer/src/',
+	  buttons1: 'schematags,|,addperson,addplace,adddate,addevent,addorg,addcitation,addtitle,addcorrection,addkeyword,addlink,|,editTag,removeTag,|,addtriple,|,viewsource,editsource,|,validate,savebutton,loadbutton',
+	  schemas: Drupal.settings.islandora_critical_edition.schema_object['schemas']
+	};
+	console.log($);
+	
+	$.ajax({
+		url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
+		async: false,
+		timeout: 3000,
+		success: function(data, status, xhr) {
+		        cwrc_params = data;
+		        console.log("cwrcy");
+		        console.log(cwrc_params);
+		        console.log($);
+		        var usr_schema;
+		        config.project = data;
+		        doInit();
+		        console.log(Drupal.settings.islandora_critical_edition.schema_pref);
+		        if (Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1) {
+		          usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid'], writer);
+		        } else {
+		          usr_schema = new Array();
+		          usr_schema['name'] = "tei";
+		        }
+		        // Initilize additional UI Elements.
+		        console.log("init_ui");
+				console.log($);
+		        init_ui();
+		        resizeCanvas();
+				console.log("resize canvas");
+		        islandoraCWRCWriter.Writer.setup_canvas(PID, init_canvas_div);
+				$(window).on('resize', doResize);
+				
+			},
+			error: function() {
+				console.log("failure");
+				config.cwrcRootUrl = baseUrl+'/cwrc/src/';
+				config.schemas = {
+					tei: {
+						name: 'CWRC Basic TEI Schema',
+						url: baseUrl+'/cwrc/src/schema/CWRC-TEIBasic.rng',
+						cssUrl: baseUrl+'/cwrc/src/css/tei_converted.css'
+					},
+					events: {
+						name: 'Events Schema',
+						url: baseUrl+'/cwrc/src/schema/events.rng',
+						cssUrl: baseUrl+'/cwrc/src/css/orlando_converted.css'
+					},
+					biography: {
+						name: 'Biography Schema',
+						url: baseUrl+'/cwrc/src/schema/biography.rng',
+						cssUrl: baseUrl+'/cwrc/src/css/orlando_converted.css'
+					},
+					writing: {
+						name: 'Writing Schema',
+						url: baseUrl+'/cwrc/src/schema/writing.rng',
+						cssUrl: baseUrl+'/cwrc/src/css/orlando_converted.css'
+					}
+				};
+				writer = new Writer(config);
+				writer.event('writerInitialized').subscribe(doResize);
+				$(window).on('resize', doResize);
+			}
+		});
+	};
+	
   function init_ui() {
+	  console.log("cwrc params");
+	  console.log(cwrc_params);
          $(this).attr("title", cwrc_params.title);
       setHeader();
       if (cwrc_params.position == 1) {
@@ -141,7 +239,6 @@ $('document').ready(function() {
               if (confirm("Permananently Delete Annotation '" + title + "'")) {
                 islandora_deleteAnno(urn);
               }
-
             }
 
             if (key == 'edit') {
@@ -171,18 +268,17 @@ $('document').ready(function() {
             }
           }
         });
-        // Initialize image annotation dialog.
         var anno_d = annotation_dialog();
         anno_d.dialog('close');
         
         // Initialize text/image annotations dialog.
 // var anno_text = text_image_anno_dialog();
 // anno_text.hide;
-        
+       
         maybe_config_create_annotation();
-        
   }
 
+  
   var init_canvas_div = function(islandora_canvas_params) {
     if (islandora_canvas_params.no_edit == true) {
       $('#create_annotation').hide();
@@ -242,7 +338,9 @@ $('document').ready(function() {
     $('#color-picker-wrapper').click(function() {
       $('#anno_color_activated').attr('value', 'active');
     });
+    
     $('.color-picker').miniColors();
+    
     var stroke_widths = islandora_canvas_params.islandora_anno_stroke_widths.split(" ");
     var s_options = "";
     for (var i = 0; i < stroke_widths.length; i++) {
@@ -253,8 +351,7 @@ $('document').ready(function() {
     $('#stroke-width-wrapper').append('<select id="stroke_width" />');
     $('#stroke_width').append(s_options);
     $('#shared-canvas-logo-img').attr('src',Drupal.settings.basePath +
-      Drupal.settings.islandora_critical_edition.image_anno_img + 'small-logo.png')
-      
+      Drupal.settings.islandora_critical_edition.image_anno_img + 'small-logo.png');
   }
 
   // @XXX openColumn and setReturnParams may not be necessary dependent on theme
@@ -278,7 +375,7 @@ $('document').ready(function() {
     cwrc_params.separator_pos = $('#column-separator').css("left");
   }
 
-  /**
+/**
 * Sets clickable page header.
 *
 */

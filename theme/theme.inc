@@ -16,14 +16,39 @@
  * $variables['custom_js']
  */
 function islandora_critical_edition_preprocess_islandora_critical_edition(&$variables) {
-  // To the markup editor!!!
+  module_load_include('inc', 'islandora_image_annotation', 'includes/utils');
+  $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
   $islandora_markup_editor_path = drupal_get_path('module', 'islandora_markup_editor');
+  $islandora_image_anno_path = drupal_get_path('module', 'islandora_image_annotation');
+
+  // Theme our custom components to the critical_edition_module viewer.
+  $variables['anno_list_pane'] = theme('islandora_anno_list_pane');
+  $variables['anno_img_pane'] = theme('islandora_anno_image_pane');
+
   // Use this flag to include your own init .js scripts.
   $variables['custom_js'] = TRUE;
-  theme('islandora_markup_editor', $variables);
-  // Custom JS for critical edition.
   $variables['cwrc_lib_path'] = $islandora_markup_editor_path;
+
+  // Custom JS for critical edition.
   islandora_critical_edition_add_js($variables);
+  theme('islandora_markup_editor', $variables);
+
+  // This is gross. We cant rely on the image_annotation module to
+  // add the required js at the correct time. It needs to be abstracted.
+  drupal_add_js($islandora_image_anno_path . '/shared_canvas/js/jquery/jquery-ui-1.8.13.custom.min.js');
+  drupal_add_js($islandora_image_anno_path . '/shared_canvas/js/jquery/jquery-1.7.js');
+
+  // This is where we add our own init scripts, since we indicated we would with
+  // the vars flag '$variables['custom_js'] = TRUE'.
+  drupal_add_js($critical_edition_module_path . "/js/custom_delegate.js");
+  drupal_add_js($critical_edition_module_path . '/js/writer_wrapper.js');
+  drupal_add_js($critical_edition_module_path . "/js/dialog_text_image_anno.js");
+  drupal_add_js($critical_edition_module_path . "/js/startup.js");
+  drupal_add_js($critical_edition_module_path . "/js/init.js");
+
+  // Include common JS/CSS for critical editions and shared canvas
+  islandora_image_annotation_include_common_js();
+  islandora_image_annotation_include_common_css();
 }
 
 /**
@@ -47,6 +72,12 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   module_load_include('inc', 'php_lib', 'DOMHelpers');
   // Islandora Image Annotation base path, required module.
   $image_annotation_module_path = drupal_get_path('module', 'islandora_image_annotation');
+  $islandora_markup_editor_path = drupal_get_path('module', 'islandora_markup_editor');
+
+  // TODO: Get these calls out into the preprocess function maby?
+  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.miniColors.js');
+  drupal_add_css($image_annotation_module_path . '/shared_canvas/css/jquery.miniColors.css');
+
   $islandora_markup_editor_module_path = drupal_get_path('module', 'islandora_markup_editor');
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);
   $pids = array_keys($pages);
@@ -76,11 +107,6 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
       'page_schema' => islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]))), 'setting');
 
   $validate_path = variable_get('islandora_critical_edition_validate_url', '/validator/validate.html');
-  // Use the theme files from image annotation for annotation list
-  // and image annotation pane's.
-  $variables['anno_list_pane'] = theme('islandora_anno_list_pane');
-  $variables['anno_img_pane'] = theme('islandora_anno_image_pane');
-
   // Fill additional session variables.
   $variables['images_path'] = url($variables['cwrc_lib_path'] . '/CWRC-Writer/src/img/', array('absolute' => TRUE));
   $image_anno_images = $image_annotation_module_path . '/shared_canvas/imgs/';
@@ -98,16 +124,7 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   drupal_add_js(array('islandora_critical_edition' => array('base_url' => $base_url)), 'setting');
   drupal_add_js(array('islandora_critical_edition' => array('validate_path' => $validate_path)), 'setting');
   drupal_add_js(array('islandora_critical_edition' => array('page_pid' => $pids[0])), 'setting');
-
-  // Include common js/css for shared canvas.
-  islandora_image_annotation_include_common_js();
-  islandora_image_annotation_include_common_css();
-
-  drupal_add_js($critical_edition_module_path . "/js/writer_backend_delegate.js");
-  drupal_add_js($critical_edition_module_path . '/js/writer_wrapper.js');
-  drupal_add_js($critical_edition_module_path . "/js/dialog_text_image_anno.js");
-  drupal_add_js($critical_edition_module_path . "/js/startup.js");
-  drupal_add_js($critical_edition_module_path . "/js/init.js");
+  drupal_add_js(array('islandora_image_annotation' => array('PID' => $pids[0])), 'setting');
 
   drupal_add_css($critical_edition_module_path . "/css/islandora_critical_edition_editor.css");
   drupal_add_css($critical_edition_module_path . "/css/islandora_critical_edition.css");

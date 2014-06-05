@@ -7,48 +7,51 @@
 var islandoraCWRCWriter = {
   // Initilize the writer, and get basic parameters for cwrc fedora integration.
   init_writer: function() {
-    PID = Drupal.settings.islandora_critical_edition.page_pid;
-    cwrc_params = {};
-    window.location.hash = '#' + PID;
-    writer = null;
-    islandoraCriticalEditionsUrl = Drupal.settings.basePath +
-        Drupal.settings.islandora_critical_edition.module_base;
-    var config = {
-      delegator: islandoraBackendDelegate,
-      cwrcRootUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/',
-      schemas: Drupal.settings.islandora_critical_edition.schema_object['schemas']
-    };
-    $.ajax({
-      url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
-      timeout: 3000,
-      async: false,
-      dataType: 'json',
-      success: function(data, status, xhr) {
-        cwrc_params = data;
-        config.project = data;
-        writer = new Writer(config);
-        writer.currentDocId = PID;
-        
-        var usr_schema;
-        if (Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1) {
-          usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
-        } else {
-          usr_schema = new Array();
-          usr_schema['name'] = "tei";
-        }
-        writer.schemaId = "tei";
-        writer.init();
-        // Initilize additional UI Elements.
-        init_ui();
-        // Initilize shared canvas image annotation canvas processing.
-        if (typeof Drupal.settings.islandora_critical_edition.source_type != 'string') {
-          islandoraCWRCWriter.Writer.setup_canvas(PID, init_canvas_div);
-        }
-      },
-      error: function() {
-        console.log("Error");
-      }
-    });
+	  
+//    PID = Drupal.settings.islandora_critical_edition.page_pid;
+//    cwrc_params = {};
+//    window.location.hash = '#' + PID;
+//    writer = null;
+//    islandoraCriticalEditionsUrl = Drupal.settings.basePath +
+//        Drupal.settings.islandora_critical_edition.module_base;
+//    
+//    Delegator = CustomDelegator;
+//    var config = {
+//      delegator: Delegator,
+//      cwrcRootUrl: islandoraCriticalEditionsUrl + '/CWRC-Writer/src/',
+//      schemas: Drupal.settings.islandora_critical_edition.schema_object['schemas']
+//    };
+//    $.ajax({
+//      url: Drupal.settings.basePath + 'islandora/cwrcwriter/setup/' + PID,
+//      timeout: 3000,
+//      async: false,
+//      dataType: 'json',
+//      success: function(data, status, xhr) {
+//        cwrc_params = data;
+//        config.project = data;
+//        writer = new Writer(config);
+//        writer.currentDocId = PID;
+//        
+//        var usr_schema;
+//        if (Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1) {
+//          usr_schema = get_schema_id_for_pid(Drupal.settings.islandora_critical_edition.schema_pref['schema_pid']);
+//        } else {
+//          usr_schema = new Array();
+//          usr_schema['name'] = "tei";
+//        }
+//        writer.schemaId = "tei";
+//        writer.init();
+//        // Initilize additional UI Elements.
+//        init_ui();
+//        // Initilize shared canvas image annotation canvas processing.
+//        if (typeof Drupal.settings.islandora_critical_edition.source_type != 'string') {
+//          islandoraCWRCWriter.Writer.setup_canvas(PID, init_canvas_div);
+//        }
+//      },
+//      error: function() {
+//        console.log("Error");
+//      }
+//    });
   },
   Writer: {
     writer_valid_doc: 0,
@@ -76,9 +79,11 @@ var islandoraCWRCWriter = {
     },
     Document: {
       load: function() {
+    	  console.log(PID);
+    	  console.log(writer);
         // Calling load doc, which assigns a doc id (the page pid) and
         // calls the delegate function loadDocument().
-        writer.fm.loadDocument(PID);
+        writer.fileManager.loadDocument(PID);
       },
       get: function() {
         return writer.getDocument();
@@ -126,15 +131,18 @@ var islandoraCWRCWriter = {
       text_image_linking: function() {
         var img_local = Drupal.settings.basePath +
             Drupal.settings.islandora_critical_edition.module_base;
-        // Hack to add the image text linking to the tinymce toolbar.
-        $('#editor_toolbar1 tr td:first').after('<td style="position: relative">' +
-            '<a id="editor_addtxtimglnk" class="mceButton wideButton mceButtonEnabled addtextimganno" title="Tag Text Annotation" aria-labelledby="editor_addperson_voice" onmousedown="return false;" href="javascript:;" role="button" tabindex="-1">' +
-            '<span class="mceIcon wideButton">' +
-            '<img class="mceIcon" alt="Tag Person" src="' + img_local + '/img/img_text.png">' +
-            '</span></a><td>');
-        $('#editor_addtxtimglnk').click(function() {
-          islandoraCWRCWriter.Writer.Extensions.textImageAnnotation();
-        });
+        if ($('#editor_addtxtimglnk').length == 0) {
+          // Hack to add the image text linking to the tinymce toolbar.
+          $('#editor_toolbar1 tr td:first').after('<td style="position: relative">' +
+              '<a id="editor_addtxtimglnk" class="mceButton wideButton mceButtonEnabled addtextimganno" title="Tag Text Annotation" aria-labelledby="editor_addperson_voice" onmousedown="return false;" href="javascript:;" role="button" tabindex="-1">' +
+              '<span class="mceIcon wideButton">' +
+              '<img class="mceIcon" alt="Tag Person" src="' + img_local + '/img/img_text.png">' +
+              '</span></a><td>');
+          $('#editor_addtxtimglnk').click(function() {
+            
+            islandoraCWRCWriter.Writer.Extensions.textImageAnnotation();
+          });
+        }
       },
       text_image_linking_show_highlight: function(tag) {
         var arr = $(tag).find('div[class="info"]').children().first().children();
@@ -175,20 +183,31 @@ var islandoraCWRCWriter = {
         }
       },
       textImageAnnotation: function() {
-        var result = writer.u.isSelectionValid();
+        console.log(writer);
+        var result = writer.utilities.isSelectionValid();
+        console.log(writer.VALID);
         if (result == writer.VALID) {
+          console.log("1");
           writer.editor.currentBookmark = writer.editor.selection.getBookmark(1);
+          console.log("2");
           // 'query' represents the selected text.
           var query = writer.editor.currentBookmark.rng.toString();
+          console.log("3");
           // create the dialog, and show it.
-          var text_image_dialog = text_image_anno_dialog();
+          
+          console.log("4");
           var data = {
-            title: writer.em.getTitle('person'),
+            title: writer.entitiesModel.getTitle('person'),
             pos: writer.editor.contextMenuPos,
             query: query
           };
-          text_image_dialog.show(data);
+          console.log("5");
+          console.log(data);
+          text_image_anno_dialog(data);
+          console.log("6");
+          //text_image_dialog.show(data);
         } else {
+        	 console.log("waaa??");
           writer.showError(result);
         }
       },
@@ -202,7 +221,7 @@ var islandoraCWRCWriter = {
  * @param schema_pid
  * @returns string
  */
-function get_schema_id_for_pid(schema_pid) {
+function get_schema_id_for_pid(schema_pid, writer) {
   if (schema_pid) {
     for (var key in writer.schemas) {
       // if we find the right pid, and the schema is valid, use that schema. && Drupal.settings.islandora_critical_edition.schema_pref['valid'] == 1
