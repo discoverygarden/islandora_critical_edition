@@ -72,11 +72,6 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   module_load_include('inc', 'php_lib', 'DOMHelpers');
   // Islandora Image Annotation base path, required module.
   $image_annotation_module_path = drupal_get_path('module', 'islandora_image_annotation');
-  $islandora_markup_editor_path = drupal_get_path('module', 'islandora_markup_editor');
-
-  // TODO: Get these calls out into the preprocess function maby?
-  drupal_add_js($image_annotation_module_path . '/shared_canvas/js/jquery/jquery.miniColors.js');
-  drupal_add_css($image_annotation_module_path . '/shared_canvas/css/jquery.miniColors.css');
 
   $islandora_markup_editor_module_path = drupal_get_path('module', 'islandora_markup_editor');
   $pages = islandora_paged_content_get_pages($variables['islandora_object']);

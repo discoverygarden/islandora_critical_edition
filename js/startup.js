@@ -101,8 +101,6 @@ function cwrcWriterInit(Writer, Delegator) {
 	};
 	
   function init_ui() {
-	  console.log("cwrc params");
-	  console.log(cwrc_params);
          $(this).attr("title", cwrc_params.title);
       setHeader();
       if (cwrc_params.position == 1) {
