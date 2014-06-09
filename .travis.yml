@@ -15,6 +15,7 @@ before_install:
   - git clone -b 7.x git://github.com/Islandora/islandora_solution_pack_book.git
   - git clone -b 7.x git://github.com/Islandora/islandora_paged_content.git
   - git clone -b 7.x git://github.com/discoverygarden/islandora_solr_metadata.git
+  - git clone -b 7.x git://github.com/discoverygarden/islandora_markup_editor.git
   - git clone -b 7.x git://github.com/discoverygarden/islandora_image_annotation.git
   - git clone -b 7.x git://github.com/discoverygarden/islandora_solution_pack_entities.git
   - git clone -b 7.x git://github.com/Islandora/islandora_solution_pack_collection.git
@@ -32,6 +33,7 @@ before_install:
   - ln -s $HOME/islandora_solution_pack_collection sites/all/modules/islandora_solution_pack_collection
   - ln -s $HOME/islandora_solr_search sites/all/modules/islandora_solr_search
   - ln -s $HOME/islandora_ocr sites/all/modules/islandora_ocr
+  - ln -s $HOME/islandora_markup_editor sites/all/modules/islandora_markup_editor
   - drush en --yes --user=1 islandora_critical_edition
 script:
   - ant -buildfile sites/all/modules/islandora_critical_edition/build.xml lint
