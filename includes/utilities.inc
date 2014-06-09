@@ -142,11 +142,7 @@ function islandora_critical_edition_wrap_plain_text_in_tei($content = 'Blank Pag
   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#"></rdf:RDF>
   <text>
     <body><ab>';
-  $suffix = '
-      </ab>
-    </body>
-  </text>
-</TEI>';
+  $suffix = '</ab></body></text></TEI>';
 
   // Correct common problems with the incoming text, and replace line breaks
   // with there TEI equivalent.
