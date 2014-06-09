@@ -107,7 +107,7 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
     $cwrc = str_replace('&', '&amp;', $cwrc);
     // Update ds.
     if (!isset($fedora_object["CWRC"])) {
-      $obj_ds = $fedora_object->constructDatastream('OBJ', 'M');
+      $obj_ds = $fedora_object->constructDatastream('CWRC', 'M');
       $fedora_object->ingestDatastream($obj_ds);
     }
     else {
@@ -117,8 +117,7 @@ function islandora_critical_edition_savedata(AbstractObject $fedora_object) {
 
     // Sanitize the schema URL, incase it gets managled during transport.
     $schema = html_entity_decode(stripslashes(check_plain($put['schema'])), ENT_QUOTES, 'UTF-8');
-    islandora_markup_editor_add_tei_processing_instruction($fedora_object, $schema);
-
+    islandora_markup_editor_add_tei_processing_instruction($fedora_object, $schema, "CWRC");
     drupal_json_output($cwrc);
   }
   catch (Exception $e) {
