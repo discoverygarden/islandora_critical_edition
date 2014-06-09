@@ -121,7 +121,10 @@ function islandora_critical_edition_generate_tei_from_ocr(AbstractObject $object
  *   The plain text to be wrapped in a TEI document.
  */
 function islandora_critical_edition_wrap_plain_text_in_tei($content = 'Blank Page') {
+  $markup_editor_module_path = drupal_get_path('module', 'islandora_markup_editor');
+  $schema = file_create_url("$markup_editor_module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng");
   $prefix = '<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="' . $schema . '" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <TEI xml:id="struct_35" xmlns="http://www.tei-c.org/ns/1.0">
   <teiHeader xml:id="struct_530">
     <fileDesc xml:id="struct_531">
@@ -139,11 +142,7 @@ function islandora_critical_edition_wrap_plain_text_in_tei($content = 'Blank Pag
   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:w="http://cwrctc.artsrn.ualberta.ca/#"></rdf:RDF>
   <text>
     <body><ab>';
-  $suffix = '
-      </ab>
-    </body>
-  </text>
-</TEI>';
+  $suffix = '</ab></body></text></TEI>';
 
   // Correct common problems with the incoming text, and replace line breaks
   // with there TEI equivalent.
@@ -184,7 +183,7 @@ function islandora_critical_edition_construct_schema_config_object() {
   }
 
   // Add all the sample schemas.
-  $critical_edition_module_path = drupal_get_path('module', 'islandora_critical_edition');
+  $critical_edition_module_path = drupal_get_path('module', 'islandora_markup_editor');
   $config_sample['schemas']['tei'] = array(
     "name" => 'CWRC EMiC TEI',
     "url" => url($critical_edition_module_path . "/CWRC-Writer/src/schema/CWRC_EMiC_TEI.rng"),

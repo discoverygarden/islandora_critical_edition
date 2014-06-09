@@ -55,10 +55,10 @@ function islandora_critical_edition_menu() {
     'access arguments' => array(2),
     'file' => 'includes/callbacks.inc',
   );
-  $items['islandora/cwrcwriter/save_data/%islandora_object/%islandora_object'] = array(
+  $items['islandora/cwrcwriter/save_data/%islandora_object'] = array(
     'title' => 'Save Data',
     'page callback' => 'islandora_critical_edition_savedata',
-    'page arguments' => array(3, 4),
+    'page arguments' => array(3),
     'type' => MENU_CALLBACK,
     'access callback' => 'islandora_critical_edition_edit_cwrc_access',
     'access arguments' => array(3),
@@ -190,12 +190,6 @@ function islandora_critical_edition_theme($existing, $type, $theme, $path) {
       'pattern' => 'islandora_critical_edition__',
       'variables' => array('islandora_object' => NULL),
     ),
-    'islandora_anno_list_pane' => array(
-      'template' => drupal_get_path('module', 'islandora_image_annotation') . 'theme/islandora-list-pane',
-    ),
-    'islandora_anno_image_pane' => array(
-      'template' => drupal_get_path('module', 'islandora_image_annotation') . 'theme/islandora-img-pane',
-    ),
     'islandora_schema' => array(
       'template' => drupal_get_path('module', 'islandora_critical_edition') . 'theme/islandora-img-pane',
     ),
@@ -215,6 +209,7 @@ function islandora_critical_edition_islandora_criticalEditionCModel_islandora_vi
  */
 function islandora_critical_edition_islandora_required_objects(IslandoraTuque $connection) {
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
+  $markup_module_path = drupal_get_path('module', 'islandora_markup_editor');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
   // Page Content Model.
   $critical_edition_page_content_model = $connection->repository->constructObject('islandora:criticalEditionCModelPage');
@@ -275,13 +270,13 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
   $new_ds = $sample_schema->constructDatastream('RDF-SCHEMA', 'M');
   $new_ds->label = 'RDF-SCHEMA';
   $new_ds->mimetype = 'application/rdf+xml';
-  $new_ds->setContentFromFile("$module_path/CWRC-Writer/src/schema/CWRC_EMiC_TEI.rng", FALSE);
+  $new_ds->setContentFromFile("$markup_module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng", FALSE);
   $sample_schema->ingestDatastream($new_ds);
 
   $new_ds_css = $sample_schema->constructDatastream('RDF-CSS', 'M');
   $new_ds_css->label = 'RDF-CSS';
   $new_ds_css->mimetype = 'text/css';
-  $new_ds_css->setContentFromFile("$module_path/CWRC-Writer/src/css/tei.css", FALSE);
+  $new_ds_css->setContentFromFile("$markup_module_path/CWRC-Writer/src/css/tei.css", FALSE);
   $sample_schema->ingestDatastream($new_ds_css);
 
   return array(

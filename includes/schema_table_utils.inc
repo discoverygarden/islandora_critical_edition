@@ -49,10 +49,8 @@ function islandora_critical_edition_edit_user_selected_schema($name, $page_pid, 
 /**
  * Remove a user prefered TEI Schema.
  *
- * @param string $name
- *   The name of the current user.
- * @param string $page_pid
- *   The pid of the page.
+ * @param string $lid
+ *   The id of the row to remove.
  */
 function islandora_critical_edition_remove_user_selected_schema($lid) {
   db_delete('islandora_critical_edition_user_schema')
