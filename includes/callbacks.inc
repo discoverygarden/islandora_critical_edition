@@ -14,7 +14,7 @@
  *   The islandora_schema object.
  */
 function islandora_critical_edition_set_user_schema(AbstractObject $islandora_object, AbstractObject $schema_object) {
-  $valid = html_entity_decode(stripslashes($_POST['valid']), ENT_QUOTES, 'UTF-8');
+  $valid = html_entity_decode(stripslashes(check_plain($_POST['valid'])), ENT_QUOTES, 'UTF-8');
   islandora_critical_edition_schema_work($islandora_object, $schema_object, $valid);
   drupal_json_output('Saved');
   drupal_exit();

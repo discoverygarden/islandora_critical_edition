@@ -22,6 +22,7 @@ function cwrcWriterInit(Writer, Delegator) {
 		resizeCanvas();
 	}
 	PID = Drupal.settings.islandora_critical_edition.page_pid;
+	console.log(PID);
 	//cwrc_params = {};
 	window.location.hash = '#' + PID;
 	moduleUrl = Drupal.settings.basePath +
