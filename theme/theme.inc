@@ -46,7 +46,7 @@ function islandora_critical_edition_preprocess_islandora_critical_edition(&$vari
   drupal_add_js($critical_edition_module_path . "/js/startup.js");
   drupal_add_js($critical_edition_module_path . "/js/init.js");
 
-  // Include common JS/CSS for critical editions and shared canvas
+  // Include common JS/CSS for critical editions and shared canvas.
   islandora_image_annotation_include_common_js();
   islandora_image_annotation_include_common_css();
 }
@@ -119,6 +119,8 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   drupal_add_js(array('islandora_critical_edition' => array('base_url' => $base_url)), 'setting');
   drupal_add_js(array('islandora_critical_edition' => array('validate_path' => $validate_path)), 'setting');
   drupal_add_js(array('islandora_critical_edition' => array('page_pid' => $pids[0])), 'setting');
+  drupal_add_js(array('islandora_critical_edition' => array('module_edit_base' => $islandora_markup_editor_module_path)), 'setting');
+
   drupal_add_js(array('islandora_image_annotation' => array('PID' => $pids[0])), 'setting');
 
   drupal_add_css($critical_edition_module_path . "/css/islandora_critical_edition_editor.css");
