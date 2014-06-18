@@ -43,6 +43,7 @@ function islandora_critical_edition_schema_work(AbstractObject $islandora_object
   // Set it to the currently selected schema.
   islandora_critical_edition_add_user_selected_schema($user->name, $islandora_object->id, $schema_object->id, $valid);
 }
+
 /**
  * Provides all the parameters necessary for CWRCWriter to operate with Fedora.
  *

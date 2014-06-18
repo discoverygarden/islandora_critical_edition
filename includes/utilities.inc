@@ -55,6 +55,7 @@ function islandora_critical_edition_get_object_of_critical_edition(AbstractObjec
  *   datastream.
  */
 function islandora_critical_edition_add_cwrc_datastream(AbstractObject $object) {
+  module_load_include('inc', 'islandora_markup_editor', 'includes/utilities');
   try {
     $cwrc_stream = islandora_critical_edition_wrap_plain_text_in_tei($object['OCR']->content);
     if (!$object['CWRC']) {
@@ -71,6 +72,9 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $object) 
     }
     $cwrc_datastream->setContentFromString($cwrc_stream);
     $object->ingestDatastream($cwrc_datastream);
+
+    // Add the default schema if it does not exist.
+    islandora_markup_editor_process_schema_relationship($object);
   }
   catch (Exception $e) {
     drupal_set_message(t(

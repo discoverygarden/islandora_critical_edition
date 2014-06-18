@@ -86,6 +86,44 @@ function islandora_critical_edition_menu() {
 }
 
 /**
+ *
+ * @param unknown $form
+ * @param unknown $form_state
+ * @param unknown $form_id
+ */
+function islandora_critical_edition_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id === "islandora_scholar_modify_form") {
+    $form['upload_document']['file']['#process'] = array('islandora_critical_edition_my_file_element_process');
+  }
+
+}
+
+/**
+ *
+ * @param unknown $element
+ * @param unknown $form_state
+ * @param unknown $form
+ * @return unknown
+ */
+function islandora_critical_edition_my_file_element_process($element, &$form_state, $form) {
+  // Set progress_message and size prior to
+  // file_managed_file_process().
+  $element['#progress_message'] = t('In Progress');
+  $element['#size'] = 30;
+
+  // Run default managed_file processing to expand
+  // the functionality of managed_file element type.
+  $element = file_managed_file_process($element, $form_state, $form);
+
+  // Finally, make our alterations as required.
+  $element['upload_button']['#value'] = t("Attach");
+
+  // Return the modified element.
+  return $element;
+}
+
+
+/**
  * Checks if the user has access to the CWRC editor for the given object.
  *
  * @param IslandoraFedora $object
@@ -235,49 +273,49 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
   $datastream->setContentFromFile("$module_path/xml/islandora_critical_edition_ds_composite_model.xml", FALSE);
   $critical_edition_content_model->ingestDatastream($datastream);
 
-  // RDF Schema Content Model.
-  $critical_edition_schema_content_model = $connection->repository->constructObject('islandora:criticaleditionschemaCModel');
-  $critical_edition_schema_content_model->owner = 'fedoraAdmin';
-  $critical_edition_schema_content_model->label = 'Islandora Critical Edition Schema Content Model';
-  $critical_edition_schema_content_model->models = 'fedora-system:ContentModel-3.0';
-  // DS-COMPOSITE-MODEL Datastream.
-  $datastream = $critical_edition_schema_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'M');
-  $datastream->label = 'DS-COMPOSITE-MODEL';
-  $datastream->mimetype = 'text/xml';
-  $datastream->setContentFromFile("$module_path/xml/islandora_crtitical_edition_schema_ds_composite_model.xml", FALSE);
-  $critical_edition_schema_content_model->ingestDatastream($datastream);
+//   // RDF Schema Content Model.
+//   $critical_edition_schema_content_model = $connection->repository->constructObject('islandora:criticaleditionschemaCModel');
+//   $critical_edition_schema_content_model->owner = 'fedoraAdmin';
+//   $critical_edition_schema_content_model->label = 'Schema Content Model';
+//   $critical_edition_schema_content_model->models = 'fedora-system:ContentModel-3.0';
+//   // DS-COMPOSITE-MODEL Datastream.
+//   $datastream = $critical_edition_schema_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'M');
+//   $datastream->label = 'DS-COMPOSITE-MODEL';
+//   $datastream->mimetype = 'text/xml';
+//   $datastream->setContentFromFile("$module_path/xml/islandora_crtitical_edition_schema_ds_composite_model.xml", FALSE);
+//   $critical_edition_schema_content_model->ingestDatastream($datastream);
 
-  // Schema Collection.
-  $schema_collection = $connection->repository->constructObject('islandora:tei_schema_collection');
-  $schema_collection->owner = 'fedoraAdmin';
-  $schema_collection->label = 'Schema Collection';
-  $schema_collection->models = 'islandora:collectionCModel';
-  $schema_collection->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:root');
-  // Collection Policy Datastream.
-  $datastream = $schema_collection->constructDatastream('COLLECTION_POLICY', 'X');
-  $datastream->label = 'Collection policy';
-  $datastream->mimetype = 'text/xml';
-  $datastream->setContentFromFile("$module_path/xml/islandora_critical_edition_schema_collection_policy.xml", FALSE);
-  $schema_collection->ingestDatastream($datastream);
+//   // Schema Collection.
+//   $schema_collection = $connection->repository->constructObject('islandora:tei_schema_collection');
+//   $schema_collection->owner = 'fedoraAdmin';
+//   $schema_collection->label = 'Schema Collection';
+//   $schema_collection->models = 'islandora:collectionCModel';
+//   $schema_collection->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:root');
+//   // Collection Policy Datastream.
+//   $datastream = $schema_collection->constructDatastream('COLLECTION_POLICY', 'X');
+//   $datastream->label = 'Collection policy';
+//   $datastream->mimetype = 'text/xml';
+//   $datastream->setContentFromFile("$module_path/xml/islandora_critical_edition_schema_collection_policy.xml", FALSE);
+//   $schema_collection->ingestDatastream($datastream);
 
-  // Ingest the basic schema types.
-  $sample_schema = $connection->repository->constructObject('islandora:tei_sample_schema');
-  $sample_schema->owner = 'fedoraAdmin';
-  $sample_schema->label = 'CWRC_EMiC_TEI_Schema';
-  $sample_schema->models = 'islandora:criticaleditionschemaCModel';
-  $sample_schema->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:tei_schema_collection');
+//   // Ingest the basic schema types.
+//   $sample_schema = $connection->repository->constructObject('islandora:tei_sample_schema');
+//   $sample_schema->owner = 'fedoraAdmin';
+//   $sample_schema->label = 'CWRC_EMiC_TEI_Schema';
+//   $sample_schema->models = 'islandora:criticaleditionschemaCModel';
+//   $sample_schema->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', 'islandora:tei_schema_collection');
 
-  $new_ds = $sample_schema->constructDatastream('RDF-SCHEMA', 'M');
-  $new_ds->label = 'RDF-SCHEMA';
-  $new_ds->mimetype = 'application/rdf+xml';
-  $new_ds->setContentFromFile("$markup_module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng", FALSE);
-  $sample_schema->ingestDatastream($new_ds);
+//   $new_ds = $sample_schema->constructDatastream('RDF-SCHEMA', 'M');
+//   $new_ds->label = 'RDF-SCHEMA';
+//   $new_ds->mimetype = 'application/rdf+xml';
+//   $new_ds->setContentFromFile("$markup_module_path/CWRC-Writer/src/schema/CWRC-TEIBasic.rng", FALSE);
+//   $sample_schema->ingestDatastream($new_ds);
 
-  $new_ds_css = $sample_schema->constructDatastream('RDF-CSS', 'M');
-  $new_ds_css->label = 'RDF-CSS';
-  $new_ds_css->mimetype = 'text/css';
-  $new_ds_css->setContentFromFile("$markup_module_path/CWRC-Writer/src/css/tei.css", FALSE);
-  $sample_schema->ingestDatastream($new_ds_css);
+//   $new_ds_css = $sample_schema->constructDatastream('RDF-CSS', 'M');
+//   $new_ds_css->label = 'RDF-CSS';
+//   $new_ds_css->mimetype = 'text/css';
+//   $new_ds_css->setContentFromFile("$markup_module_path/CWRC-Writer/src/css/tei.css", FALSE);
+//   $sample_schema->ingestDatastream($new_ds_css);
 
   return array(
     'islandora_critical_edition' => array(
@@ -285,9 +323,6 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
       'objects' => array(
         $critical_edition_content_model,
         $critical_edition_page_content_model,
-        $critical_edition_schema_content_model,
-        $schema_collection,
-        $sample_schema,
       ),
     ),
   );
@@ -299,7 +334,6 @@ function islandora_critical_edition_islandora_required_objects(IslandoraTuque $c
 function islandora_critical_edition_islandora_xml_form_builder_forms() {
   $module_path = drupal_get_path('module', 'islandora_critical_edition');
   return array(
-    'Schema MODS form' => array('form_file' => "$module_path/xml/islandora_critical_edition_schema_form_mods.xml"),
     'Islandora Critical Edition Mods Form' => array('form_file' => "$module_path/xml/islandora_critical_edition_form_mods.xml"),
   );
 }
@@ -312,14 +346,6 @@ function islandora_critical_edition_islandora_content_model_forms_form_associati
     'critical_edition_form_mods' => array(
       'content_model' => 'islandora:criticalEditionCModel',
       'form_name' => 'Islandora Critical Edition Mods Form',
-      'dsid' => 'MODS',
-      'title_field' => array('titleInfo', 'title'),
-      'transform' => 'mods_to_dc.xsl',
-      'template' => FALSE,
-    ),
-    'islandora_critical_edition_schema_mods_form' => array(
-      'content_model' => 'islandora:criticaleditionschemaCModel',
-      'form_name' => 'Schema MODS form',
       'dsid' => 'MODS',
       'title_field' => array('titleInfo', 'title'),
       'transform' => 'mods_to_dc.xsl',
