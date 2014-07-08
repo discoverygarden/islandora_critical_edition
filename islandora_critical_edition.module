@@ -86,44 +86,6 @@ function islandora_critical_edition_menu() {
 }
 
 /**
- *
- * @param unknown $form
- * @param unknown $form_state
- * @param unknown $form_id
- */
-function islandora_critical_edition_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id === "islandora_scholar_modify_form") {
-    $form['upload_document']['file']['#process'] = array('islandora_critical_edition_my_file_element_process');
-  }
-
-}
-
-/**
- *
- * @param unknown $element
- * @param unknown $form_state
- * @param unknown $form
- * @return unknown
- */
-function islandora_critical_edition_my_file_element_process($element, &$form_state, $form) {
-  // Set progress_message and size prior to
-  // file_managed_file_process().
-  $element['#progress_message'] = t('In Progress');
-  $element['#size'] = 30;
-
-  // Run default managed_file processing to expand
-  // the functionality of managed_file element type.
-  $element = file_managed_file_process($element, $form_state, $form);
-
-  // Finally, make our alterations as required.
-  $element['upload_button']['#value'] = t("Attach");
-
-  // Return the modified element.
-  return $element;
-}
-
-
-/**
  * Checks if the user has access to the CWRC editor for the given object.
  *
  * @param IslandoraFedora $object
