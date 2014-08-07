@@ -14,9 +14,9 @@ before_install:
   - git clone -b 7.x git://github.com/Islandora/islandora.git
   - git clone -b 7.x git://github.com/Islandora/islandora_solution_pack_book.git
   - git clone -b 7.x git://github.com/Islandora/islandora_paged_content.git
-  - git clone -b 7.x git://github.com/discoverygarden/islandora_solr_metadata.git
+  - git clone -b 7.x git://github.com/Islandora/islandora_solr_metadata.git
   - git clone -b 7.x git://github.com/discoverygarden/islandora_markup_editor.git
-  - git clone -b 7.x git://github.com/discoverygarden/islandora_image_annotation.git
+  - git clone -b 7.x git://github.com/Islandora/islandora_image_annotation.git
   - git clone -b 7.x git://github.com/discoverygarden/islandora_solution_pack_entities.git
   - git clone -b 7.x git://github.com/Islandora/islandora_solution_pack_collection.git
   - git clone -b 7.x git://github.com/Islandora/islandora_solr_search.git
