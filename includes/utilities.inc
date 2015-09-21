@@ -188,7 +188,7 @@ function islandora_critical_edition_construct_schema_config_object() {
     "name" => 'CWRC EMiC TEI',
     "url" => url($critical_edition_module_path . "/CWRC-Writer/src/schema/CWRC_EMiC_TEI.rng"),
     "cssUrl" => url($critical_edition_module_path . "/CWRC-Writer/src/css/tei_converted.css"),
-    "pid" => $schema_pid,
+    "pid" => 'islandora:tei_sample_schema',
   );
   return $config_sample;
 }
