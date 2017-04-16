@@ -61,8 +61,10 @@ function islandora_create_edition_form_submit($form, &$form_state) {
   $book_object = islandora_object_load($book_pid);
 
   // Create Critical edition Fedora Object.
-  $fedora_object = islandora_critical_edition_create_object(islandora_get_namespace($book_pid),
-                                                            $form_state['values']['title']);
+  $fedora_object = islandora_critical_edition_create_object(
+    islandora_get_namespace($book_pid),
+    $form_state['values']['title']
+  );
 
   $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF, $book_pid, RELS_TYPE_PLAIN_LITERAL);
   $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:criticalEditionCModel');
@@ -101,7 +103,9 @@ function islandora_create_edition_form_submit($form, &$form_state) {
 function islandora_create_edition_page($page, $parent) {
   module_load_include('inc', 'islandora', '/includes/ingest.form');
   module_load_include('inc', 'islandora_critical_edition', 'includes/utilities');
+  module_load_include('inc', 'islandora_markup_editor', 'includes/utilities');
 
+  // Create the TEI-RDF object.
   $namespace = substr($page['pid'], 0, strpos($page['pid'], ":"));
   $fedora_object = islandora_critical_edition_create_object($namespace, $page['label']);
 
@@ -113,6 +117,7 @@ function islandora_create_edition_page($page, $parent) {
   $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isSequenceNumber', $page['page'], RELS_TYPE_PLAIN_LITERAL);
   $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isPageNumber', $page['page'], RELS_TYPE_PLAIN_LITERAL);
   $fedora_object->relationships->add(ISLANDORA_RELS_EXT_URI, 'isSection', '1', RELS_TYPE_PLAIN_LITERAL);
+
   // Create object.
   $new_page_object = islandora_add_object($fedora_object);
   $original_page_object = islandora_object_load($page['pid']);
@@ -124,10 +129,14 @@ function islandora_create_edition_page($page, $parent) {
       $new_page_object->ingestDatastream($original_page_object[$dsid]);
     }
   }
+
   // Create new CWRC datastream if there is none.
   if (!isset($new_page_object['CWRC']) && isset($new_page_object['OCR'])) {
     islandora_critical_edition_add_cwrc_datastream($new_page_object);
   }
+
+  // Add a relationship to our default schema, on the page level.
+  islandora_markup_editor_process_schema_relationship($new_page_object);
 }
 
 /**

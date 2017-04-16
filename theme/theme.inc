@@ -90,7 +90,8 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
     'name' => 'tei',
     'url' => $schema_url,
   );
-  $schema_pref = islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]);
+  $schema_rels = islandora_markup_editor_process_schema_relationship($page_obj);
+  $schema_pref = $schema_rels[0]['object']['value'];
 
   dom_document_pretty_print_include_files();
   // Local Critical Editions module path.
@@ -99,7 +100,7 @@ function islandora_critical_edition_add_js(&$variables, $media = FALSE) {
   // Get the schema for the first page.
   drupal_add_js(array(
     'islandora_critical_edition' => array(
-      'page_schema' => islandora_critical_edition_get_user_selected_schema($user->name, $pids[0]))), 'setting');
+      'page_schema' => $schema_pref)), 'setting');
 
   $validate_path = variable_get('islandora_critical_edition_validate_url', '/validator/validate.html');
   // Fill additional session variables.

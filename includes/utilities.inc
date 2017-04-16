@@ -16,13 +16,14 @@
 function islandora_critical_edition_get_critical_editions(AbstractObject $fedora_object) {
   $edition_pids = array();
 
+  // @codingStandardsIgnoreStart
   $query = "
 select \$subject \$title from <#ri>
 where (\$subject <" . ISLANDORA_RELS_EXT_URI . ISLANDORA_CRITICAL_EDITION_IS_CRITICAL_EDITION_OF . ">'" . $fedora_object->id . "'
 and \$subject <" . FEDORA_MODEL_URI . "state> <" . FEDORA_MODEL_URI . "Active>
 and \$subject <dc:title> \$title)
 ";
-
+  // @codingStandardsIgnoreEnd
   $objects = $fedora_object->repository->ri->itqlQuery($query, 'unlimited');
   if (!empty($objects)) {
     foreach ($objects as $object) {
@@ -55,6 +56,7 @@ function islandora_critical_edition_get_object_of_critical_edition(AbstractObjec
  *   datastream.
  */
 function islandora_critical_edition_add_cwrc_datastream(AbstractObject $object) {
+  module_load_include('inc', 'islandora_markup_editor', 'includes/utilities');
   try {
     $cwrc_stream = islandora_critical_edition_wrap_plain_text_in_tei($object['OCR']->content);
     if (!$object['CWRC']) {
@@ -71,6 +73,9 @@ function islandora_critical_edition_add_cwrc_datastream(AbstractObject $object) 
     }
     $cwrc_datastream->setContentFromString($cwrc_stream);
     $object->ingestDatastream($cwrc_datastream);
+
+    // Add the default schema if it does not exist.
+    islandora_markup_editor_process_schema_relationship($object);
   }
   catch (Exception $e) {
     drupal_set_message(t(
